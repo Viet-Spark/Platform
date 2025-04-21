@@ -125,49 +125,51 @@
 			<form on:submit|preventDefault={handleSubmit} class="space-y-6 p-6">
 				<!-- Donation Amount -->
 				<div>
-					<label class="mb-4 block font-medium text-gray-700">Select Donation Amount</label>
-					<div class="grid grid-cols-3 gap-2 md:grid-cols-5">
-						{#each donationOptions as amount}
+					<fieldset>
+						<legend class="mb-4 block font-medium text-gray-700">Select Donation Amount</legend>
+						<div class="grid grid-cols-3 gap-2 md:grid-cols-5">
+							{#each donationOptions as amount}
+								<button
+									type="button"
+									class="rounded-md border px-4 py-2 {selectedAmount === amount && !isCustomAmount
+										? 'bg-primary border-primary text-white'
+										: 'hover:border-primary border-gray-300 text-gray-700'}"
+									on:click={() => setAmount(amount)}
+								>
+									${amount}
+								</button>
+							{/each}
 							<button
 								type="button"
-								class="rounded-md border px-4 py-2 {selectedAmount === amount && !isCustomAmount
+								class="rounded-md border px-4 py-2 {isCustomAmount
 									? 'bg-primary border-primary text-white'
 									: 'hover:border-primary border-gray-300 text-gray-700'}"
-								on:click={() => setAmount(amount)}
+								on:click={setCustomAmount}
 							>
-								${amount}
+								Custom
 							</button>
-						{/each}
-						<button
-							type="button"
-							class="rounded-md border px-4 py-2 {isCustomAmount
-								? 'bg-primary border-primary text-white'
-								: 'hover:border-primary border-gray-300 text-gray-700'}"
-							on:click={setCustomAmount}
-						>
-							Custom
-						</button>
-					</div>
-
-					{#if isCustomAmount}
-						<div class="mt-3">
-							<label for="custom-amount" class="sr-only">Custom amount</label>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-									<span class="text-gray-500">$</span>
-								</div>
-								<input
-									type="number"
-									id="custom-amount"
-									bind:value={customAmount}
-									placeholder="Enter amount"
-									min="1"
-									step="1"
-									class="focus:ring-primary w-full rounded-md border px-4 py-2 pl-8 focus:outline-none focus:ring-2"
-								/>
-							</div>
 						</div>
-					{/if}
+
+						{#if isCustomAmount}
+							<div class="mt-3">
+								<label for="custom-amount" class="sr-only">Custom amount</label>
+								<div class="relative">
+									<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+										<span class="text-gray-500">$</span>
+									</div>
+									<input
+										type="number"
+										id="custom-amount"
+										bind:value={customAmount}
+										placeholder="Enter amount"
+										min="1"
+										step="1"
+										class="focus:ring-primary w-full rounded-md border px-4 py-2 pl-8 focus:outline-none focus:ring-2"
+									/>
+								</div>
+							</div>
+						{/if}
+					</fieldset>
 				</div>
 
 				<!-- Donor Information -->

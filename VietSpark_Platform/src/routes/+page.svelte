@@ -179,7 +179,7 @@
 					<p class="mb-4 text-gray-600">
 						Join us for a day of inspiring talks, networking, and workshops from industry leaders.
 					</p>
-					<a href="/events/tech-summit" class="text-primary font-medium hover:underline"
+					<a href="/events/tech-summit-2023" class="text-primary font-medium hover:underline"
 						>Learn more →</a
 					>
 				</div>

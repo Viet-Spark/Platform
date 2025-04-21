@@ -355,22 +355,27 @@
 						</div>
 
 						<div>
-							<label class="mb-2 block font-medium text-gray-700">Interests</label>
-							<div class="flex flex-wrap gap-2">
-								{#each profileData.interests as interest, index}
-									<div class="flex items-center rounded-full bg-blue-50 px-3 py-1">
-										<span>{interest}</span>
-										<button class="ml-2 text-gray-500 hover:text-red-500">
-											<i class="fas fa-times-circle"></i>
-										</button>
-									</div>
-								{/each}
-								<button
-									class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
-								>
-									<i class="fas fa-plus mr-1"></i> Add interest
-								</button>
-							</div>
+							<fieldset>
+								<legend class="mb-2 block font-medium text-gray-700">Interests</legend>
+								<div class="flex flex-wrap gap-2">
+									{#each profileData.interests as interest, index}
+										<div class="flex items-center rounded-full bg-blue-50 px-3 py-1">
+											<span>{interest}</span>
+											<button
+												class="ml-2 text-gray-500 hover:text-red-500"
+												aria-label={`Remove ${interest}`}
+											>
+												<i class="fas fa-times-circle"></i>
+											</button>
+										</div>
+									{/each}
+									<button
+										class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
+									>
+										<i class="fas fa-plus mr-1"></i> Add interest
+									</button>
+								</div>
+							</fieldset>
 						</div>
 
 						<div class="border-t pt-6">

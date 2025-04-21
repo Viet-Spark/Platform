@@ -133,7 +133,7 @@
 					placeholder="Search articles..."
 					class="w-full px-6 py-3 text-gray-700 outline-none"
 				/>
-				<button class="flex items-center bg-blue-800 px-6 text-white">
+				<button class="flex items-center bg-blue-800 px-6 text-white" aria-label="Search articles">
 					<i class="fas fa-search"></i>
 				</button>
 			</div>

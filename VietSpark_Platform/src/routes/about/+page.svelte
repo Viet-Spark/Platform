@@ -229,6 +229,7 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-primary hover:text-primary-dark"
+						aria-label={`${member.name}'s LinkedIn profile`}
 					>
 						<i class="fab fa-linkedin text-xl"></i>
 					</a>
@@ -261,6 +262,7 @@
 						target="_blank"
 						rel="noopener noreferrer"
 						class="text-primary hover:text-primary-dark"
+						aria-label={`${member.name}'s LinkedIn profile`}
 					>
 						<i class="fab fa-linkedin text-xl"></i>
 					</a>

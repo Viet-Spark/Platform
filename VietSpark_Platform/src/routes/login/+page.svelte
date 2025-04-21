@@ -56,9 +56,16 @@
 
 <div class="login-container">
 	<div class="mx-auto max-w-md rounded-lg bg-white p-6 shadow-md">
-		<h2 class="mb-6 text-center text-2xl font-bold">
-			{isRegistering ? 'Register' : 'Login'}
-		</h2>
+		<div class="mb-6 text-center">
+			<img
+				src="/logos/225357894_335085408311214_4818242809207101955_n.png"
+				alt="VietSpark Logo"
+				class="mx-auto mb-4 h-16"
+			/>
+			<h2 class="text-2xl font-bold">
+				{isRegistering ? 'Register' : 'Login'}
+			</h2>
+		</div>
 
 		<form on:submit|preventDefault={handleSubmit} class="space-y-4">
 			<div>

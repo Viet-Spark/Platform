@@ -16,10 +16,12 @@
 			<div class="flex items-center">
 				<a href="/" class="text-primary text-2xl font-bold">
 					<span class="sr-only">VietSpark</span>
-					<!-- Replace with actual logo when available -->
-					<div class="bg-primary flex h-10 w-32 items-center justify-center rounded text-white">
-						VietSpark
-					</div>
+					<!-- Replace placeholder with actual logo -->
+					<img
+						src="/logos/225357894_335085408311214_4818242809207101955_n.png"
+						alt="VietSpark Logo"
+						class="h-10"
+					/>
 				</a>
 			</div>
 
@@ -72,7 +74,14 @@
 		<div class="container mx-auto px-4 py-8">
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-4">
 				<div>
-					<h3 class="mb-4 text-lg font-bold">VietSpark</h3>
+					<div class="mb-4">
+						<img
+							src="/logos/225357894_335085408311214_4818242809207101955_n.png"
+							alt="VietSpark Logo"
+							class="mb-2 h-12"
+						/>
+						<h3 class="text-lg font-bold">VietSpark</h3>
+					</div>
 					<p class="mb-4 text-gray-300">Empowering Vietnamese professionals to lead in tech</p>
 					<div class="flex space-x-4">
 						<a
