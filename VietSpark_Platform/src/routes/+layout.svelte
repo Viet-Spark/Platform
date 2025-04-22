@@ -85,18 +85,20 @@
 					<p class="mb-4 text-gray-300">Empowering Vietnamese professionals to lead in tech</p>
 					<div class="flex space-x-4">
 						<a
-							href="https://facebook.com"
-							class="text-white hover:text-blue-400"
+							href="https://www.facebook.com/VietSpark.org"
+							class="text-white transition-colors duration-300 hover:text-blue-400"
 							aria-label="Facebook"
+							target="_blank"
 						>
-							<i class="fab fa-facebook-f"></i>
+							<i class="fab fa-facebook-f text-xl"></i>
 						</a>
 						<a
-							href="https://linkedin.com"
-							class="text-white hover:text-blue-400"
+							href="https://www.linkedin.com/company/vietnam-business-professional-in-tech/"
+							class="text-white transition-colors duration-300 hover:text-blue-400"
 							aria-label="LinkedIn"
+							target="_blank"
 						>
-							<i class="fab fa-linkedin-in"></i>
+							<i class="fab fa-linkedin-in text-xl"></i>
 						</a>
 					</div>
 				</div>
