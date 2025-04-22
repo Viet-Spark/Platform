@@ -1,9 +1,6 @@
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { writable } from 'svelte/store';
-import { app } from '$lib/firebase/firebase';
-
-// Initialize Firebase auth
-const auth = getAuth(app);
+import { auth } from '$lib/firebase/firebase';
 
 // Create a store for the user
 export const user = writable(null);

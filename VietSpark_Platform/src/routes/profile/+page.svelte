@@ -1,30 +1,22 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { user, logout, authLoading } from '$lib/stores/authStore';
+	import {
+		profileData,
+		profileLoading,
+		profileError,
+		getUserProfile,
+		uploadProfileImage,
+		updateUserProfile
+	} from '$lib/stores/profileStore';
 	import { goto } from '$app/navigation';
 
-	// Mock user profile data (to be replaced with actual data from backend)
-	let profileData = {
-		name: '',
-		email: '',
-		title: 'Software Engineer',
-		company: 'Tech Company',
-		location: 'San Francisco, CA',
-		bio: 'Passionate about technology and community building.',
-		interests: ['Web Development', 'AI/ML', 'Community Building'],
-		events: [
-			{
-				id: 'tech-summit-2022',
-				title: 'Tech Summit 2022',
-				date: 'December 10, 2022'
-			},
-			{
-				id: 'mentorship-kickoff',
-				title: 'Mentorship Program Kickoff',
-				date: 'September 15, 2022'
-			}
-		]
-	};
+	let fileInput;
+	let uploadError = null;
+	let isUploading = false;
+	let localImagePreview = null;
+	let loadingError = null;
+	let loadingTimeout;
 
 	// Tabs for the profile page
 	const tabs = ['Overview', 'Events', 'Mentorship', 'Settings'];
@@ -43,17 +35,99 @@
 		}
 	}
 
+	function handleAvatarClick() {
+		if (fileInput) {
+			fileInput.click();
+		}
+	}
+
+	async function handleFileChange(event) {
+		const file = event.target.files[0];
+		if (!file) return;
+
+		// Check file type
+		if (!file.type.startsWith('image/')) {
+			uploadError = 'Please select an image file';
+			return;
+		}
+
+		// Check file size (max 2MB)
+		if (file.size > 2 * 1024 * 1024) {
+			uploadError = 'Image size should be less than 2MB';
+			return;
+		}
+
+		uploadError = null;
+		isUploading = true;
+
+		// Show preview immediately
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			localImagePreview = e.target.result;
+		};
+		reader.readAsDataURL(file);
+
+		try {
+			// Upload to Firebase Storage
+			if ($user && $user.uid) {
+				await uploadProfileImage($user.uid, file);
+				// The profileData store will be updated automatically
+				localImagePreview = null; // Clear local preview as we'll use the one from Firebase
+			} else {
+				uploadError = 'User not authenticated';
+			}
+		} catch (error) {
+			console.error('Upload error:', error);
+			uploadError = `Upload failed: ${error.message}`;
+		} finally {
+			isUploading = false;
+		}
+	}
+
+	async function loadUserProfile() {
+		// Set a timeout to force loading to end after 15 seconds
+		loadingTimeout = setTimeout(() => {
+			if ($profileLoading) {
+				console.log('Profile loading timed out');
+				profileLoading.set(false);
+				loadingError = 'Loading timed out. Please try again.';
+			}
+		}, 15000);
+
+		if (!$user || !$user.uid) {
+			console.log('No user or user ID available');
+			loadingError = 'User not authenticated';
+			profileLoading.set(false); // Force loading to end if no user
+			return;
+		}
+
+		try {
+			console.log('Loading profile for user:', $user.uid);
+			await getUserProfile($user.uid);
+			console.log('Profile loaded successfully:', $profileData);
+		} catch (error) {
+			console.error('Error loading profile:', error);
+			loadingError = `Failed to load profile: ${error.message}`;
+			profileLoading.set(false); // Force loading to end on error
+		}
+	}
+
 	onMount(() => {
 		// If user is not logged in, redirect to login
 		if (!$user) {
+			console.log('No user in onMount, redirecting to login');
 			goto('/login');
 		} else {
-			// Update profile data with user information
-			profileData = {
-				...profileData,
-				name: $user.displayName || 'VietSpark Member',
-				email: $user.email
-			};
+			console.log('User authenticated, loading profile');
+			// Load profile data
+			loadUserProfile();
+		}
+	});
+
+	onDestroy(() => {
+		// Clear the timeout if component is destroyed
+		if (loadingTimeout) {
+			clearTimeout(loadingTimeout);
 		}
 	});
 </script>
@@ -66,38 +140,107 @@
 	/>
 </svelte:head>
 
-{#if $authLoading}
+{#if $authLoading || $profileLoading}
 	<div class="flex min-h-screen items-center justify-center">
 		<div class="text-center">
 			<div
 				class="border-primary inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-t-2"
 			></div>
 			<p class="mt-4 text-gray-600">Loading profile...</p>
+			{#if loadingError}
+				<p class="mt-2 text-red-500">{loadingError}</p>
+				<button
+					class="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+					on:click={() => window.location.reload()}
+				>
+					Retry
+				</button>
+			{/if}
 		</div>
 	</div>
 {:else if $user}
+	<!-- Hidden file input for profile image upload -->
+	<input
+		type="file"
+		accept="image/*"
+		style="display: none;"
+		bind:this={fileInput}
+		on:change={handleFileChange}
+	/>
+
 	<!-- Profile Header -->
 	<section class="bg-primary py-16 text-white">
 		<div class="container mx-auto px-4">
 			<div class="flex flex-col items-center gap-8 md:flex-row">
 				<div
-					class="text-primary flex h-32 w-32 items-center justify-center rounded-full bg-blue-200 text-4xl font-bold"
+					class="text-primary relative flex h-32 w-32 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-blue-200 text-4xl font-bold"
+					on:click={handleAvatarClick}
+					on:keydown={(e) => {
+						if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space') {
+							e.preventDefault();
+							handleAvatarClick();
+						}
+					}}
+					role="button"
+					tabindex="0"
+					aria-label="Upload profile picture"
 				>
-					{profileData.name.charAt(0).toUpperCase()}
+					{#if isUploading}
+						<div
+							class="absolute inset-0 flex items-center justify-center bg-blue-200 bg-opacity-80"
+						>
+							<div
+								class="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent"
+							></div>
+						</div>
+					{:else if localImagePreview}
+						<img
+							src={localImagePreview}
+							alt="Profile Preview"
+							class="absolute inset-0 h-full w-full object-cover"
+						/>
+					{:else if $profileData.profileImage}
+						<img
+							src={$profileData.profileImage}
+							alt="Profile"
+							class="absolute inset-0 h-full w-full object-cover"
+						/>
+					{:else}
+						{($profileData.name || 'U').charAt(0).toUpperCase()}
+					{/if}
+
+					<!-- Overlay with hint -->
+					<div
+						class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity hover:opacity-100"
+					>
+						<i class="fas fa-camera text-2xl text-white"></i>
+					</div>
 				</div>
 				<div>
-					<h1 class="mb-2 text-3xl font-bold">{profileData.name}</h1>
-					<p class="mb-4 text-blue-100">{profileData.title} at {profileData.company}</p>
+					<h1 class="mb-2 flex w-full items-center justify-start text-3xl font-bold">
+						{$profileData.name || 'VietSpark Member'}
+					</h1>
+					<p class="mb-4 text-blue-100">
+						{$profileData.title || ''}
+						{$profileData.title && $profileData.company ? 'at' : ''}
+						{$profileData.company || ''}
+					</p>
 					<div class="flex flex-wrap gap-2">
 						<span class="inline-flex items-center rounded-full bg-blue-700 px-3 py-1 text-sm">
 							<i class="fas fa-map-marker-alt mr-2"></i>
-							{profileData.location}
+							{$profileData.location || 'No location set'}
 						</span>
 						<span class="inline-flex items-center rounded-full bg-blue-700 px-3 py-1 text-sm">
 							<i class="fas fa-envelope mr-2"></i>
-							{profileData.email}
+							{$profileData.email || 'No email available'}
 						</span>
 					</div>
+					{#if uploadError}
+						<div class="mt-2 text-sm text-red-300">{uploadError}</div>
+					{/if}
+					{#if $profileError}
+						<div class="mt-2 text-sm text-red-300">{$profileError}</div>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -129,21 +272,25 @@
 					<div class="lg:col-span-2">
 						<div class="rounded-lg bg-white p-6 shadow-md">
 							<h2 class="mb-4 text-2xl font-bold">About Me</h2>
-							<p class="mb-6 text-gray-700">{profileData.bio}</p>
+							<p class="mb-6 text-gray-700">{$profileData.bio || 'No bio information yet.'}</p>
 
 							<h3 class="mb-3 text-lg font-bold">Interests</h3>
 							<div class="mb-6 flex flex-wrap gap-2">
-								{#each profileData.interests as interest}
-									<span class="text-primary rounded-full bg-blue-100 px-3 py-1 text-sm">
-										{interest}
-									</span>
-								{/each}
+								{#if $profileData.interests && $profileData.interests.length > 0}
+									{#each $profileData.interests as interest}
+										<span class="text-primary rounded-full bg-blue-100 px-3 py-1 text-sm">
+											{interest}
+										</span>
+									{/each}
+								{:else}
+									<span class="text-sm text-gray-500">No interests added yet.</span>
+								{/if}
 							</div>
 
 							<h3 class="mb-3 text-lg font-bold">Recent Events</h3>
-							{#if profileData.events.length > 0}
+							{#if $profileData.events && $profileData.events.length > 0}
 								<div class="space-y-4">
-									{#each profileData.events.slice(0, 2) as event}
+									{#each $profileData.events.slice(0, 2) as event}
 										<div class="flex items-center rounded-lg bg-gray-50 p-3">
 											<div
 												class="text-primary mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100"
@@ -228,9 +375,9 @@
 				<div class="rounded-lg bg-white p-6 shadow-md">
 					<h2 class="mb-6 text-2xl font-bold">My Events</h2>
 
-					{#if profileData.events.length > 0}
+					{#if $profileData.events && $profileData.events.length > 0}
 						<div class="space-y-4">
-							{#each profileData.events as event}
+							{#each $profileData.events as event}
 								<div class="flex items-center rounded-lg border p-4 hover:bg-gray-50">
 									<div
 										class="text-primary mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100"
@@ -291,13 +438,30 @@
 				<div class="rounded-lg bg-white p-6 shadow-md">
 					<h2 class="mb-6 text-2xl font-bold">Account Settings</h2>
 
-					<form class="space-y-6">
+					<form
+						class="space-y-6"
+						on:submit|preventDefault={async () => {
+							if ($user && $user.uid) {
+								try {
+									await updateUserProfile($user.uid, {
+										name: $profileData.name,
+										title: $profileData.title,
+										company: $profileData.company,
+										location: $profileData.location,
+										bio: $profileData.bio
+									});
+								} catch (error) {
+									console.error('Error updating profile:', error);
+								}
+							}
+						}}
+					>
 						<div>
 							<label for="name" class="mb-2 block font-medium text-gray-700">Display Name</label>
 							<input
 								type="text"
 								id="name"
-								value={profileData.name}
+								bind:value={$profileData.name}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
 							/>
 						</div>
@@ -307,7 +471,7 @@
 							<input
 								type="email"
 								id="email"
-								value={profileData.email}
+								value={$profileData.email}
 								disabled
 								class="w-full rounded-md border bg-gray-50 px-4 py-2"
 							/>
@@ -319,7 +483,7 @@
 							<input
 								type="text"
 								id="title"
-								value={profileData.title}
+								bind:value={$profileData.title}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
 							/>
 						</div>
@@ -329,7 +493,7 @@
 							<input
 								type="text"
 								id="company"
-								value={profileData.company}
+								bind:value={$profileData.company}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
 							/>
 						</div>
@@ -339,7 +503,7 @@
 							<input
 								type="text"
 								id="location"
-								value={profileData.location}
+								bind:value={$profileData.location}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
 							/>
 						</div>
@@ -349,21 +513,30 @@
 							<textarea
 								id="bio"
 								rows="4"
+								bind:value={$profileData.bio}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
-								>{profileData.bio}</textarea
-							>
+							></textarea>
 						</div>
 
 						<div>
 							<fieldset>
 								<legend class="mb-2 block font-medium text-gray-700">Interests</legend>
 								<div class="flex flex-wrap gap-2">
-									{#each profileData.interests as interest, index}
+									{#each $profileData.interests as interest, index}
 										<div class="flex items-center rounded-full bg-blue-50 px-3 py-1">
 											<span>{interest}</span>
 											<button
 												class="ml-2 text-gray-500 hover:text-red-500"
 												aria-label={`Remove ${interest}`}
+												type="button"
+												on:click={() => {
+													const newInterests = [...$profileData.interests];
+													newInterests.splice(index, 1);
+													profileData.update((data) => ({
+														...data,
+														interests: newInterests
+													}));
+												}}
 											>
 												<i class="fas fa-times-circle"></i>
 											</button>
@@ -371,6 +544,16 @@
 									{/each}
 									<button
 										class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
+										type="button"
+										on:click={() => {
+											const interest = prompt('Enter new interest:');
+											if (interest && !$profileData.interests.includes(interest)) {
+												profileData.update((data) => ({
+													...data,
+													interests: [...data.interests, interest]
+												}));
+											}
+										}}
 									>
 										<i class="fas fa-plus mr-1"></i> Add interest
 									</button>
