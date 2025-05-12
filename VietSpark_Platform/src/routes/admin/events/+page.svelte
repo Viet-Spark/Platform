@@ -1,111 +1,157 @@
 <script>
 	import { onMount } from 'svelte';
-	import {
-		events,
-		eventsLoading,
-		eventsError,
-		fetchEvents,
-		deleteEvent
-	} from '$lib/stores/eventStore';
 	import { goto } from '$app/navigation';
+	import { authUser } from '$lib/stores/authStore';
+	import { userData } from '$lib/stores/userStore';
+	import { events, eventsLoading, fetchEvents, deleteEvent } from '$lib/stores/eventStore';
 
-	onMount(fetchEvents);
+	let isDataReady = false;
+	let filterStatus = 'all'; // all, upcoming, past
+	let filteredEvents = [];
 
-	async function handleDelete(eventId) {
-		if (confirm('Are you sure you want to delete this event?')) {
-			try {
-				await deleteEvent(eventId);
-			} catch (error) {
-				console.error('Error deleting event:', error);
+	$: if ($authUser && $userData) {
+		isDataReady = true;
+	}
+
+	$: if (isDataReady && $authUser && !$userData?.isAdmin) {
+		goto('/');
+	}
+
+	$: filteredEvents = $events
+		.filter((event) => {
+			const now = new Date();
+			const eventDate = new Date(event.date);
+
+			if (filterStatus === 'upcoming') {
+				return eventDate >= now;
+			} else if (filterStatus === 'past') {
+				return eventDate < now;
 			}
+			return true;
+		})
+		.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+	onMount(async () => {
+		await fetchEvents();
+	});
+
+	async function handleDelete(id) {
+		if (confirm('Are you sure you want to delete this event?')) {
+			await deleteEvent(id);
 		}
 	}
 </script>
 
-<div>
-	<div class="mb-8 flex items-center justify-between">
-		<h1 class="text-3xl font-bold">Manage Events</h1>
-		<a
-			href="/admin/events/new"
-			class="bg-primary hover:bg-primary-dark rounded-lg px-4 py-2 text-white"
-		>
-			Create New Event
-		</a>
-	</div>
-
-	{#if $eventsLoading}
-		<p>Loading events...</p>
-	{:else if $eventsError}
-		<p class="text-red-500">Error: {$eventsError}</p>
-	{:else if $events.length === 0}
-		<p>No events found. Create your first event!</p>
+<div class="container mx-auto px-4 py-8">
+	{#if !isDataReady}
+		<div class="flex h-screen items-center justify-center">
+			<p class="text-xl">Loading...</p>
+		</div>
 	{:else}
-		<div class="overflow-x-auto rounded-lg bg-white shadow">
-			<table class="min-w-full divide-y divide-gray-200">
-				<thead class="bg-gray-50">
-					<tr>
-						<th
-							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-						>
-							Title
-						</th>
-						<th
-							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-						>
-							Date
-						</th>
-						<th
-							class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
-						>
-							Status
-						</th>
-						<th
-							class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500"
-						>
-							Actions
-						</th>
-					</tr>
-				</thead>
-				<tbody class="divide-y divide-gray-200 bg-white">
-					{#each $events as event}
-						<tr>
-							<td class="whitespace-nowrap px-6 py-4">
-								<div class="text-sm font-medium text-gray-900">{event.title}</div>
-							</td>
-							<td class="whitespace-nowrap px-6 py-4">
-								<div class="text-sm text-gray-500">
-									{new Date(event.date).toLocaleDateString()}
-								</div>
-							</td>
-							<td class="whitespace-nowrap px-6 py-4">
-								<span
-									class="inline-flex rounded-full px-2 text-xs font-semibold leading-5"
-									class:bg-green-100={new Date(event.date) > new Date()}
-									class:text-green-800={new Date(event.date) > new Date()}
-									class:bg-gray-100={new Date(event.date) <= new Date()}
-									class:text-gray-800={new Date(event.date) <= new Date()}
-								>
-									{new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
-								</span>
-							</td>
-							<td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-								<a
-									href="/admin/events/{event.id}/edit"
-									class="text-primary hover:text-primary-dark"
-								>
+		<div class="mb-8 flex items-center justify-between">
+			<h1 class="text-3xl font-bold">Manage Events</h1>
+			<a
+				href="/admin/events/new"
+				class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white"
+			>
+				Create New Event
+			</a>
+		</div>
+
+		<div class="mb-6 flex space-x-4">
+			<button
+				class="rounded-md px-4 py-2"
+				class:bg-primary={filterStatus === 'all'}
+				class:text-white={filterStatus === 'all'}
+				class:bg-gray-100={filterStatus !== 'all'}
+				class:text-gray-700={filterStatus !== 'all'}
+				on:click={() => (filterStatus = 'all')}
+			>
+				All Events
+			</button>
+			<button
+				class="rounded-md px-4 py-2"
+				class:bg-primary={filterStatus === 'upcoming'}
+				class:text-white={filterStatus === 'upcoming'}
+				class:bg-gray-100={filterStatus !== 'upcoming'}
+				class:text-gray-700={filterStatus !== 'upcoming'}
+				on:click={() => (filterStatus = 'upcoming')}
+			>
+				Upcoming
+			</button>
+			<button
+				class="rounded-md px-4 py-2"
+				class:bg-primary={filterStatus === 'past'}
+				class:text-white={filterStatus === 'past'}
+				class:bg-gray-100={filterStatus !== 'past'}
+				class:text-gray-700={filterStatus !== 'past'}
+				on:click={() => (filterStatus = 'past')}
+			>
+				Past
+			</button>
+		</div>
+
+		{#if $eventsLoading}
+			<div class="flex h-32 items-center justify-center">
+				<p>Loading events...</p>
+			</div>
+		{:else if filteredEvents.length === 0}
+			<div class="rounded-lg bg-gray-100 p-8 text-center">
+				<p class="text-gray-600">No events found. Create your first event!</p>
+			</div>
+		{:else}
+			<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+				{#each filteredEvents as event}
+					<div class="rounded-lg bg-white p-6 shadow-md">
+						{#if event.image}
+							<img
+								src={event.image}
+								alt={event.title}
+								class="mb-4 h-48 w-full rounded-lg object-cover"
+							/>
+						{/if}
+						<div class="mb-4 flex items-center justify-between">
+							<h3 class="text-xl font-semibold">{event.title}</h3>
+							<div class="flex space-x-2">
+								<a href="/admin/events/{event.id}/edit" class="text-blue-600 hover:text-blue-800">
 									Edit
 								</a>
 								<button
 									on:click={() => handleDelete(event.id)}
-									class="ml-4 text-red-600 hover:text-red-900"
+									class="text-red-600 hover:text-red-800"
 								>
 									Delete
 								</button>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+							</div>
+						</div>
+						<p class="mb-4 text-gray-600">{event.description}</p>
+						<div class="mb-4">
+							<p class="text-sm text-gray-500">
+								<i class="far fa-calendar mr-2"></i>
+								{new Date(event.date).toLocaleDateString()} at {event.time}
+							</p>
+							<p class="text-sm text-gray-500">
+								<i class="fas fa-map-marker-alt mr-2"></i>
+								{event.location}
+							</p>
+						</div>
+						<div class="flex flex-wrap gap-2">
+							{#each event.tags as tag}
+								<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
+									{tag}
+								</span>
+							{/each}
+						</div>
+						<a
+							href="/events/{event.slug}"
+							target="_blank"
+							class="text-primary mt-4 inline-block hover:underline"
+						>
+							View Event →
+						</a>
+					</div>
+				{/each}
+			</div>
+		{/if}
 	{/if}
 </div>
