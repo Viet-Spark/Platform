@@ -1,5 +1,5 @@
 <script>
-	import { user, logout } from '$lib/stores/authStore';
+	import { authUser, logout } from '$lib/stores/authStore';
 
 	async function handleLogout() {
 		try {
@@ -10,14 +10,16 @@
 	}
 </script>
 
-{#if $user}
+{#if $authUser}
 	<div class="mx-auto max-w-md rounded-lg bg-white p-6 shadow-md">
 		<div class="text-center">
 			<div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
-				<span class="text-xl font-bold text-blue-600">{$user.email.charAt(0).toUpperCase()}</span>
+				<span class="text-xl font-bold text-blue-600"
+					>{$authUser.email.charAt(0).toUpperCase()}</span
+				>
 			</div>
-			<h2 class="text-xl font-bold">{$user.email}</h2>
-			<p class="mb-4 text-sm text-gray-600">User ID: {$user.uid}</p>
+			<h2 class="text-xl font-bold">{$authUser.email}</h2>
+			<p class="mb-4 text-sm text-gray-600">User ID: {$authUser.uid}</p>
 
 			<button
 				on:click={handleLogout}

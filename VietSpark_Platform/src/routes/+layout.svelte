@@ -1,6 +1,29 @@
 <script>
 	import '../app.css';
-	import { user } from '$lib/stores/authStore';
+	import { authUser } from '$lib/stores/authStore';
+	import { userData } from '$lib/stores/userStore';
+	import { addSubscriber, newsletterError, newsletterLoading } from '$lib/stores/newsletterStore';
+
+	let isMobileMenuOpen = false;
+	let newsletterEmail = '';
+	let newsletterMessage = '';
+
+	function toggleMobileMenu() {
+		isMobileMenuOpen = !isMobileMenuOpen;
+	}
+
+	async function handleNewsletterSubmit() {
+		newsletterMessage = '';
+		try {
+			await addSubscriber(newsletterEmail);
+			newsletterMessage = 'Thank you for subscribing!';
+			newsletterEmail = '';
+		} catch (error) {
+			newsletterMessage = error.message;
+		}
+	}
+
+	$: console.log('user', $userData);
 </script>
 
 <svelte:head>
@@ -36,24 +59,31 @@
 			</div>
 
 			<div class="flex items-center space-x-4">
-				{#if $user}
+				{#if $authUser}
 					<a href="/profile" class="text-primary text-sm hover:underline">
-						{$user.email}
+						{$userData?.email || $authUser.email}
 					</a>
+					{#if $userData?.isAdmin}
+						<a href="/admin" class="text-primary text-sm hover:underline"> Admin Dashboard </a>
+					{/if}
 				{:else}
 					<a href="/login" class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white">
 						Login
 					</a>
 				{/if}
 
-				<button class="text-gray-600 focus:outline-none md:hidden" aria-label="Toggle menu">
+				<button
+					class="text-gray-600 focus:outline-none md:hidden"
+					aria-label="Toggle menu"
+					on:click={toggleMobileMenu}
+				>
 					<i class="fas fa-bars text-xl"></i>
 				</button>
 			</div>
 		</nav>
 
 		<!-- Mobile menu (hidden by default) -->
-		<div class="hidden md:hidden">
+		<div class="md:hidden" class:hidden={!isMobileMenuOpen}>
 			<div class="space-y-1 px-2 pb-3 pt-2">
 				<a href="/" class="mobile-nav-link">Home</a>
 				<a href="/about" class="mobile-nav-link">About Us</a>
@@ -124,18 +154,30 @@
 				<div>
 					<h3 class="mb-4 text-lg font-bold">Newsletter</h3>
 					<p class="mb-4 text-gray-300">Subscribe to our newsletter for updates</p>
-					<form class="flex">
+					<form on:submit|preventDefault={handleNewsletterSubmit} class="flex flex-col space-y-2">
 						<input
 							type="email"
+							bind:value={newsletterEmail}
 							placeholder="Your email"
-							class="w-full rounded-l-md px-3 py-2 focus:outline-none"
+							required
+							class="w-full rounded-md px-3 py-2 focus:outline-none"
 						/>
 						<button
 							type="submit"
-							class="bg-primary hover:bg-primary-dark rounded-r-md px-4 py-2 focus:outline-none"
+							disabled={$newsletterLoading}
+							class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 focus:outline-none disabled:opacity-50"
 						>
-							Subscribe
+							{$newsletterLoading ? 'Subscribing...' : 'Subscribe'}
 						</button>
+						{#if newsletterMessage}
+							<p
+								class="text-sm"
+								class:text-red-500={$newsletterError}
+								class:text-green-500={!$newsletterError}
+							>
+								{newsletterMessage}
+							</p>
+						{/if}
 					</form>
 				</div>
 			</div>

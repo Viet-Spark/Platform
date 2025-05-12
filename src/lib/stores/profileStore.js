@@ -15,8 +15,7 @@ export const profileData = writable({
     bio: 'Passionate about technology and community building.',
     interests: ['Web Development', 'AI/ML', 'Community Building'],
     profileImage: null,
-    events: [],
-    isAdmin: false
+    events: []
 });
 
 export const profileLoading = writable(false);

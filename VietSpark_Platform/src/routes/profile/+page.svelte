@@ -1,6 +1,13 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import { user, logout, authLoading } from '$lib/stores/authStore';
+	import { authUser, logout, authLoading } from '$lib/stores/authStore';
+	import {
+		userData,
+		userLoading,
+		userError,
+		getUserData,
+		updateUserData
+	} from '$lib/stores/userStore';
 	import {
 		profileData,
 		profileLoading,
@@ -69,8 +76,8 @@
 
 		try {
 			// Upload to Firebase Storage
-			if ($user && $user.uid) {
-				await uploadProfileImage($user.uid, file);
+			if ($authUser && $authUser.uid) {
+				await uploadProfileImage($authUser.uid, file);
 				// The profileData store will be updated automatically
 				localImagePreview = null; // Clear local preview as we'll use the one from Firebase
 			} else {
@@ -94,7 +101,7 @@
 			}
 		}, 15000);
 
-		if (!$user || !$user.uid) {
+		if (!$authUser || !$authUser.uid) {
 			console.log('No user or user ID available');
 			loadingError = 'User not authenticated';
 			profileLoading.set(false); // Force loading to end if no user
@@ -102,8 +109,9 @@
 		}
 
 		try {
-			console.log('Loading profile for user:', $user.uid);
-			await getUserProfile($user.uid);
+			console.log('Loading profile for user:', $authUser.uid);
+			await getUserData($authUser.uid);
+			await getUserProfile($authUser.uid);
 			console.log('Profile loaded successfully:', $profileData);
 		} catch (error) {
 			console.error('Error loading profile:', error);
@@ -112,17 +120,14 @@
 		}
 	}
 
-	onMount(() => {
-		// If user is not logged in, redirect to login
-		if (!$user) {
-			console.log('No user in onMount, redirecting to login');
-			goto('/login');
-		} else {
-			console.log('User authenticated, loading profile');
-			// Load profile data
-			loadUserProfile();
-		}
+	onMount(async () => {
+		await loadUserProfile();
 	});
+
+	// Add a subscription to authUser changes
+	$: if ($authUser) {
+		loadUserProfile();
+	}
 
 	onDestroy(() => {
 		// Clear the timeout if component is destroyed
@@ -158,7 +163,7 @@
 			{/if}
 		</div>
 	</div>
-{:else if $user}
+{:else if $authUser}
 	<!-- Hidden file input for profile image upload -->
 	<input
 		type="file"
@@ -441,9 +446,9 @@
 					<form
 						class="space-y-6"
 						on:submit|preventDefault={async () => {
-							if ($user && $user.uid) {
+							if ($authUser && $authUser.uid) {
 								try {
-									await updateUserProfile($user.uid, {
+									await updateUserProfile($authUser.uid, {
 										name: $profileData.name,
 										title: $profileData.title,
 										company: $profileData.company,
@@ -496,6 +501,34 @@
 								bind:value={$profileData.company}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
 							/>
+						</div>
+
+						<div class="flex items-center justify-between rounded-lg border p-4">
+							<div>
+								<h3 class="font-medium text-gray-700">Admin Access</h3>
+								<p class="text-sm text-gray-600">Toggle admin privileges for your account</p>
+							</div>
+							<label class="relative inline-flex cursor-pointer items-center">
+								<input
+									type="checkbox"
+									class="peer sr-only"
+									bind:checked={$userData.isAdmin}
+									on:change={async () => {
+										if ($authUser && $authUser.uid) {
+											try {
+												await updateUserData($authUser.uid, { isAdmin: $userData.isAdmin });
+											} catch (error) {
+												console.error('Error updating admin status:', error);
+												// Revert the change if update fails
+												$userData.isAdmin = !$userData.isAdmin;
+											}
+										}
+									}}
+								/>
+								<div
+									class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300"
+								></div>
+							</label>
 						</div>
 
 						<div>

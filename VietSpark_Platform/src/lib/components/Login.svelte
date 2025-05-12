@@ -4,7 +4,7 @@
 		registerWithEmail,
 		authLoading,
 		authError,
-		user
+		authUser
 	} from '$lib/stores/authStore';
 
 	let email = '';
@@ -36,7 +36,7 @@
 	}
 </script>
 
-{#if !$user}
+{#if !$authUser}
 	<div class="mx-auto max-w-md rounded-lg bg-white p-6 shadow-md">
 		<div class="mb-6 text-center">
 			<img
@@ -98,6 +98,6 @@
 	</div>
 {:else}
 	<div class="mx-auto max-w-md rounded-lg bg-white p-6 text-center shadow-md">
-		<p class="mb-4">You are logged in as {$user.email}</p>
+		<p class="mb-4">You are logged in as {$authUser.email}</p>
 	</div>
 {/if}

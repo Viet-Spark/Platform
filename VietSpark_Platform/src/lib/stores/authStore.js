@@ -1,19 +1,22 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { writable } from 'svelte/store';
 import { auth } from '$lib/firebase/firebase';
+import { initializeUserData } from './userStore';
 
-// Create a store for the user
-export const user = writable(null);
+// Create stores for auth state
+export const authUser = writable(null);
 export const authLoading = writable(true);
 export const authError = writable(null);
 
 // Listen for auth state changes
-onAuthStateChanged(auth, (firebaseUser) => {
+onAuthStateChanged(auth, async (firebaseUser) => {
     authLoading.set(false);
     if (firebaseUser) {
-        user.set(firebaseUser);
+        authUser.set(firebaseUser);
+        // Initialize or update user data when auth state changes
+        await initializeUserData(firebaseUser.uid, firebaseUser.email);
     } else {
-        user.set(null);
+        authUser.set(null);
     }
 });
 

@@ -4,7 +4,7 @@
 	import welcomeFallback from '$lib/images/svelte-welcome.png';
 	import Login from '$lib/components/Login.svelte';
 	import UserProfile from '$lib/components/UserProfile.svelte';
-	import { user } from '$lib/stores/authStore';
+	import { authUser } from '$lib/stores/authStore';
 </script>
 
 <svelte:head>
@@ -28,7 +28,7 @@
 				</p>
 				<div class="flex flex-wrap gap-4">
 					<a href="/about" class="btn text-primary bg-white hover:bg-gray-100">Learn More</a>
-					{#if !$user}
+					{#if !$authUser}
 						<a
 							href="/login"
 							class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
@@ -235,7 +235,7 @@
 			Connect with like-minded professionals, access mentorship opportunities, and grow your career
 			in tech.
 		</p>
-		{#if !$user}
+		{#if !$authUser}
 			<a href="/login" class="btn text-primary bg-white hover:bg-gray-100">Join VietSpark</a>
 		{:else}
 			<a href="/profile" class="btn text-primary bg-white hover:bg-gray-100">View Your Profile</a>
