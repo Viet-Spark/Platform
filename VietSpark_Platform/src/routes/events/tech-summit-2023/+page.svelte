@@ -1,5 +1,5 @@
 <script>
-	import TechSummitImage from '$lib/images/Events/TechSummitImage.jpg'
+	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
 	// Event data (to be replaced with API/database data later)
 	const event = {
 		title: 'Annual Tech Summit 2023',
@@ -64,10 +64,10 @@
 				<div class="prose prose-lg max-w-none">
 					<h2>About This Event</h2>
 					<p>
-						Our signature event, usually held in August, brings together Vietnamese professionals 
-						from across the tech industry onsite for 2-3 days of learning, networking, and inspiration. 
-						The Tech Summit features keynote speeches from industry leaders, panel discussions on emerging trends, 
-						and workshops to develop practical skills
+						Our signature event, usually held in August, brings together Vietnamese professionals
+						from across the tech industry onsite for 2-3 days of learning, networking, and
+						inspiration. The Tech Summit features keynote speeches from industry leaders, panel
+						discussions on emerging trends, and workshops to develop practical skills
 					</p>
 					<p>
 						Whether you're a seasoned professional or just starting your tech journey, the Tech
