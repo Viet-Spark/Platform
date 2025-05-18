@@ -11,7 +11,7 @@ export const blogLoading = writable(false);
 // Create a writable store for error state
 export const blogError = writable(null);
 
-// Function to fetch all blog posts
+// Function to fetch all blog post s
 export const fetchBlogPosts = async () => {
     blogLoading.set(true);
     try {
