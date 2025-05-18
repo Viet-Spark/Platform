@@ -1,6 +1,6 @@
 <script>
-	import TechSummitImage from '$lib/images/Events/TechSummitImage.jpg'
-	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg'
+	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
+	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
 	// Sample events data (to be replaced with actual data from a database/API)
 	const upcomingEvents = [
 		{
