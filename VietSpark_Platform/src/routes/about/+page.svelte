@@ -2,26 +2,32 @@
 	// Team members data (to be expanded with real data)
 	const boardMembers = [
 		{
-			name: 'Jane Doe',
-			title: 'Board Chair',
+			name: 'Ionah Hang Nguyen',
+			title: 'Founder',
 			image: 'https://via.placeholder.com/150',
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
-			name: 'John Smith',
-			title: 'Vice Chair',
+			name: 'Hanh Mai',
+			title: 'Managing Director',
 			image: 'https://via.placeholder.com/150',
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
-			name: 'Alice Johnson',
-			title: 'Secretary',
+			name: 'Van Le',
+			title: 'Head of External Relations',
 			image: 'https://via.placeholder.com/150',
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
-			name: 'Robert Williams',
-			title: 'Treasurer',
+			name: 'Nhu Vo',
+			title: 'Head of Operations',
+			image: 'https://via.placeholder.com/150',
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Tan Phan',
+			title: 'Director of Programs',
 			image: 'https://via.placeholder.com/150',
 			linkedIn: 'https://linkedin.com/'
 		}
@@ -81,22 +87,20 @@
 				<h2 class="mb-6 text-3xl font-bold">Our History</h2>
 				<div class="bg-primary mb-6 h-1 w-24"></div>
 				<p class="mb-4 text-gray-700">
-					Viet Spark traces its roots back to 2020, when a group of passionate US-based Viet MBAs
-					recognized the need for a platform that would bridge the gap between Vietnamese
-					professionals and the tech industry. Originally known as <em
-						>Vietnamese Business Professionals in Tech</em
-					>, our organization has evolved into a vibrant community that thrives on
-					knowledge-sharing, mentorship, and collaboration.
+					Viet Spark was founded in 2020 by a group of passionate US-based Vietnamese MBAs 
+					who recognized the need for a platform connecting Vietnamese professionals with the tech industry. 
+					Originally known as <em>Vietnamese Business Professionals in Tech</em
+					>, our organization has grown into a dynamic community focused on mentorship, 
+					knowledge-sharing, and collaboration.
 				</p>
 				<p class="mb-4 text-gray-700">
-					Over the years, we've hosted impactful events, facilitated countless connections, and
-					witnessed the growth of our members. From our signature Tech Summit to the inspiring Human
-					of Viet Spark series, our history is woven with stories of resilience, achievement, and
-					collective progress.
+					Over the years, we've hosted impactful events, fostered valuable connections, and witnessed our members' growth. 
+					From our signature Tech Summit to our empowering Mentorship Program, our journey has been marked by 
+					stories of resilience, success, and collective progress.
 				</p>
 				<p class="text-gray-700">
-					Join us as we continue to write the next chapter of Viet Spark, where passion meets
-					purpose, and where every individual has the opportunity to spark their own success story.
+					Join us as we continue to shape the future of Viet Spark, where passion fuels purpose, 
+					and every individual has the opportunity to spark their own success story.
 				</p>
 			</div>
 			<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100">
@@ -134,10 +138,9 @@
 				</div>
 				<h2 class="mb-4 text-2xl font-bold">Our Vision</h2>
 				<p class="text-gray-700">
-					Empowering Vietnamese professionals to lead in tech. We envision a future where Vietnamese
-					professionals are well-represented in leadership positions across the tech industry,
-					contributing their unique perspectives and talents to drive innovation and create positive
-					impact.
+					We aim to empower Vietnamese professionals to take the lead in tech. 
+					We envision a future where Vietnamese professionals hold influential leadership roles across the tech industry, 
+					bringing their unique perspectives and talents to foster innovation and create lasting, positive change.
 				</p>
 			</div>
 		</div>
@@ -202,72 +205,6 @@
 				<h3 class="mb-2 text-xl font-bold">Diversity</h3>
 				<p class="text-gray-600">We celebrate diverse perspectives and inclusive collaboration.</p>
 			</div>
-		</div>
-	</div>
-</section>
-
-<!-- Board of Management Section -->
-<section class="bg-gray-50 py-16">
-	<div class="container mx-auto px-4">
-		<div class="mb-12 text-center">
-			<h2 class="mb-4 text-3xl font-bold">Board of Management</h2>
-			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-		</div>
-
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-			{#each boardMembers as member}
-				<div class="rounded-lg bg-white p-6 text-center shadow-md">
-					<img
-						src={member.image}
-						alt={member.name}
-						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
-					/>
-					<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
-					<p class="mb-3 text-gray-600">{member.title}</p>
-					<a
-						href={member.linkedIn}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-primary hover:text-primary-dark"
-						aria-label={`${member.name}'s LinkedIn profile`}
-					>
-						<i class="fab fa-linkedin text-xl"></i>
-					</a>
-				</div>
-			{/each}
-		</div>
-	</div>
-</section>
-
-<!-- Advisory Board Section -->
-<section class="bg-white py-16">
-	<div class="container mx-auto px-4">
-		<div class="mb-12 text-center">
-			<h2 class="mb-4 text-3xl font-bold">Advisory Board</h2>
-			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-		</div>
-
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-			{#each advisoryBoard as member}
-				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
-					<img
-						src={member.image}
-						alt={member.name}
-						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
-					/>
-					<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
-					<p class="mb-3 text-gray-600">{member.title}</p>
-					<a
-						href={member.linkedIn}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-primary hover:text-primary-dark"
-						aria-label={`${member.name}'s LinkedIn profile`}
-					>
-						<i class="fab fa-linkedin text-xl"></i>
-					</a>
-				</div>
-			{/each}
 		</div>
 	</div>
 </section>
@@ -341,6 +278,72 @@
 					<li>Job fairs and recruitment partnerships</li>
 				</ul>
 			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Board of Directors Section -->
+<section class="bg-gray-50 py-16">
+	<div class="container mx-auto px-4">
+		<div class="mb-12 text-center">
+			<h2 class="mb-4 text-3xl font-bold">Board of Directors</h2>
+			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
+		</div>
+
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{#each boardMembers as member}
+				<div class="rounded-lg bg-white p-6 text-center shadow-md">
+					<img
+						src={member.image}
+						alt={member.name}
+						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+					/>
+					<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
+					<p class="mb-3 text-gray-600">{member.title}</p>
+					<a
+						href={member.linkedIn}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-primary hover:text-primary-dark"
+						aria-label={`${member.name}'s LinkedIn profile`}
+					>
+						<i class="fab fa-linkedin text-xl"></i>
+					</a>
+				</div>
+			{/each}
+		</div>
+	</div>
+</section>
+
+<!-- Advisory Board Section -->
+<section class="bg-white py-16">
+	<div class="container mx-auto px-4">
+		<div class="mb-12 text-center">
+			<h2 class="mb-4 text-3xl font-bold">Advisory Board</h2>
+			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
+		</div>
+
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{#each advisoryBoard as member}
+				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
+					<img
+						src={member.image}
+						alt={member.name}
+						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+					/>
+					<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
+					<p class="mb-3 text-gray-600">{member.title}</p>
+					<a
+						href={member.linkedIn}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-primary hover:text-primary-dark"
+						aria-label={`${member.name}'s LinkedIn profile`}
+					>
+						<i class="fab fa-linkedin text-xl"></i>
+					</a>
+				</div>
+			{/each}
 		</div>
 	</div>
 </section>

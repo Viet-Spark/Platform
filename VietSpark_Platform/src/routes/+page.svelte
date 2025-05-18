@@ -18,38 +18,30 @@
 <!-- Hero Section -->
 <section class="hero-section from-primary bg-gradient-to-r to-blue-800 py-16 text-white">
 	<div class="container mx-auto px-4">
-		<div class="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-			<div>
-				<h1 class="mb-4 text-4xl font-bold md:text-5xl">
-					Empowering Vietnamese Professionals to Lead in Tech
-				</h1>
-				<p class="mb-8 text-xl">
-					Connect, learn, and grow with a community of like-minded professionals.
-				</p>
-				<div class="flex flex-wrap gap-4">
-					<a href="/about" class="btn text-primary bg-white hover:bg-gray-100">Learn More</a>
-					{#if !$authUser}
-						<a
-							href="/login"
-							class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
-						>
-							Join Us
-						</a>
-					{:else}
-						<a
-							href="/events"
-							class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
-						>
-							Explore Events
-						</a>
-					{/if}
-				</div>
-			</div>
-			<div class="hidden md:block">
-				<!-- Placeholder for hero image -->
-				<div class="flex h-96 items-center justify-center rounded-lg bg-blue-200">
-					<span class="text-primary text-lg font-bold">VietSpark Hero Image</span>
-				</div>
+		<div class="flex flex-col items-center">
+			<h1 class="mb-4 text-4xl font-bold md:text-5xl">
+				Empowering Vietnamese Professionals to Lead in Tech
+			</h1>
+			<p class="mb-8 text-xl ">
+				Connect, learn, and grow with a community of like-minded professionals.
+			</p>
+			<div class="flex flex-wrap gap-4">
+				<a href="/events/tech-summit-2023" class="btn text-primary bg-white hover:bg-gray-100">Tech Summit 2025</a>
+				{#if !$authUser}
+					<a
+						href="/work-with-us"
+						class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
+					>
+						Join Us
+					</a>
+				{:else}
+					<a
+						href="/events"
+						class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
+					>
+						Explore Events
+					</a>
+				{/if}
 			</div>
 		</div>
 	</div>
