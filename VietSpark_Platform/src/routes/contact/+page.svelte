@@ -56,7 +56,7 @@
 				<h3 class="mb-2 text-xl font-bold">Email Us</h3>
 				<p class="mb-4 text-gray-600">For general inquiries and information</p>
 				<a href="mailto:info@vietspark.org" class="text-primary hover:underline"
-					>info@vietspark.org</a
+					>contact@vietspark.org</a
 				>
 			</div>
 
@@ -69,7 +69,7 @@
 				<h3 class="mb-2 text-xl font-bold">Partnership Inquiries</h3>
 				<p class="mb-4 text-gray-600">For sponsorships and collaborations</p>
 				<a href="mailto:partnerships@vietspark.org" class="text-primary hover:underline"
-					>partnerships@vietspark.org</a
+					>fundraising@vietspark.org</a
 				>
 			</div>
 
@@ -81,7 +81,7 @@
 				</div>
 				<h3 class="mb-2 text-xl font-bold">Join Our Team</h3>
 				<p class="mb-4 text-gray-600">For volunteer and career opportunities</p>
-				<a href="/work-with-us" class="text-primary hover:underline">View Opportunities</a>
+				<a href="/work-with-us" class="text-primary hover:underline">Work with us</a>
 			</div>
 		</div>
 
