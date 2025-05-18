@@ -1,35 +1,41 @@
 <script>
+	import placeHolderAvatar from '$lib/images/About/placeHolderAvatar.jpg';
+	import IonahImage from '$lib/images/About/Ionah.jpg';
+	import HanhMaiImage from '$lib/images/About/HanhMai.jpg';
+    import VanLeImage from '$lib/images/About/VanLe.jpg';
+    import TanPhanImage from '$lib/images/About/TanPhan.jpg';
 	// Team members data (to be expanded with real data)
+    import HistoryImage from '$lib/images/About/HistoryImage.jpg';
 	const boardMembers = [
 		{
 			name: 'Ionah Hang Nguyen',
 			title: 'Founder',
-			image: 'https://via.placeholder.com/150',
-			linkedIn: 'https://linkedin.com/'
+			image: IonahImage,
+			linkedIn: 'https://www.linkedin.com/in/ionah-hang-nguyen-60b59922/'
 		},
 		{
 			name: 'Hanh Mai',
 			title: 'Managing Director',
-			image: 'https://via.placeholder.com/150',
-			linkedIn: 'https://linkedin.com/'
+			image: HanhMaiImage,
+			linkedIn: 'https://www.linkedin.com/in/hanhmaihhm'
 		},
 		{
 			name: 'Van Le',
 			title: 'Head of External Relations',
-			image: 'https://via.placeholder.com/150',
-			linkedIn: 'https://linkedin.com/'
+			image: VanLeImage,
+			linkedIn: 'https://www.linkedin.com/in/van-hong-le'
 		},
 		{
 			name: 'Nhu Vo',
 			title: 'Head of Operations',
-			image: 'https://via.placeholder.com/150',
+			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
 			name: 'Tan Phan',
 			title: 'Director of Programs',
-			image: 'https://via.placeholder.com/150',
-			linkedIn: 'https://linkedin.com/'
+			image: TanPhanImage,
+			linkedIn: 'https://www.linkedin.com/in/tanphanvan'
 		}
 	];
 
@@ -37,25 +43,25 @@
 		{
 			name: 'Dr. Emily Chen',
 			title: 'Technology Advisor',
-			image: 'https://via.placeholder.com/150',
+			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
 			name: 'Michael Brown',
 			title: 'Industry Advisor',
-			image: 'https://via.placeholder.com/150',
+			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
 			name: 'Sarah Wilson',
 			title: 'Education Advisor',
-			image: 'https://via.placeholder.com/150',
+			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
 			name: 'David Lee',
 			title: 'Financial Advisor',
-			image: 'https://via.placeholder.com/150',
+			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		}
 	];
@@ -103,9 +109,9 @@
 					and every individual has the opportunity to spark their own success story.
 				</p>
 			</div>
-			<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100">
+			<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100 overflow-hidden">
 				<!-- Placeholder for history image -->
-				<span class="font-bold text-gray-500">History Image</span>
+				<img src={HistoryImage} alt="History" class="object-cover w-full"/>
 			</div>
 		</div>
 	</div>

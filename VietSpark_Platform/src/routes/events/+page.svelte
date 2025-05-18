@@ -1,4 +1,6 @@
 <script>
+	import TechSummitImage from '$lib/images/Events/TechSummitImage.jpg'
+	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg'
 	// Sample events data (to be replaced with actual data from a database/API)
 	const upcomingEvents = [
 		{
@@ -9,8 +11,8 @@
 			location: 'San Francisco, CA',
 			description:
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			image: 'https://via.placeholder.com/800x400',
-			category: 'Tech Summit'
+			image: TechSummitImage,
+			category: 'Vietnam Tech Summit'
 		},
 		{
 			id: 'break-into-tech',
@@ -20,7 +22,7 @@
 			location: 'Online (Zoom)',
 			description:
 				'A workshop designed to help newcomers navigate their way into the tech industry.',
-			image: 'https://via.placeholder.com/800x400',
+			image: EventPlaceHolderImage,
 			category: 'Break Into Tech'
 		},
 		{
@@ -30,7 +32,7 @@
 			time: '6:00 PM - 9:00 PM PST',
 			location: 'Seattle, WA',
 			description: 'An evening of networking with professionals from leading tech companies.',
-			image: 'https://via.placeholder.com/800x400',
+			image: EventPlaceHolderImage,
 			category: 'Networking'
 		}
 	];
@@ -43,7 +45,7 @@
 			location: 'San Francisco, CA',
 			description:
 				'Our signature event featuring keynotes from tech leaders and innovative workshops.',
-			image: 'https://via.placeholder.com/800x400',
+			image: EventPlaceHolderImage,
 			category: 'Tech Summit'
 		},
 		{
@@ -53,14 +55,15 @@
 			location: 'Online (Zoom)',
 			description:
 				'The launch of our annual mentorship program pairing mentees with experienced tech professionals.',
-			image: 'https://via.placeholder.com/800x400',
+			image: EventPlaceHolderImage,
 			category: 'Mentorship'
 		}
 	];
 
 	// Filter events by category
 	let selectedCategory = 'All';
-	const categories = ['All', 'Tech Summit', 'Break Into Tech', 'Networking', 'Mentorship'];
+	// const categories = ['All', 'Vietnam Tech Summit', 'Break Into Tech', 'Networking', 'Vietnam – US Fall Forum'];
+	const categories = ['All', 'Vietnam Tech Summit', 'Break Into Tech', 'Vietnam – US Fall Forum'];
 
 	$: filteredUpcomingEvents =
 		selectedCategory === 'All'
