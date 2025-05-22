@@ -5,6 +5,7 @@
 	import Login from '$lib/components/Login.svelte';
 	import UserProfile from '$lib/components/UserProfile.svelte';
 	import { authUser } from '$lib/stores/authStore';
+	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
 </script>
 
 <svelte:head>
@@ -163,21 +164,21 @@
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
 			<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
-					<span class="text-primary font-bold">Tech Summit Image</span>
+					<img src={TechSummitImage} alt="TechSummitImage" class="object-cover w-full h-48"/>
 				</div>
 				<div class="p-6">
-					<div class="text-primary mb-2 text-sm font-semibold">Dec 15, 2023</div>
-					<h3 class="mb-2 text-xl font-bold">Annual Tech Summit 2023</h3>
+					<div class="text-primary mb-2 text-sm font-semibold">Dec 15, 2025</div>
+					<h3 class="mb-2 text-xl font-bold">Tech Summit 2025</h3>
 					<p class="mb-4 text-gray-600">
 						Join us for a day of inspiring talks, networking, and workshops from industry leaders.
 					</p>
-					<a href="/events/tech-summit-2023" class="text-primary font-medium hover:underline"
+					<a href="/events/tech-summit-2025" class="text-primary font-medium hover:underline"
 						>Learn more →</a
 					>
 				</div>
 			</div>
 
-			<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
+			<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
 					<span class="text-primary font-bold">Break Into Tech Image</span>
 				</div>
@@ -191,7 +192,7 @@
 						>Learn more →</a
 					>
 				</div>
-			</div>
+			</div> -->
 		</div>
 
 		<div class="mt-8 text-center">
