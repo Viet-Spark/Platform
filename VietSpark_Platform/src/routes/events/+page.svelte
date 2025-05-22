@@ -4,9 +4,9 @@
 	// Sample events data (to be replaced with actual data from a database/API)
 	const upcomingEvents = [
 		{
-			id: 'tech-summit-2023',
-			title: 'Annual Tech Summit 2023',
-			date: 'December 15, 2023',
+			id: 'tech-summit-2025',
+			title: 'Annual Tech Summit 2025',
+			date: 'December 15, 2025',
 			time: '9:00 AM - 5:00 PM PST',
 			location: 'San Francisco, CA',
 			description:
@@ -180,13 +180,12 @@
 	<div class="container mx-auto px-4">
 		<div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
 			<div class="order-2 lg:order-1">
-				<h2 class="mb-6 text-3xl font-bold">Annual Tech Summit</h2>
+				<h2 class="mb-6 text-3xl font-bold">Tech Summit</h2>
 				<div class="bg-primary mb-6 h-1 w-24"></div>
 				<p class="mb-4 text-gray-700">
-					Our signature event brings together Vietnamese professionals from across the tech industry
-					for a day of learning, networking, and inspiration. The Tech Summit features keynote
-					speeches from industry leaders, panel discussions on emerging trends, and workshops to
-					develop practical skills.
+					Our signature event, usually held in August, brings together Vietnamese professionals from across the tech industry onsite 
+					for 2-3 days of learning, networking, and inspiration. The Tech Summit features keynote speeches from industry leaders, 
+					panel discussions on emerging trends, and workshops to develop practical skills.
 				</p>
 				<p class="mb-6 text-gray-700">
 					Whether you're a seasoned professional or just starting your tech journey, the Tech Summit
@@ -197,8 +196,8 @@
 				</a>
 			</div>
 			<div class="order-1 flex h-96 items-center justify-center rounded-lg bg-gray-100 lg:order-2">
-				<!-- Placeholder for Tech Summit image -->
-				<span class="font-bold text-gray-500">Tech Summit Image</span>
+				<!-- Placeholder for history image -->
+				<img src={TechSummitImage} alt="TechSummitImage" class="object-cover w-full"/>
 			</div>
 		</div>
 	</div>
@@ -213,23 +212,25 @@
 				<span class="font-bold text-gray-500">Break Into Tech Image</span>
 			</div>
 			<div>
-				<h2 class="mb-6 text-3xl font-bold">Break Into Tech Program</h2>
+				<h2 class="mb-6 text-3xl font-bold">Break Into Tech</h2>
 				<div class="bg-primary mb-6 h-1 w-24"></div>
 				<p class="mb-4 text-gray-700">
-					Our Break Into Tech program is designed to help Vietnamese professionals transition into
-					the tech industry or advance their early-stage tech careers. Through workshops,
-					mentorship, and networking opportunities, participants gain the knowledge and connections
-					needed to thrive.
+					Our Break Into Tech program is an online, three-month long program run between December and March, 
+					designed to help Vietnamese professionals transition into the tech industry or advance their early-stage tech careers. 
+					Through workshops, mentorship, and networking opportunities, participants gain the knowledge and connections needed to thrive.
 				</p>
 				<p class="mb-6 text-gray-700">
-					The program includes resume workshops, mock interviews, technical skill development
-					sessions, and insights from professionals who have successfully navigated the tech
-					landscape.
+					The program includes resume workshops, mock interviews, technical skill development sessions, 
+					and insights from professionals who have successfully navigated the tech landscape.
+				</p>
+				<p class="mb-6 text-gray-700">
+					In 2024, we ran a pilot data analytics and software engineering project, 
+					with some promising success and will incorporate it into the core program in the future.
 				</p>
 				<div class="flex flex-wrap gap-4">
-					<a href="/events/break-into-tech" class="btn bg-primary hover:bg-primary-dark text-white">
+					<!-- <a href="/events/break-into-tech" class="btn bg-primary hover:bg-primary-dark text-white">
 						Upcoming Workshops
-					</a>
+					</a> -->
 					<a
 						href="/testimonials"
 						class="btn border-primary text-primary border-2 bg-transparent hover:bg-gray-100"
@@ -242,7 +243,32 @@
 	</div>
 </section>
 
-<!-- Past Events -->
+<!-- Tech Summit Feature -->
+<section class="bg-white py-16">
+	<div class="container mx-auto px-4">
+		<div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+			<div class="order-2 lg:order-1">
+				<h2 class="mb-6 text-3xl font-bold">Fall Forum</h2>
+				<div class="bg-primary mb-6 h-1 w-24"></div>
+				<p class="mb-4 text-gray-700">
+					PLACEHOLDER
+				</p>
+				<p class="mb-6 text-gray-700">
+					PLACEHOLDER
+				</p>
+				<a href="/events/tech-summit-2023" class="btn bg-primary hover:bg-primary-dark text-white">
+					Learn More About Fall Forum
+				</a>
+			</div>
+			<div class="order-1 flex h-96 items-center justify-center rounded-lg bg-gray-100 lg:order-2">
+				<!-- Placeholder for Break Into Tech image -->
+				<span class="font-bold text-gray-500">Fall Forum Image</span>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Past Events
 <section class="bg-white py-16">
 	<div class="container mx-auto px-4">
 		<div class="mb-12 text-center">
@@ -294,7 +320,7 @@
 			</div>
 		{/if}
 	</div>
-</section>
+</section> -->
 
 <!-- Host an Event CTA -->
 <section class="bg-primary py-16 text-white">
