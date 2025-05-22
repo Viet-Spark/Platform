@@ -65,6 +65,33 @@
 			linkedIn: 'https://linkedin.com/'
 		}
 	];
+
+	const volunteers = [
+		{
+			name: 'Kevin Nguyen',
+			title: 'Volunteer',
+			image: placeHolderAvatar,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Vivian Trang',
+			title: 'Volunteer',
+			image: placeHolderAvatar,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Kevin Nguyen',
+			title: 'Volunteer',
+			image: placeHolderAvatar,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Vivian Trang',
+			title: 'Volunteer',
+			image: placeHolderAvatar,
+			linkedIn: 'https://linkedin.com/'
+		},
+	];
 </script>
 
 <svelte:head>
@@ -331,6 +358,39 @@
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			{#each advisoryBoard as member}
+				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
+					<img
+						src={member.image}
+						alt={member.name}
+						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+					/>
+					<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
+					<p class="mb-3 text-gray-600">{member.title}</p>
+					<a
+						href={member.linkedIn}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-primary hover:text-primary-dark"
+						aria-label={`${member.name}'s LinkedIn profile`}
+					>
+						<i class="fab fa-linkedin text-xl"></i>
+					</a>
+				</div>
+			{/each}
+		</div>
+	</div>
+</section>
+
+<!-- Volunteers Section -->
+<section class="bg-white py-16">
+	<div class="container mx-auto px-4">
+		<div class="mb-12 text-center">
+			<h2 class="mb-4 text-3xl font-bold">Volunteers</h2>
+			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
+		</div>
+
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{#each volunteers as member}
 				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
 					<img
 						src={member.image}
