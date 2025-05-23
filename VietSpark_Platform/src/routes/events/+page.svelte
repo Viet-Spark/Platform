@@ -13,27 +13,6 @@
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
 			image: TechSummitImage,
 			category: 'Vietnam Tech Summit'
-		},
-		{
-			id: 'break-into-tech',
-			title: 'Break Into Tech Workshop',
-			date: 'November 5, 2023',
-			time: '10:00 AM - 2:00 PM PST',
-			location: 'Online (Zoom)',
-			description:
-				'A workshop designed to help newcomers navigate their way into the tech industry.',
-			image: EventPlaceHolderImage,
-			category: 'Break Into Tech'
-		},
-		{
-			id: 'networking-night',
-			title: 'Tech Networking Night',
-			date: 'October 20, 2023',
-			time: '6:00 PM - 9:00 PM PST',
-			location: 'Seattle, WA',
-			description: 'An evening of networking with professionals from leading tech companies.',
-			image: EventPlaceHolderImage,
-			category: 'Networking'
 		}
 	];
 
@@ -57,6 +36,27 @@
 				'The launch of our annual mentorship program pairing mentees with experienced tech professionals.',
 			image: EventPlaceHolderImage,
 			category: 'Mentorship'
+		},
+		{
+			id: 'break-into-tech',
+			title: 'Break Into Tech Workshop',
+			date: 'November 5, 2023',
+			time: '10:00 AM - 2:00 PM PST',
+			location: 'Online (Zoom)',
+			description:
+				'A workshop designed to help newcomers navigate their way into the tech industry.',
+			image: EventPlaceHolderImage,
+			category: 'Break Into Tech'
+		},
+		{
+			id: 'networking-night',
+			title: 'Tech Networking Night',
+			date: 'October 20, 2023',
+			time: '6:00 PM - 9:00 PM PST',
+			location: 'Seattle, WA',
+			description: 'An evening of networking with professionals from leading tech companies.',
+			image: EventPlaceHolderImage,
+			category: 'Networking'
 		}
 	];
 
