@@ -4,19 +4,19 @@
 
 	onMount(() => {
 		// Redirect to the correct URL
-		goto('/events/tech-summit-2023');
+		goto('/events/tech-summit');
 	});
 </script>
 
 <svelte:head>
 	<title>Redirecting...</title>
-	<meta http-equiv="refresh" content="0;url=/events/tech-summit-2023" />
+	<meta http-equiv="refresh" content="0;url=/events/tech-summit-content" />
 </svelte:head>
 
 <div class="flex h-screen items-center justify-center">
 	<div class="text-center">
 		<p class="mb-4 text-xl">Redirecting to Tech Summit 2023...</p>
-		<a href="/events/tech-summit-2023" class="text-primary hover:underline"
+		<a href="/events/tech-summit" class="text-primary hover:underline"
 			>Click here if you are not redirected</a
 		>
 	</div>

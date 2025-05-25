@@ -251,7 +251,7 @@
 						Tech Summit
 					</span>
 					<h3 class="hover:text-primary mb-2 mt-2 text-lg font-bold">
-						<a href="/events/tech-summit-2023">Annual Tech Summit 2023</a>
+						<a href="/events/tech-summit-content">Annual Tech Summit 2023</a>
 					</h3>
 					<p class="mb-4 text-sm text-gray-600">December 15, 2023 • San Francisco, CA</p>
 				</div>

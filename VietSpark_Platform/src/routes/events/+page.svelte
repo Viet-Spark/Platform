@@ -192,7 +192,7 @@
 					Whether you're a seasoned professional or just starting your tech journey, the Tech Summit
 					offers valuable insights and connections to help advance your career.
 				</p>
-				<a href="/events/tech-summit-2023" class="btn bg-primary hover:bg-primary-dark text-white">
+				<a href="/events/tech-summit-content" class="btn bg-primary hover:bg-primary-dark text-white">
 					Learn More About Tech Summit
 				</a>
 			</div>

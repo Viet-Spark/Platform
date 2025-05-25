@@ -26,7 +26,7 @@
 				Connect, learn, and grow with a community of like-minded professionals.
 			</p>
 			<div class="flex flex-wrap gap-4">
-				<a href="/events/tech-summit-2023" class="btn text-primary bg-white hover:bg-gray-100">Tech Summit 2025</a>
+				<a href="/events/tech-summit-content" class="btn text-primary bg-white hover:bg-gray-100">Tech Summit 2025</a>
 				{#if !$authUser}
 					<a
 						href="/work-with-us"
@@ -171,7 +171,7 @@
 					<p class="mb-4 text-gray-600">
 						Join us for a day of inspiring talks, networking, and workshops from industry leaders.
 					</p>
-					<a href="/events/tech-summit-2023" class="text-primary font-medium hover:underline"
+					<a href="/events/tech-summit-content" class="text-primary font-medium hover:underline"
 						>Learn more →</a
 					>
 				</div>
