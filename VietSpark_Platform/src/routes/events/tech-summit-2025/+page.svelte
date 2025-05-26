@@ -1,5 +1,6 @@
 <script>
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
+	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
 	// Event data (to be replaced with API/database data later)
 	const event = {
 		title: 'Annual Tech Summit 2025',
@@ -205,9 +206,10 @@
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 			<!-- Placeholder events -->
 			<div class="overflow-hidden rounded-lg bg-white shadow-sm">
+
 				<img
-					src="https://via.placeholder.com/800x400"
-					alt="Break Into Tech Workshop"
+					src={EventPlaceHolderImage}
+					alt="EventPlaceHolderImage"
 					class="h-48 w-full object-cover"
 				/>
 				<div class="p-4">
@@ -225,8 +227,8 @@
 
 			<div class="overflow-hidden rounded-lg bg-white shadow-sm">
 				<img
-					src="https://via.placeholder.com/800x400"
-					alt="Tech Networking Night"
+					src={EventPlaceHolderImage}
+					alt="EventPlaceHolderImage"
 					class="h-48 w-full object-cover"
 				/>
 				<div class="p-4">
@@ -242,8 +244,8 @@
 
 			<div class="overflow-hidden rounded-lg bg-white shadow-sm">
 				<img
-					src="https://via.placeholder.com/800x400"
-					alt="Mentorship Program Kickoff"
+					src={EventPlaceHolderImage}
+					alt="EventPlaceHolderImage"
 					class="h-48 w-full object-cover"
 				/>
 				<div class="p-4">
