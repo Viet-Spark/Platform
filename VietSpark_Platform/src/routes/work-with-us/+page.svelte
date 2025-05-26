@@ -180,11 +180,12 @@
 			<h2 class="mb-4 text-3xl font-bold">Volunteer Opportunities</h2>
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			<p class="mx-auto max-w-3xl text-lg text-gray-600">
-				We have various volunteer roles available based on your interests, skills, and availability.
+				<!-- We have various volunteer roles available based on your interests, skills, and availability. -->
+				 There are no volunteering roles available currently. Please check back in the future!
 			</p>
 		</div>
 
-		<div class="mb-10 flex flex-wrap justify-center gap-3">
+		<!-- <div class="mb-10 flex flex-wrap justify-center gap-3">
 			{#each categories as category}
 				<button
 					class="rounded-full px-4 py-2 text-sm font-medium transition-colors {selectedCategory ===
@@ -243,7 +244,7 @@
 					View all opportunities
 				</button>
 			</div>
-		{/if}
+		{/if} -->
 	</div>
 </section>
 

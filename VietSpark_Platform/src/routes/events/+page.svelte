@@ -13,27 +13,6 @@
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
 			image: TechSummitImage,
 			category: 'Vietnam Tech Summit'
-		},
-		{
-			id: 'break-into-tech',
-			title: 'Break Into Tech Workshop',
-			date: 'November 5, 2023',
-			time: '10:00 AM - 2:00 PM PST',
-			location: 'Online (Zoom)',
-			description:
-				'A workshop designed to help newcomers navigate their way into the tech industry.',
-			image: EventPlaceHolderImage,
-			category: 'Break Into Tech'
-		},
-		{
-			id: 'networking-night',
-			title: 'Tech Networking Night',
-			date: 'October 20, 2023',
-			time: '6:00 PM - 9:00 PM PST',
-			location: 'Seattle, WA',
-			description: 'An evening of networking with professionals from leading tech companies.',
-			image: EventPlaceHolderImage,
-			category: 'Networking'
 		}
 	];
 
@@ -57,6 +36,27 @@
 				'The launch of our annual mentorship program pairing mentees with experienced tech professionals.',
 			image: EventPlaceHolderImage,
 			category: 'Mentorship'
+		},
+		{
+			id: 'break-into-tech',
+			title: 'Break Into Tech Workshop',
+			date: 'November 5, 2023',
+			time: '10:00 AM - 2:00 PM PST',
+			location: 'Online (Zoom)',
+			description:
+				'A workshop designed to help newcomers navigate their way into the tech industry.',
+			image: EventPlaceHolderImage,
+			category: 'Break Into Tech'
+		},
+		{
+			id: 'networking-night',
+			title: 'Tech Networking Night',
+			date: 'October 20, 2023',
+			time: '6:00 PM - 9:00 PM PST',
+			location: 'Seattle, WA',
+			description: 'An evening of networking with professionals from leading tech companies.',
+			image: EventPlaceHolderImage,
+			category: 'Networking'
 		}
 	];
 
@@ -191,13 +191,13 @@
 					Whether you're a seasoned professional or just starting your tech journey, the Tech Summit
 					offers valuable insights and connections to help advance your career.
 				</p>
-				<a href="/events/tech-summit-2023" class="btn bg-primary hover:bg-primary-dark text-white">
+				<a href="/events/tech-summit-content" class="btn bg-primary hover:bg-primary-dark text-white">
 					Learn More About Tech Summit
 				</a>
 			</div>
 			<div class="order-1 flex h-96 items-center justify-center rounded-lg bg-gray-100 lg:order-2">
 				<!-- Placeholder for history image -->
-				<img src={TechSummitImage} alt="TechSummitImage" class="object-cover w-full"/>
+				<img src={TechSummitImage} alt="TechSummitImage" class="object-cover w-full h-96"/>
 			</div>
 		</div>
 	</div>
@@ -209,7 +209,7 @@
 		<div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
 			<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100">
 				<!-- Placeholder for Break Into Tech image -->
-				<span class="font-bold text-gray-500">Break Into Tech Image</span>
+				<img src={EventPlaceHolderImage} alt="EventPlaceHolderImage" class="object-cover w-full h-96"/>
 			</div>
 			<div>
 				<h2 class="mb-6 text-3xl font-bold">Break Into Tech</h2>
@@ -262,7 +262,7 @@
 			</div>
 			<div class="order-1 flex h-96 items-center justify-center rounded-lg bg-gray-100 lg:order-2">
 				<!-- Placeholder for Break Into Tech image -->
-				<span class="font-bold text-gray-500">Fall Forum Image</span>
+				<img src={EventPlaceHolderImage} alt="EventPlaceHolderImage" class="object-cover w-full h-96"/>
 			</div>
 		</div>
 	</div>
