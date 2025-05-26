@@ -178,6 +178,7 @@
 				</div>
 			</div>
 
+			
 			<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
 					<span class="text-primary font-bold">Break Into Tech Image</span>
