@@ -15,19 +15,19 @@
 		},
 		{
 			name: 'Hanh Mai',
-			title: 'Managing Director',
+			title: 'Board Member and CEO',
 			image: HanhMaiImage,
 			linkedIn: 'https://www.linkedin.com/in/hanhmaihhm'
 		},
 		{
 			name: 'Van Le',
-			title: 'Head of External Relations',
+			title: 'Director of Fundraising and Finance',
 			image: VanLeImage,
 			linkedIn: 'https://www.linkedin.com/in/van-hong-le'
 		},
 		{
 			name: 'Nhu Vo',
-			title: 'Head of Operations',
+			title: 'Director of Operations',
 			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
@@ -38,7 +38,7 @@
 			linkedIn: 'https://www.linkedin.com/in/tanphanvan'
 		}
 	];
-
+ 
 	const advisoryBoard = [
 		{
 			name: 'Dr. Emily Chen',
@@ -323,8 +323,33 @@
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 		</div>
 
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-			{#each boardMembers as member}
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+			{#each boardMembers.slice(0,2) as member}
+				<div class="rounded-lg bg-white p-6 text-center shadow-md mx-auto w-130">
+					<img
+						src={member.image}
+						alt={member.name}
+						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+					/>
+					<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
+					<p class="mb-3 text-gray-600">{member.title}</p>
+					<a
+						href={member.linkedIn}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="text-primary hover:text-primary-dark"
+						aria-label={`${member.name}'s LinkedIn profile`}
+					>
+						<i class="fab fa-linkedin text-xl"></i>
+					</a>
+				</div>
+			{/each}
+		</div>
+
+		<div class="mt-6"></div>
+
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{#each boardMembers.slice(2,5) as member}
 				<div class="rounded-lg bg-white p-6 text-center shadow-md">
 					<img
 						src={member.image}
