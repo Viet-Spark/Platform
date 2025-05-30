@@ -39,7 +39,7 @@
 </svelte:head>
 
 <!-- Hero Section -->
-<section class="hero-section from-primary bg-gradient-to-r to-blue-800 py-16 text-white">
+<section class="bg-primary py-16 text-white">
 	<div class="container mx-auto px-4">
 		<div class="flex flex-col items-center">
 			<h1 class="mb-4 text-4xl font-bold md:text-5xl">
