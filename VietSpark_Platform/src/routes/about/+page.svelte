@@ -323,9 +323,9 @@
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 		</div>
 
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+		<div class="flex w-full item-center justify-center gap-6">
 			{#each boardMembers.slice(0,2) as member}
-				<div class="rounded-lg bg-white p-6 text-center shadow-md mx-auto w-130">
+				<div class="rounded-lg bg-white p-6 text-center shadow-md w-130">
 					<img
 						src={member.image}
 						alt={member.name}
