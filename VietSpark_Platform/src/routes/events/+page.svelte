@@ -60,6 +60,7 @@
 		}
 	];
 
+	
 	// Filter events by category
 	let selectedCategory = 'All';
 	// const categories = ['All', 'Vietnam Tech Summit', 'Break Into Tech', 'Networking', 'Vietnam – US Fall Forum'];

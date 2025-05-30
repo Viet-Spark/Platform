@@ -5,7 +5,29 @@
 	import Login from '$lib/components/Login.svelte';
 	import UserProfile from '$lib/components/UserProfile.svelte';
 	import { authUser } from '$lib/stores/authStore';
+
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
+	import VietBayLogo from "$lib/images/Partners/VietBayLogo.jpg"
+	import AIforVietNamFoundationLogo from "$lib/images/Partners/AIforVietNamFoundationLogo.jpg"
+	import VISEMIFoundationLogo from "$lib/images/Partners/VISEMIFoundationLogo.jpg"
+
+	const Partners = [
+		{
+			name: "VietBay",
+			image: VietBayLogo,
+			website: "https://www.vietbay.group/"
+		},
+		{
+			name: "VISEMI",
+			image: VISEMIFoundationLogo,
+			website: "https://visemi.org/"
+		},
+		{
+			name: "AIforVietNamFoundation",
+			image: AIforVietNamFoundationLogo,
+			website: "https://www.aiforvietnam.org/"
+		},
+	]
 </script>
 
 <svelte:head>
@@ -27,7 +49,7 @@
 				Connect, learn, and grow with a community of like-minded professionals.
 			</p>
 			<div class="flex flex-wrap gap-4">
-				<a href="/events/tech-summit-2023" class="btn text-primary bg-white hover:bg-gray-100">Tech Summit 2025</a>
+				<a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100">Tech Summit 2025</a>
 				{#if !$authUser}
 					<a
 						href="/work-with-us"
@@ -178,7 +200,6 @@
 				</div>
 			</div>
 
-			
 			<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
 					<span class="text-primary font-bold">Break Into Tech Image</span>
@@ -210,12 +231,16 @@
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 		</div>
 
-		<div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+		<div class="grid grid-cols-2 gap-8 md:grid-cols-3">
 			<!-- Partner logos placeholders -->
-			{#each Array(4) as _, i}
-				<div class="flex h-24 items-center justify-center rounded-lg bg-white p-6 shadow-sm">
-					<span class="font-medium text-gray-400">Partner {i + 1}</span>
-				</div>
+			{#each Partners as Partner}
+				<a href={Partner.website} target="_blank" class="flex h-24 items-center justify-center rounded-lg bg-white p-6 shadow-sm ">
+					 <img
+					 	src= {Partner.image}
+						alt= {Partner.name}
+						class="mx-auto max-h-full max-w-full object-contain"
+					 />
+				</a>
 			{/each}
 		</div>
 	</div>
