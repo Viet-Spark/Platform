@@ -7,27 +7,27 @@
 	import { authUser } from '$lib/stores/authStore';
 
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
-	import VietBayLogo from "$lib/images/Partners/VietBayLogo.jpg"
-	import AIforVietNamFoundationLogo from "$lib/images/Partners/AIforVietNamFoundationLogo.jpg"
-	import VISEMIFoundationLogo from "$lib/images/Partners/VISEMIFoundationLogo.jpg"
+	import VietBayLogo from '$lib/images/Partners/VietBayLogo.jpg';
+	import AIforVietNamFoundationLogo from '$lib/images/Partners/AIforVietNamFoundationLogo.jpg';
+	import VISEMIFoundationLogo from '$lib/images/Partners/VISEMIFoundationLogo.jpg';
 
 	const Partners = [
 		{
-			name: "VietBay",
+			name: 'VietBay',
 			image: VietBayLogo,
-			website: "https://www.vietbay.group/"
+			website: 'https://www.vietbay.group/'
 		},
 		{
-			name: "VISEMI",
+			name: 'VISEMI',
 			image: VISEMIFoundationLogo,
-			website: "https://visemi.org/"
+			website: 'https://visemi.org/'
 		},
 		{
-			name: "AIforVietNamFoundation",
+			name: 'AIforVietNamFoundation',
 			image: AIforVietNamFoundationLogo,
-			website: "https://www.aiforvietnam.org/"
-		},
-	]
+			website: 'https://www.aiforvietnam.org/'
+		}
+	];
 </script>
 
 <svelte:head>
@@ -45,11 +45,13 @@
 			<h1 class="mb-4 text-4xl font-bold md:text-5xl">
 				Empowering Vietnamese Professionals to Lead in Tech
 			</h1>
-			<p class="mb-8 text-xl ">
+			<p class="mb-8 text-xl">
 				Connect, learn, and grow with a community of like-minded professionals.
 			</p>
 			<div class="flex flex-wrap gap-4">
-				<a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100">Tech Summit 2025</a>
+				<a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100"
+					>Tech Summit 2025</a
+				>
 				{#if !$authUser}
 					<a
 						href="/work-with-us"
@@ -60,7 +62,7 @@
 				{:else}
 					<a
 						href="/events"
-						class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
+						class="btn hover:text-primary border-2 border-white bg-transparent text-white transition-all hover:bg-white"
 					>
 						Explore Events
 					</a>
@@ -186,7 +188,7 @@
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
 			<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
-					<img src={TechSummitImage} alt="TechSummitImage" class="object-cover w-full h-48"/>
+					<img src={TechSummitImage} alt="TechSummitImage" class="h-48 w-full object-cover" />
 				</div>
 				<div class="p-6">
 					<div class="text-primary mb-2 text-sm font-semibold">Dec 15, 2025</div>
@@ -234,12 +236,16 @@
 		<div class="grid grid-cols-2 gap-8 md:grid-cols-3">
 			<!-- Partner logos placeholders -->
 			{#each Partners as Partner}
-				<a href={Partner.website} target="_blank" class="flex h-24 items-center justify-center rounded-lg bg-white p-6 shadow-sm ">
-					 <img
-					 	src= {Partner.image}
-						alt= {Partner.name}
+				<a
+					href={Partner.website}
+					target="_blank"
+					class="flex h-24 items-center justify-center rounded-lg bg-white p-6 shadow-sm"
+				>
+					<img
+						src={Partner.image}
+						alt={Partner.name}
 						class="mx-auto max-h-full max-w-full object-contain"
-					 />
+					/>
 				</a>
 			{/each}
 		</div>
@@ -276,16 +282,8 @@
 		transition: all 0.2s;
 	}
 
-	:global(.bg-primary) {
-		background-color: #0a57a0;
-	}
-
-	:global(.text-primary) {
-		color: #0a57a0;
-	}
-
-	:global(.from-primary) {
-		--tw-gradient-from: #0a57a0;
-		--tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(10, 87, 160, 0));
+	:global(a.btn:hover) {
+		text-decoration: none !important;
+		color: #0a57a0 !important; /* This is primary from your config */
 	}
 </style>
