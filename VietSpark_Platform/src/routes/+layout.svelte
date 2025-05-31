@@ -35,7 +35,7 @@
 
 <div class="site-container">
 	<header class="bg-white shadow-md">
-		<nav class="container mx-auto flex items-center justify-between p-4">
+		<nav class="container mx-auto flex items-center justify-between p-1">
 			<div class="flex items-center">
 				<a href="/" class="text-primary text-2xl font-bold">
 					<span class="sr-only">VietSpark</span>
@@ -43,7 +43,7 @@
 					<img
 						src="/logos/225357894_335085408311214_4818242809207101955_n.png"
 						alt="VietSpark Logo"
-						class="h-10"
+						class="h-20"
 					/>
 				</a>
 			</div>
@@ -67,9 +67,9 @@
 						<a href="/admin" class="text-primary text-sm hover:underline"> Admin Dashboard </a>
 					{/if}
 				{:else}
-					<a href="/login" class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white">
+					<!-- <a href="/login" class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white">
 						Login
-					</a>
+					</a> -->
 				{/if}
 
 				<button

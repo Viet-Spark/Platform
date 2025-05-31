@@ -1,17 +1,17 @@
 <script>
-	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
-	import IMG_8404 from '$lib/images/Events/IMG_8404.JPG';
 	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
+	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
+	import { eventImages } from '$lib/images/Events/imgEvents.js';
 	// Event data (to be replaced with API/database data later)
 	const events = [
 		{
 			title: 'Annual Tech Summit 2025',
-			date: 'December 15, 2025',
+			date: 'August 22-23, 2025',
 			time: '9:00 AM - 5:00 PM PST',
 			location: 'San Francisco, CA',
 			description:
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [TechSummitImage,IMG_8404],
+			images: [TechSummitImage],
 			category: 'Tech Summit',
 			content:[
 				"<p>MORE TO COME</p>",
@@ -19,12 +19,15 @@
 		},
 		{
 			title: 'Annual Tech Summit 2024',
-			date: 'December 15, 2024',
+			date: 'August 16-17, 2024',
 			time: '9:00 AM - 5:00 PM PST',
 			location: 'San Francisco, CA',
 			description:
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [TechSummitImage],
+			images: [
+				eventImages.IMG_2024_1,eventImages.IMG_2024_2,eventImages.IMG_2024_3,eventImages.IMG_2024_4,eventImages.IMG_2024_5,
+				eventImages.IMG_2024_6,eventImages.IMG_2024_7,eventImages.IMG_2024_8,eventImages.IMG_2024_9,eventImages.IMG_2024_10,
+			],
 			category: 'Tech Summit',
 			content:[
 				"<p>Tech Summit 2024 was hosted in Bay Area in August 2024, attracting over 400 tech enthusiasts who gathered to explore the latest industry trends and share insights that push the boundaries of AI and career development. Day 1 featured exclusive tours of Google and Microsoft Headquarters, offering attendees a unique opportunity to witness the cutting-edge work being done at two of the world’s most influential tech companies. After the tours, the evening was capped off with a lively Networking Night, complete with live Co Band music, providing a relaxed and enjoyable setting for participants to forge meaningful connections and reflect on the day's experiences.</p>",
@@ -34,12 +37,15 @@
 		},
 		{
 			title: 'Annual Tech Summit 2023',
-			date: 'December 15, 2023',
+			date: 'August 11-13, 2023',
 			time: '9:00 AM - 5:00 PM PST',
 			location: 'San Francisco, CA',
 			description:
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [IMG_8404,TechSummitImage],
+			images: [
+				eventImages.IMG_2023_1,eventImages.IMG_2023_2,eventImages.IMG_2023_3,eventImages.IMG_2023_4,eventImages.IMG_2023_5,
+				eventImages.IMG_2023_6,eventImages.IMG_2023_7,eventImages.IMG_2023_8,eventImages.IMG_2023_9,eventImages.IMG_2023_10,
+			],
 			category: 'Tech Summit',
 			content:[
 				"<p>Following the success of Tech Summit 2022, Tech Summit 2023 in the Bay Area brought together over 300 participants for a dynamic two-day event filled with insightful panels, engaging workshops, and valuable networking.</p>",
@@ -53,12 +59,15 @@
 		},
 		{
 			title: 'Annual Tech Summit 2022',
-			date: 'December 15, 2022',
+			date: 'September 16-18, 2022',
 			time: '9:00 AM - 5:00 PM PST',
-			location: 'San Francisco, CA',
+			location: 'Seattle, WA',
 			description:
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [TechSummitImage],
+			images: [
+				eventImages.IMG_2022_1,eventImages.IMG_2022_2,eventImages.IMG_2022_3,eventImages.IMG_2022_4,eventImages.IMG_2022_5,
+				eventImages.IMG_2022_6,eventImages.IMG_2022_7,eventImages.IMG_2022_8,eventImages.IMG_2022_9,eventImages.IMG_2022_10,
+			],
 			category: 'Tech Summit',
 			content:[
 				"<p>The inaugural Tech Summit 2022, organized by Viet Spark and Seattle Vietnamese Professionals & Students (SVPS), took place in Seattle, WA, from September 16-18, attracting over 100 attendees. The event kicked off with a tour of Microsoft Headquarters, followed by a relaxed Happy Hour, offering participants a chance to connect with industry leaders.</p>",
@@ -156,7 +165,7 @@
 							<button
 								on:click={() => {console.log(event.images[i]); return prev(i, event.images.length)}}
 								aria-label="Previous image"
-								class="absolute top-1/2 left-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition"
+								class="opacity-50 absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-30 text-white p-5 rounded-full hover:bg-opacity-50 transition-all duration-200 w-14 h-14 flex items-center justify-center text-xl cursor-pointer"
 							>
 								‹
 							</button>
@@ -164,10 +173,11 @@
 							<button
 								on:click={() => next(i, event.images.length)}
 								aria-label="Next image"
-								class="absolute top-1/2 right-2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition"
+								class="opacity-50 absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-30 text-white p-5 rounded-full hover:bg-opacity-50 transition-all duration-200 w-14 h-14 flex items-center justify-center text-xl cursor-pointer"
 							>
 								›
 							</button>
+
 						</div>
 					{:else if event.images.length === 1}
 						<img
@@ -184,51 +194,51 @@
 						{/each}
 					</div>
 				</div>
+				{#if i === 0}
+					<div class="lg:col-span-1">
+						<div class="mb-8 rounded-lg bg-gray-50 p-6 shadow-sm">
+							<h3 class="mb-4 text-xl font-bold">Event Details</h3>
+							<ul class="space-y-4">
+								<li class="flex items-start">
+									<div class="text-primary mr-3 mt-1">
+										<i class="fas fa-calendar-alt"></i>
+									</div>
+									<div>
+										<strong>Date</strong>
+										<p>{event.date}</p>
+									</div>
+								</li>
+								<li class="flex items-start">
+									<div class="text-primary mr-3 mt-1">
+										<i class="fas fa-clock"></i>
+									</div>
+									<div>
+										<strong>Time</strong>
+										<p>{event.time}</p>
+									</div>
+								</li>
+								<li class="flex items-start">
+									<div class="text-primary mr-3 mt-1">
+										<i class="fas fa-map-marker-alt"></i>
+									</div>
+									<div>
+										<strong>Location</strong>
+										<p>{event.location}</p>
+										<p class="text-sm">123 Main Street, San Francisco, CA 94105</p>
+									</div>
+								</li>
+								<li class="flex items-start">
+									<div class="text-primary mr-3 mt-1">
+										<i class="fas fa-ticket-alt"></i>
+									</div>
+									<div>
+										<strong>Registration</strong>
+										<p>$25 - $50 (Early bird pricing available)</p>
+									</div>
+								</li>
+							</ul>
 
-				<div class="lg:col-span-1">
-					<div class="mb-8 rounded-lg bg-gray-50 p-6 shadow-sm">
-						<h3 class="mb-4 text-xl font-bold">Event Details</h3>
-						<ul class="space-y-4">
-							<li class="flex items-start">
-								<div class="text-primary mr-3 mt-1">
-									<i class="fas fa-calendar-alt"></i>
-								</div>
-								<div>
-									<strong>Date</strong>
-									<p>{event.date}</p>
-								</div>
-							</li>
-							<li class="flex items-start">
-								<div class="text-primary mr-3 mt-1">
-									<i class="fas fa-clock"></i>
-								</div>
-								<div>
-									<strong>Time</strong>
-									<p>{event.time}</p>
-								</div>
-							</li>
-							<li class="flex items-start">
-								<div class="text-primary mr-3 mt-1">
-									<i class="fas fa-map-marker-alt"></i>
-								</div>
-								<div>
-									<strong>Location</strong>
-									<p>{event.location}</p>
-									<p class="text-sm">123 Main Street, San Francisco, CA 94105</p>
-								</div>
-							</li>
-							<li class="flex items-start">
-								<div class="text-primary mr-3 mt-1">
-									<i class="fas fa-ticket-alt"></i>
-								</div>
-								<div>
-									<strong>Registration</strong>
-									<p>$25 - $50 (Early bird pricing available)</p>
-								</div>
-							</li>
-						</ul>
-
-						{#if i === 0}
+							
 							<div class="mt-6">
 								<button class="btn bg-primary hover:bg-primary-dark w-full text-white">
 									Register Now
@@ -237,59 +247,57 @@
 									Limited seats available. VietSpark members receive special pricing.
 								</p>
 							</div>
-						{/if}
-					</div>
+						</div>
 
-					{#if i === 0}
-					<div class="rounded-lg bg-gray-50 p-6 shadow-sm">
-						<h3 class="mb-4 text-xl font-bold">Share This Event</h3>
-						<div class="flex space-x-4">
-							<a
-								href="https://facebook.com/sharer/sharer.php?u={encodeURIComponent(
-									`https://vietspark.org/events/tech-summit-content`
-								)}"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="text-gray-600 hover:text-blue-600"
-								aria-label="Share on Facebook"
-							>
-								<i class="fab fa-facebook-f text-xl"></i>
-							</a>
-							<a
-								href="https://twitter.com/intent/tweet?url={encodeURIComponent(
-									`https://vietspark.org/events/tech-summit-content`
-								)}&text={encodeURIComponent(event.title)}"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="text-gray-600 hover:text-blue-400"
-								aria-label="Share on Twitter"
-							>
-								<i class="fab fa-twitter text-xl"></i>
-							</a>
-							<a
-								href="https://www.linkedin.com/sharing/share-offsite/?url={encodeURIComponent(
-									`https://vietspark.org/events/tech-summit-content`
-								)}"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="text-gray-600 hover:text-blue-700"
-								aria-label="Share on LinkedIn"
-							>
-								<i class="fab fa-linkedin-in text-xl"></i>
-							</a>
-							<a
-								href="mailto:?subject={encodeURIComponent(event.title)}&body={encodeURIComponent(
-									`Check out this event: https://vietspark.org/events/tech-summit-content`
-								)}"
-								class="text-gray-600 hover:text-green-500"
-								aria-label="Share via Email"
-							>
-								<i class="fas fa-envelope text-xl"></i>
-							</a>
+						<div class="rounded-lg bg-gray-50 p-6 shadow-sm text-gray-600">
+							<h3 class="mb-4 text-xl font-bold">Share This Event</h3>
+							<div class="flex space-x-4">
+								<a
+									href="https://facebook.com/sharer/sharer.php?u={encodeURIComponent(
+										`https://vietspark.org/events/tech-summit-content`
+									)}"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="text-gray-600 hover:text-blue-600"
+									aria-label="Share on Facebook"
+								>
+									<i class="fab fa-facebook-f text-xl"></i>
+								</a>
+								<a
+									href="https://twitter.com/intent/tweet?url={encodeURIComponent(
+										`https://vietspark.org/events/tech-summit-content`
+									)}&text={encodeURIComponent(event.title)}"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="text-gray-600 hover:text-blue-400"
+									aria-label="Share on Twitter"
+								>
+									<i class="fab fa-twitter text-xl"></i>
+								</a>
+								<a
+									href="https://www.linkedin.com/sharing/share-offsite/?url={encodeURIComponent(
+										`https://vietspark.org/events/tech-summit-content`
+									)}"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="text-gray-600 hover:text-blue-700"
+									aria-label="Share on LinkedIn"
+								>
+									<i class="fab fa-linkedin-in text-xl"></i>
+								</a>
+								<a
+									href="mailto:?subject={encodeURIComponent(event.title)}&body={encodeURIComponent(
+										`Check out this event: https://vietspark.org/events/tech-summit-content`
+									)}"
+									class="text-gray-600 hover:text-green-500"
+									aria-label="Share via Email"
+								>
+									<i class="fas fa-envelope text-xl"></i>
+								</a>
+							</div>
 						</div>
 					</div>
-					{/if}
-				</div>
+				{/if}
 			</div>
 		</div>
 	</section>
@@ -300,12 +308,11 @@
 
 
 <!-- Related Events -->
-<section class="bg-gray-50 py-16">
+<!-- <section class="bg-gray-50 py-16">
 	<div class="container mx-auto px-4">
 		<h2 class="mb-8 text-2xl font-bold">Other Events You Might Like</h2>
 
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-			<!-- Placeholder events -->
 			<div class="overflow-hidden rounded-lg bg-white shadow-sm">
 				<img
 					src={EventPlaceHolderImage}
@@ -360,7 +367,7 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
 <!-- CTA -->
 <section class="bg-primary py-16 text-white">

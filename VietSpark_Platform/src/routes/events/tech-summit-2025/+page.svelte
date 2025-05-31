@@ -199,12 +199,11 @@
 </section>
 
 <!-- Related Events -->
-<section class="bg-gray-50 py-16">
+<!-- <section class="bg-gray-50 py-16">
 	<div class="container mx-auto px-4">
 		<h2 class="mb-8 text-2xl font-bold">Other Events You Might Like</h2>
 
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-			<!-- Placeholder events -->
 			<div class="overflow-hidden rounded-lg bg-white shadow-sm">
 
 				<img
@@ -260,7 +259,7 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
 <!-- CTA -->
 <section class="bg-primary py-16 text-white">
