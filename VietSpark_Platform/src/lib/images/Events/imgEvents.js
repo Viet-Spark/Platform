@@ -11,8 +11,8 @@ import IMG_2022_9 from '$lib/images/Events/2022/IMG_8333.jpg';
 import IMG_2022_10 from '$lib/images/Events/2022/IMG_8361.jpg';
 
 // 2023
-import IMG_2023_1 from '$lib/images/Events/2023/_RPH4538.jpg';
-import IMG_2023_2 from '$lib/images/Events/2023/_RPH4791.jpg';
+import IMG_2023_1 from '$lib/images/Events/2023/_RPH4538.JPG';
+import IMG_2023_2 from '$lib/images/Events/2023/_RPH4791.JPG';
 import IMG_2023_3 from '$lib/images/Events/2023/DSC04247.jpg';
 import IMG_2023_4 from '$lib/images/Events/2023/IMG_2697.JPG';
 import IMG_2023_5 from '$lib/images/Events/2023/IMG_3480.JPG';
@@ -23,7 +23,7 @@ import IMG_2023_9 from '$lib/images/Events/2023/LI300311.JPG';
 import IMG_2023_10 from '$lib/images/Events/2023/IMG_7399.jpg';
 
 // 2024
-import IMG_2024_1 from '$lib/images/Events/2024/IMG_6540.jpg';
+import IMG_2024_1 from '$lib/images/Events/2024/DSCF6540.jpg';
 // import IMG_2024_1 from '$lib/images/Events/2024/DSCF1181.jpg';
 import IMG_2024_2 from '$lib/images/Events/2024/DSCF1392.jpg';
 import IMG_2024_3 from '$lib/images/Events/2024/DSCF1432.jpg';
