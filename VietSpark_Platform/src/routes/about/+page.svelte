@@ -15,7 +15,7 @@
 		},
 		{
 			name: 'Hanh Mai',
-			title: 'Board Member and CEO',
+			title: 'Chief Executive Officer',
 			image: HanhMaiImage,
 			linkedIn: 'https://www.linkedin.com/in/hanhmaihhm'
 		},
