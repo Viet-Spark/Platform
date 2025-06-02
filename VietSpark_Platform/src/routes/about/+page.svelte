@@ -433,7 +433,7 @@
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 		</div>
 
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 item-center">
 			{#each advisoryBoard as member}
 				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
 					<img
@@ -466,7 +466,7 @@
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 		</div>
 
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-7">
 			{#each volunteers as member}
 				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
 					<img
