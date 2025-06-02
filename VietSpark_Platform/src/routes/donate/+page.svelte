@@ -330,16 +330,16 @@
 </section>
 
 <!-- Donor Recognition -->
-<section class="bg-gray-50 py-16">
+<!-- <section class="bg-gray-50 py-16">
 	<div class="container mx-auto px-4 text-center">
 		<h2 class="mb-4 text-3xl font-bold">Our Supporters</h2>
 		<p class="mx-auto mb-8 max-w-2xl text-xl text-gray-600">
 			We are grateful to the individuals and organizations whose generous support makes our work
 			possible.
-		</p>
+		</p> -->
 
 		<!-- Placeholder for donor recognition wall -->
-		<div class="mx-auto grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+		<!-- <div class="mx-auto grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
 			{#each Array(6) as _, i}
 				<div class="flex h-24 items-center justify-center rounded-lg bg-white p-4 shadow-sm">
 					<span class="text-gray-400">Supporter {i + 1}</span>
@@ -354,7 +354,7 @@
 			>.
 		</p>
 	</div>
-</section>
+</section> -->
 
 <!-- FAQ Section -->
 <section class="bg-white py-16">
