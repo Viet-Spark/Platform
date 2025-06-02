@@ -241,7 +241,7 @@
 							
 							<div class="mt-6">
 								<button class="btn bg-primary hover:bg-primary-dark w-full text-white">
-									Register Now 
+									Register Now
 								</button>
 								<p class="mt-2 text-center text-sm text-gray-600">
 									Limited seats available. VietSpark members receive special pricing.
