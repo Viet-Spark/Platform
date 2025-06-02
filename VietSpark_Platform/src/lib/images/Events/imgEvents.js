@@ -23,7 +23,7 @@ import IMG_2023_9 from '$lib/images/Events/2023/LI300311.JPG';
 import IMG_2023_10 from '$lib/images/Events/2023/IMG_7399.jpg';
 
 // 2024
-import IMG_2024_1 from '$lib/images/Events/2024/IMG_6540.JPG';
+import IMG_2024_1 from '$lib/images/Events/2024/IMG_6540.jpg';
 import IMG_2024_2 from '$lib/images/Events/2024/DSCF1392.JPG';
 import IMG_2024_3 from '$lib/images/Events/2024/DSCF1432.JPG';
 import IMG_2024_4 from '$lib/images/Events/2024/DSCF1570.JPG';
