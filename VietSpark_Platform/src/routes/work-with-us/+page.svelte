@@ -1,4 +1,5 @@
 <script>
+	import TeamImage from '$lib/images/WorkWithUs/TeamImage.jpg'
 	// Sample volunteer opportunities
 	const volunteerOpportunities = [
 		{
@@ -164,10 +165,10 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100">
-				<!-- Placeholder for team image -->
-				<span class="font-bold text-gray-500">Team Image</span>
+			
+			<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100 overflow-hidden">
+				<!-- Placeholder for history image -->
+				<img src={TeamImage} alt="TeamImage" class="object-cover w-full"/>
 			</div>
 		</div>
 	</div>
@@ -266,7 +267,7 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="bg-gray-50 py-16">
+<!-- <section class="bg-gray-50 py-16">
 	<div class="container mx-auto px-4">
 		<div class="mb-12 text-center">
 			<h2 class="mb-4 text-3xl font-bold">Volunteer Testimonials</h2>
@@ -317,7 +318,7 @@
 			</div>
 		</div>
 	</div>
-</section>
+</section> -->
 
 <!-- Application Process Section -->
 <section class="bg-white py-16">

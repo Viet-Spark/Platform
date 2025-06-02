@@ -66,7 +66,7 @@
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			<p class="mx-auto max-w-3xl text-lg text-gray-600">
 				Every contribution helps us expand our programs and reach more professionals in the
-				community.
+				community. Please email contact@vietspark.org for direct donation.
 			</p>
 		</div>
 
@@ -114,7 +114,7 @@
 </section>
 
 <!-- Donation Form Section -->
-<section class="bg-gray-50 py-16">
+<!-- <section class="bg-gray-50 py-16">
 	<div class="container mx-auto px-4">
 		<div class="mx-auto max-w-3xl overflow-hidden rounded-lg bg-white shadow-md">
 			<div class="bg-primary p-6 text-white">
@@ -123,7 +123,7 @@
 			</div>
 
 			<form on:submit|preventDefault={handleSubmit} class="space-y-6 p-6">
-				<!-- Donation Amount -->
+				Donation Amount
 				<div>
 					<fieldset>
 						<legend class="mb-4 block font-medium text-gray-700">Select Donation Amount</legend>
@@ -172,7 +172,7 @@
 					</fieldset>
 				</div>
 
-				<!-- Donor Information -->
+				Donor Information
 				<div>
 					<h3 class="mb-4 text-lg font-bold">Donor Information</h3>
 
@@ -256,7 +256,7 @@
 					</div>
 				</div>
 
-				<!-- Submit Button -->
+				Submit Button
 				<div class="pt-4">
 					<button
 						type="submit"
@@ -271,7 +271,7 @@
 			</form>
 		</div>
 	</div>
-</section>
+</section> -->
 
 <!-- Other Ways to Support -->
 <section class="bg-white py-16">
