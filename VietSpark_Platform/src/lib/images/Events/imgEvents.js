@@ -23,17 +23,16 @@ import IMG_2023_9 from '$lib/images/Events/2023/LI300311.JPG';
 import IMG_2023_10 from '$lib/images/Events/2023/IMG_7399.jpg';
 
 // 2024
-import IMG_2024_1 from '$lib/images/Events/2024/DSCF6540.jpg';
-// import IMG_2024_1 from '$lib/images/Events/2024/DSCF1181.jpg';
-import IMG_2024_2 from '$lib/images/Events/2024/DSCF1392.jpg';
-import IMG_2024_3 from '$lib/images/Events/2024/DSCF1432.jpg';
-import IMG_2024_4 from '$lib/images/Events/2024/DSCF1570.jpg';
-import IMG_2024_5 from '$lib/images/Events/2024/DSCF1661.jpg';
-import IMG_2024_6 from '$lib/images/Events/2024/IMG_1166.jpg';
-import IMG_2024_7 from '$lib/images/Events/2024/IMG_1186.jpg';
-import IMG_2024_8 from '$lib/images/Events/2024/IMG_1205.jpg';
-import IMG_2024_9 from '$lib/images/Events/2024/IMG_1213.jpg';
-import IMG_2024_10 from '$lib/images/Events/2024/IMG_8405.jpg';
+import IMG_2024_1 from '$lib/images/Events/2024/IMG_6540.JPG';
+import IMG_2024_2 from '$lib/images/Events/2024/DSCF1392.JPG';
+import IMG_2024_3 from '$lib/images/Events/2024/DSCF1432.JPG';
+import IMG_2024_4 from '$lib/images/Events/2024/DSCF1570.JPG';
+import IMG_2024_5 from '$lib/images/Events/2024/DSCF1661.JPG';
+import IMG_2024_6 from '$lib/images/Events/2024/IMG_1166.JPG';
+import IMG_2024_7 from '$lib/images/Events/2024/IMG_1186.JPG';
+import IMG_2024_8 from '$lib/images/Events/2024/IMG_1205.JPG';
+import IMG_2024_9 from '$lib/images/Events/2024/IMG_1213.JPG';
+import IMG_2024_10 from '$lib/images/Events/2024/IMG_8405.JPG';
 
 export const eventImages = {
 	IMG_2022_1,
