@@ -1,6 +1,7 @@
 <script>
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
 	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
+	import FallForumImage from '$lib/images/Events/FallForumImage.jpg';
 	// Sample events data (to be replaced with actual data from a database/API)
 	const upcomingEvents = [
 		{
@@ -244,7 +245,7 @@
 	</div>
 </section>
 
-<!-- Tech Summit Feature -->
+<!-- Fall Forum Feature -->
 <section class="bg-white py-16">
 	<div class="container mx-auto px-4">
 		<div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -252,18 +253,24 @@
 				<h2 class="mb-6 text-3xl font-bold">Fall Forum</h2>
 				<div class="bg-primary mb-6 h-1 w-24"></div>
 				<p class="mb-4 text-gray-700">
-					PLACEHOLDER
+					The VN-US Fall Forum 2024, held from October 25th to November 2nd across San Francisco, New York, and Boston, successfully brought together leaders from both Vietnam and the United States. 
+					VietSpark was honored to partner with Indiana University, HCMC People’s Committee, US-ASEAN Business Council, Vietnam Initiative, VietChallenge, and BambuUP to host the event. 
+					This annual event, designed to advance the Comprehensive Strategic Partnership between the two nations, served as a dynamic platform for sharing initiatives and identifying key opportunities for business and economic cooperation.
 				</p>
 				<p class="mb-6 text-gray-700">
-					PLACEHOLDER
+					This year’s Forum featured over 70 rising leaders from Vietnam across various industries, including trading, real estate, tech startups, pharmaceuticals, manufacturing, engineering, and financial services. 
+					In addition, the event attracted more than 150 business professionals and experts from the US, creating an enriching environment for cross-cultural exchange and collaboration.
+				</p>
+				<p class="mb-6 text-gray-700">
+					Participants engaged in lively discussions, explored partnership potential, and forged valuable connections, strengthening ties between the two countries. 
+					The event marked another significant milestone in fostering collaboration and driving forward business and economic growth on both sides.
 				</p>
 				<a href="/events/tech-summit-2023" class="btn bg-primary hover:bg-primary-dark text-white">
 					Learn More About Fall Forum
 				</a>
 			</div>
 			<div class="order-1 flex h-96 items-center justify-center rounded-lg bg-gray-100 lg:order-2">
-				<!-- Placeholder for Break Into Tech image -->
-				<img src={EventPlaceHolderImage} alt="EventPlaceHolderImage" class="object-cover w-full h-96"/>
+				<img src={FallForumImage} alt="FallForumImage" class="object-cover w-full h-96"/>
 			</div>
 		</div>
 	</div>

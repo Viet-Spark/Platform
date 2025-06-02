@@ -86,7 +86,7 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
-			<div>
+			<!-- <div>
 				<h2 class="mb-6 text-3xl font-bold">Send Us a Message</h2>
 				<p class="mb-6 text-gray-600">
 					Have a question or want to get involved? Use the form below to send us a message, and
@@ -165,7 +165,7 @@
 						</button>
 					</div>
 				</form>
-			</div>
+			</div> -->
 
 			<div>
 				<h2 class="mb-6 text-3xl font-bold">Connect With Us</h2>
@@ -232,9 +232,8 @@
 				<div class="rounded-lg bg-white p-6 shadow-sm">
 					<h3 class="mb-2 text-xl font-bold">How can I join VietSpark?</h3>
 					<p class="text-gray-600">
-						Joining is easy! Simply create an account on our website and you'll have access to our
-						community resources. For deeper involvement, check out our volunteer opportunities on
-						the "Work With Us" page.
+						Joining is easy! Check out our volunteer opportunities on the “Work With Us” page and apply to positions that you see fit. 
+						You can also email us at contact@vietspark.org with your inquiries..
 					</p>
 				</div>
 
@@ -250,7 +249,7 @@
 					<h3 class="mb-2 text-xl font-bold">How can my company partner with VietSpark?</h3>
 					<p class="text-gray-600">
 						We offer various partnership opportunities including event sponsorships, mentorship
-						programs, and collaborative initiatives. Please email partnerships@vietspark.org to
+						programs, and collaborative initiatives. Please email fundraising@vietspark.org to
 						discuss potential collaborations.
 					</p>
 				</div>

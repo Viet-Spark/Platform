@@ -66,7 +66,7 @@
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			<p class="mx-auto max-w-3xl text-lg text-gray-600">
 				Every contribution helps us expand our programs and reach more professionals in the
-				community.
+				community. Please contact @email.com for direct donation.
 			</p>
 		</div>
 

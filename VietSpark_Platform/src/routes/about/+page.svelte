@@ -4,6 +4,22 @@
 	import HanhMaiImage from '$lib/images/About/HanhMai.jpg';
     import VanLeImage from '$lib/images/About/VanLe.jpg';
     import TanPhanImage from '$lib/images/About/TanPhan.jpg';
+    import NhuVoImange from '$lib/images/About/NhuVo.jpg';
+
+    import HienLuuImage from '$lib/images/About/HienLuu.jpg';
+
+    import VyHuynhImage from '$lib/images/About/VyHuynh.jpg';
+    import NgaNguyenImage from '$lib/images/About/NgaNguyen.jpg';
+    import DungNguyenImage from '$lib/images/About/DungNguyen.jpg';
+    import LeePhamImage from '$lib/images/About/LeePham.jpg';
+    import ThanhThaoNguyenImage from '$lib/images/About/ThanhThaoNguyen.jpg';
+    import UyenTranImage from '$lib/images/About/UyenTran.jpg';
+    import TuNhiImage from '$lib/images/About/TuNhi.jpg';
+    import VyHoImage from '$lib/images/About/VyHo.jpg';
+    import HellenTrinhImage from '$lib/images/About/HellenTrinh.jpg';
+    import HongNhungImage from '$lib/images/About/HongNhung.jpg';
+    import QuanNguyenImage from '$lib/images/About/QuanNguyen.jpg';
+
 	// Team members data (to be expanded with real data)
     import HistoryImage from '$lib/images/About/HistoryImage.jpg';
 	const boardMembers = [
@@ -15,7 +31,7 @@
 		},
 		{
 			name: 'Hanh Mai',
-			title: 'Chief Executive Officer',
+			title: 'Chief Executive Officer ',
 			image: HanhMaiImage,
 			linkedIn: 'https://www.linkedin.com/in/hanhmaihhm'
 		},
@@ -28,7 +44,7 @@
 		{
 			name: 'Nhu Vo',
 			title: 'Director of Operations',
-			image: placeHolderAvatar,
+			image: NhuVoImange,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
@@ -41,54 +57,90 @@
  
 	const advisoryBoard = [
 		{
-			name: 'Dr. Emily Chen',
-			title: 'Technology Advisor',
-			image: placeHolderAvatar,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Michael Brown',
-			title: 'Industry Advisor',
-			image: placeHolderAvatar,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Sarah Wilson',
-			title: 'Education Advisor',
-			image: placeHolderAvatar,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'David Lee',
-			title: 'Financial Advisor',
-			image: placeHolderAvatar,
-			linkedIn: 'https://linkedin.com/'
+			name: 'Hien Luu',
+			title: 'Advisor Board Member',
+			image: HienLuuImage,
+			linkedIn: 'https://www.linkedin.com/in/hienluu/'
 		}
 	];
 
 	const volunteers = [
 		{
-			name: 'Kevin Nguyen',
-			title: 'Volunteer',
+			name: 'Vy Huynh',
+			title: 'Design Lead',
+			image: VyHuynhImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Nga Nguyen',
+			title: 'Marketing Lead',
+			image: NgaNguyenImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Dung Nguyen',
+			title: 'Program Lead',
+			image: DungNguyenImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Lee Pham',
+			title: 'Sr. Technical Program Manager',
+			image: LeePhamImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Thanh Thao Nguyen',
+			title: 'Program Lead',
+			image: ThanhThaoNguyenImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Uyen Tran',
+			title: 'Operations Lead',
+			image: UyenTranImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Tu Nhi Phung',
+			title: 'Lead Project Manager',
+			image: TuNhiImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Han Phung',
+			title: 'Lead Project Manager',
 			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
-			name: 'Vivian Trang',
-			title: 'Volunteer',
+			name: 'Uyen Truong',
+			title: 'Program Lead',
 			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
-			name: 'Kevin Nguyen',
-			title: 'Volunteer',
-			image: placeHolderAvatar,
+			name: 'Vy Ho',
+			title: 'Marketing Lead',
+			image: VyHoImage,
 			linkedIn: 'https://linkedin.com/'
 		},
 		{
-			name: 'Vivian Trang',
-			title: 'Volunteer',
-			image: placeHolderAvatar,
+			name: 'Hellen Trinh',
+			title: 'Fundraising Lead',
+			image: HellenTrinhImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Hong Nhung',
+			title: 'Fundraising Lead',
+			image: HongNhungImage,
+			linkedIn: 'https://linkedin.com/'
+		},
+		{
+			name: 'Quan Nguyen',
+			title: 'Lead Project Manager',
+			image: QuanNguyenImage,
 			linkedIn: 'https://linkedin.com/'
 		},
 	];
@@ -431,7 +483,7 @@
 						class="text-primary hover:text-primary-dark"
 						aria-label={`${member.name}'s LinkedIn profile`}
 					>
-						<i class="fab fa-linkedin text-xl"></i>
+						<!-- <i class="fab fa-linkedin text-xl"></i> -->
 					</a>
 				</div>
 			{/each}
