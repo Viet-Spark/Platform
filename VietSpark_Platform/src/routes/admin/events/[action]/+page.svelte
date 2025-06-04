@@ -76,12 +76,13 @@
 				updatedAt: new Date()
 			};
 
-			if (isEditing) {
-				await updateEvent(eventId, dataToSubmit);
-			} else {
-				await createEvent(dataToSubmit);
-			}
-			goto('/admin/events');
+			console.log(dataToSubmit)
+			// if (isEditing) {
+			// 	await updateEvent(eventId, dataToSubmit);
+			// } else {
+			// 	await createEvent(dataToSubmit);
+			// }
+			// goto('/admin/events');
 		} catch (error) {
 			console.error('Error saving event:', error);
 		}
