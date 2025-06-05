@@ -1,6 +1,7 @@
 <script>
 	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
+	import TechSummit2025Image from '$lib/images/Events/2025/TechSummit2025Image.jpg';
 	import { eventImages } from '$lib/images/Events/imgEvents.js';
 	// Event data (to be replaced with API/database data later)
 	const events = [
@@ -11,10 +12,10 @@
 			location: 'San Francisco, CA',
 			description:
 				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [TechSummitImage],
+			images: [TechSummit2025Image],
 			category: 'Tech Summit',
 			content:[
-				"<p>MORE TO COME</p>",
+				"<p>📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b></p>",
 			]
 		},
 		{
@@ -233,16 +234,21 @@
 									</div>
 									<div>
 										<strong>Registration</strong>
-										<p>$25 - $50 (Early bird pricing available)</p>
+										<p>$30 - $70 (Early bird pricing available)</p>
 									</div>
 								</li>
 							</ul>
 
 							
 							<div class="mt-6">
-								<button class="btn bg-primary hover:bg-primary-dark w-full text-white">
-									Register Now
-								</button>
+								<a href="https://bit.ly/VietnamTechSummit2025" 
+								aria-label="Register for Vietnam Tech Summit 2025"
+								target="_blank"
+								>
+									<button class="btn bg-primary hover:underline hover:bg-primary-dark w-full text-white">
+										Register Now
+									</button>
+								</a>
 								<p class="mt-2 text-center text-sm text-gray-600">
 									Limited seats available. VietSpark members receive special pricing.
 								</p>

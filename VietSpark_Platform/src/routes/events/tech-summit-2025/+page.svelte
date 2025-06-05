@@ -1,15 +1,16 @@
 <script>
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
+	import TechSummit2025Image from '$lib/images/Events/2025/TechSummit2025Image.jpg';
 	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
 	// Event data (to be replaced with API/database data later)
 	const event = {
 		title: 'Annual Tech Summit 2025',
-		date: 'December 15, 2025',
+		date: 'August 22-23, 2025',
 		time: '9:00 AM - 5:00 PM PST',
 		location: 'San Francisco, CA',
 		description:
 			'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-		image: TechSummitImage,
+		image: TechSummit2025Image,
 		category: 'Tech Summit'
 	};
 </script>
@@ -56,40 +57,49 @@
 	<div class="container mx-auto px-4">
 		<div class="grid grid-cols-1 gap-12 lg:grid-cols-3">
 			<div class="lg:col-span-2">
-				<img
+				<div class="flex justify-center">
+					<img
 					src={event.image}
 					alt={event.title}
-					class="mb-8 w-full rounded-lg object-cover shadow-md"
+					class="mb-8 h-full rounded-lg shadow-md"
 					style="height: 400px;"
-				/>
+					/>
+				</div>
 
 				<div class="prose prose-lg max-w-none">
-					<h2>About This Event</h2>
-					<p>
-						Our signature event, usually held in August, brings together Vietnamese professionals
-						from across the tech industry onsite for 2-3 days of learning, networking, and
-						inspiration. The Tech Summit features keynote speeches from industry leaders, panel
-						discussions on emerging trends, and workshops to develop practical skills
-					</p>
-					<p>
-						Whether you're a seasoned professional or just starting your tech journey, the Tech
-						Summit offers valuable insights and connections to help advance your career.
-					</p>
+					<h2>{@html "📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b>"}</h2>
+					
+					<p>{@html "After three successful years, drawing over 400 professionals and tech enthusiasts just last year alone, <b>Vietnam Tech Summit 2025</b> is officially back!"}</p>
+					<p>{@html "Get ready for an exciting 2-day journey of breakthrough ideas and meaningful connections — where the Vietnamese tech community across the U.S. gathers to <b>connect - share - and unlock new opportunities.</b>"}</p>
+					<p>{@html "🗓️ <b>When? August 22-23, 2025</b>"}</p>
+					<p>{@html "📍 <b>Where? Silicon Valley, CA</b>"}</p>
+					<p><br></p>
+					<p>{@html "📣 <b>What's waiting for you at Vietnam Tech Summit 2025?</b>"}</p>
+					<p>{@html "✨ <b>In-depth Panel Discussions</b> featuring top experts on the hottest topics: AI and Semiconductors."}</p>
+					<p>{@html "✨ <b>Vietnam AI Stars 2025 – Grand Finale:</b> The first AI-focused competition designed for Vietnamese talents. Finalist teams will pitch their AI projects live in front of an all-star panel of judges and compete for amazing prizes — including cash awards, 1:1 mentoring/coaching by industry leaders, investment opportunities, and global visibility."}</p>
 
-					<h2>What to Expect</h2>
+					<p>{@html "<b>Judging Panel includes:</b>"}</p>
 					<ul>
-						<li>Keynote presentations from industry leaders</li>
-						<li>Panel discussions on emerging tech trends</li>
-						<li>Hands-on workshops and skill-building sessions</li>
-						<li>Networking opportunities with professionals in the field</li>
-						<li>Career development resources and mentorship connections</li>
+						<li>{@html "Mr. Quoc Le – Google Fellow, Google DeepMind"}</li>
+						<li>{@html "Mr. Hung Tran – CEO | Co-Founder, AI for Vietnam"}</li>
+						<li>{@html "Ms. Huyen Chip – Computer Scientist, Founder of Claypot AI, Amazon Bestselling Author"}</li>
+						<li>{@html "Mr. Hien Luu – Senior Engineering Manager, Zoox"}</li>
 					</ul>
 
-					<h2>Featured Speakers</h2>
-					<p>
-						Speaker announcements coming soon! Check back for updates or subscribe to our newsletter
-						to be the first to know.
-					</p>
+					<p>{@html "✨ <b>Live Music & Networking Night:</b> A cozy yet vibrant kickoff party with live music – perfect for building authentic connections with speakers, professionals, and the broader Vietnamese tech community."}</p>
+					<p>{@html "✨ <b>10+ Hands-on Workshops</b> across 4 time slots: Covering a wide range of topics from AI, Semiconductors to career skills in Software, Data, Product, and Business."}</p>
+					
+					<p>{@html "✨ <b>Company Tours</b> to top tech headquarters like Google, Microsoft, and TikTok: Get an exclusive look into how the tech giants operate in real life."}</p>
+					<p>{@html "<b>Note</b>: Company Tours is complimentary and free of charge to Vietnam Tech Summit participants. Limited spots available, early registration priority. The organizing committee reserves the right to determine the final participant list"}</p>
+					<p><br></p>
+					<p>{@html "👉 <b>Register today to receive Early Bird tickets at discounted prices!</b>"}</p>
+					<p>{@html "📌 Registration link: <a href='https://bit.ly/VietnamTechSummit2025'style='color: blue; '>https://bit.ly/VietnamTechSummit2025</a>"}</p>
+
+					<p>{@html "Don' miss out - this summer will be more vibrant than ever with the Tech Summit!"}</p>
+					<p>{@html "📣 <b>Follow the Viet Spark fanpage to stay updated with the latest news and announcements for the event!</b>"}</p>
+					<p>{@html "We can't wait to see you at the upcoming activities of <b>Vietnam Tech Summit 2025!</b>"}</p>
+
+					<h2>{@html "📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b>"}</h2>
 				</div>
 			</div>
 
@@ -131,15 +141,20 @@
 							</div>
 							<div>
 								<strong>Registration</strong>
-								<p>$25 - $50 (Early bird pricing available)</p>
+								<p>$30 - $70 (Early bird pricing available)</p>
 							</div>
 						</li>
 					</ul>
 
 					<div class="mt-6">
-						<button class="btn bg-primary hover:bg-primary-dark w-full text-white">
-							Register Now
-						</button>
+						<a href="https://bit.ly/VietnamTechSummit2025" 
+						aria-label="Register for Vietnam Tech Summit 2025"
+						target="_blank"
+						>
+							<button class="btn bg-primary hover:underline hover:bg-primary-dark w-full text-white">
+								Register Now
+							</button>
+						</a>
 						<p class="mt-2 text-center text-sm text-gray-600">
 							Limited seats available. VietSpark members receive special pricing.
 						</p>

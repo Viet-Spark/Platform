@@ -67,9 +67,9 @@
 						<a href="/admin" class="text-primary text-sm hover:underline"> Admin Dashboard </a>
 					{/if}
 				{:else}
-					<!-- <a href="/login" class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white">
+					<a href="/login" class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white">
 						Login
-					</a> -->
+					</a>
 				{/if}
 
 				<button
