@@ -5,19 +5,19 @@
 	import { eventImages } from '$lib/images/Events/imgEvents.js';
 	// Event data (to be replaced with API/database data later)
 	const events = [
-		{
-			title: 'Annual Tech Summit 2025',
-			date: 'August 22-23, 2025',
-			time: '9:00 AM - 5:00 PM PST',
-			location: 'San Francisco, CA',
-			description:
-				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [TechSummit2025Image],
-			category: 'Tech Summit',
-			content:[
-				"<p>📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b></p>",
-			]
-		},
+		// {
+		// 	title: 'Annual Tech Summit 2025',
+		// 	date: 'August 22-23, 2025',
+		// 	time: '9:00 AM - 5:00 PM PST',
+		// 	location: 'San Francisco, CA',
+		// 	description:
+		// 		'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
+		// 	images: [TechSummit2025Image],
+		// 	category: 'Tech Summit',
+		// 	content:[
+		// 		"<p>📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b></p>",
+		// 	]
+		// },
 		{
 			title: 'Annual Tech Summit 2024',
 			date: 'August 16-17, 2024',
