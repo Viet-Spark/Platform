@@ -181,12 +181,14 @@
 
 						</div>
 					{:else if event.images.length === 1}
-						<img
-							src={event.images[0]}
-							alt={event.title}
-							class="mb-8 w-full rounded-lg object-cover shadow-md"
-							style="height: 400px;"
-						/>
+						<div class="flex justify-center">
+							<img
+								src={event.images[0]}
+								alt={event.title}
+								class="mb-8 h-full rounded-lg object-cover shadow-md"
+								style="height: 400px;"
+							/>
+						</div>
 					{/if}
 					
 					<div class="prose prose-lg max-w-none">
