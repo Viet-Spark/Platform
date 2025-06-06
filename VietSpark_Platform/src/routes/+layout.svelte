@@ -231,15 +231,4 @@
 		background-color: #f3f4f6;
 	}
 
-	:global(.bg-primary) {
-		background-color: #0a57a0;
-	}
-
-	:global(.bg-primary-dark) {
-		background-color: #084682;
-	}
-
-	:global(.text-primary) {
-		color: #0a57a0;
-	}
 </style>
