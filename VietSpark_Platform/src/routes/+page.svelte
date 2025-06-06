@@ -49,7 +49,8 @@
 				Connect, learn, and grow with a community of like-minded professionals.
 			</p>
 			<div class="flex flex-wrap gap-4">
-				<a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100"
+				<!-- <a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100" -->
+				<a href="/events/tech-summit-content" class="btn text-primary bg-white hover:bg-gray-100"
 					>Tech Summit 2025</a
 				>
 				{#if !$authUser}
@@ -186,7 +187,7 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-			<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
+			<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
 					<img src={TechSummitImage} alt="TechSummitImage" class="h-48 w-full object-cover" />
 				</div>
@@ -200,7 +201,7 @@
 						>Learn more →</a
 					>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
