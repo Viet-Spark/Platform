@@ -20,6 +20,84 @@
 	color: var(--color-text);
 }
 
+@theme {
+	--color-primary: #0A57A0;
+	--color-primary-25: #F3F7FA;
+	--color-primary-50: #E6EEF6;
+	--color-primary-100: #CEDDEC;
+	--color-primary-200: #9DBCD9;
+	--color-primary-300: #6C9AC6;
+	--color-primary-400: #3B79B3;
+	--color-primary-500: #0A57A0;
+	--color-primary-600: #094E90;
+	--color-primary-700: #073D70;
+	--color-primary-800: #052C50;
+	--color-primary-900: #031A30;
+	--color-primary-950: #020D18;
+	--color-primary-1000: #000408;
+
+	--color-secondary: #26AA82; 
+	--color-secondary-25: #F4FBF9;
+	--color-secondary-50: #E9F7F3;
+	--color-secondary-100: #D4EEE6;
+	--color-secondary-200: #A8DDCD;
+	--color-secondary-300: #7DCCB4;
+	--color-secondary-400: #51BB9B;
+	--color-secondary-500: #3CB38F;
+	--color-secondary-600: #26AA82; 
+	--color-secondary-700: #229975;
+	--color-secondary-800: #1B775B;
+	--color-secondary-900: #135541;
+	--color-secondary-950: #0D3B2E;
+	--color-secondary-1000: #08221A;
+
+	--color-tertiary: #EAB308; 
+    --color-tertiary-25: #FFFEF8;
+	--color-tertiary-50: #FFFDF2;
+	--color-tertiary-100: #FEF9E6;
+	--color-tertiary-200: #FEF3CC;
+	--color-tertiary-300: #FDEAA1;
+	--color-tertiary-400: #FCD866;
+	--color-tertiary-500: #FACD27;
+	--color-tertiary-600: #EAB308; 
+	--color-tertiary-700: #CA8A04;
+	--color-tertiary-800: #A16207;
+	--color-tertiary-900: #854D0E;
+	--color-tertiary-950: #713F12;
+	--color-tertiary-1000: #362008;
+
+	--color-quaternary: #7C3AED;
+	--color-quaternary-25: #FDFBFF;
+	--color-quaternary-50: #FAF7FF;
+	--color-quaternary-100: #EEE9FF;
+	--color-quaternary-200: #DDD6FE;
+	--color-quaternary-300: #C4B5FD;
+	--color-quaternary-400: #A78BFA;
+	--color-quaternary-500: #8B5CF6;
+	--color-quaternary-600: #7C3AED;
+	--color-quaternary-700: #6D28D9;
+	--color-quaternary-800: #5B21B6;
+	--color-quaternary-900: #4C1D95;
+	--color-quaternary-950: #2E1065;
+	--color-quaternary-1000: #19093A;
+    
+	--color-gray-25: #FCFDFD;
+	--color-gray-50: #F9FAFB;
+	--color-gray-100: #F3F4F6;
+	--color-gray-200: #E5E7EB;
+	--color-gray-300: #D1D5DB;
+	--color-gray-400: #9CA3AF;
+	--color-gray-500: #6B7280;
+	--color-gray-600: #4B5563;
+	--color-gray-700: #374151;
+	--color-gray-800: #1F2937;
+	--color-gray-900: #111827;
+	--color-gray-950: #030712;
+	--color-gray-1000: #000000;
+
+	--color-primary-dark: #084682; 
+}
+
 body {
 	min-height: 100vh;
 	margin: 0;

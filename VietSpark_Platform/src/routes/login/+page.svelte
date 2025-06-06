@@ -183,18 +183,6 @@
 		padding: 2rem;
 	}
 
-	:global(.bg-primary) {
-		background-color: #0a57a0;
-	}
-
-	:global(.bg-primary-dark) {
-		background-color: #084682;
-	}
-
-	:global(.text-primary) {
-		color: #0a57a0;
-	}
-
 	:global(.ring-primary) {
 		--tw-ring-color: #0a57a0;
 	}
