@@ -191,7 +191,7 @@
 					<img src={TechSummitImage} alt="TechSummitImage" class="h-48 w-full object-cover" />
 				</div>
 				<div class="p-6">
-					<div class="text-primary mb-2 text-sm font-semibold">Dec 15, 2025</div>
+					<div class="text-primary mb-2 text-sm font-semibold">Aug 22-23, 2025</div>
 					<h3 class="mb-2 text-xl font-bold">Tech Summit 2025</h3>
 					<p class="mb-4 text-gray-600">
 						Join us for a day of inspiring talks, networking, and workshops from industry leaders.
