@@ -10,6 +10,7 @@
 	import VietBayLogo from '$lib/images/Partners/VietBayLogo.jpg';
 	import AIforVietNamFoundationLogo from '$lib/images/Partners/AIforVietNamFoundationLogo.jpg';
 	import VISEMIFoundationLogo from '$lib/images/Partners/VISEMIFoundationLogo.jpg';
+	import { devStore } from '$lib/stores/devStore';
 
 	const Partners = [
 		{
@@ -28,6 +29,10 @@
 			website: 'https://www.aiforvietnam.org/'
 		}
 	];
+
+	devStore.subscribe((state) => {
+		console.log('Dev Store State:', state);
+	});
 </script>
 
 <svelte:head>
