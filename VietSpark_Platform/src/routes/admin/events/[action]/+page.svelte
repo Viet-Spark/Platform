@@ -89,7 +89,14 @@
 	}
 
 	function addSpeaker() {
-		eventData.speakers = [...eventData.speakers, { userId: '', metaData: {} }];
+		eventData.speakers = [...eventData.speakers, { 
+			userId: '', 
+			metaData: {
+				agenda: '',
+				bio: '',
+				title: '',
+				socials: '',
+			} }];
 	}
 
 	function removeSpeaker(index) {
@@ -386,7 +393,7 @@
 
 		<div class="space-y-4">
 			<h3 class="text-lg font-medium">Speakers</h3>
-			{#each eventData.speakers as speaker, index}
+			{#each eventData.speakers as speaker, index (index)}
 				<div class="rounded-md border p-4">
 					<div class="grid grid-cols-2 gap-4">
 						<div>
@@ -400,6 +407,16 @@
 								class="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
 							/>
 						</div>
+						{#each Object.entries(speaker.metaData) as [key, value] (key)}
+							<div>
+								<label for="speaker-{index}-{key}" class="block text-sm font-medium text-gray-700">{key.charAt(0).toUpperCase() + key.slice(1)}</label>
+								<input
+									type='text'
+									bind:value={speaker.metaData[key]}
+									class="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+								/>
+							</div>
+						{/each}
 						<button
 							type="button"
 							on:click={() => removeSpeaker(index)}
