@@ -5,17 +5,17 @@
 	import FallForumImage from '$lib/images/Events/FallForumImage.jpg';
 	// Sample events data (to be replaced with actual data from a database/API)
 	const upcomingEvents = [
-		// {
-		// 	id: 'tech-summit-2025',
-		// 	title: 'Annual Tech Summit 2025',
-		// 	date: 'August 22-23, 2025',
-		// 	time: '9:00 AM - 5:00 PM PST',
-		// 	location: 'San Francisco, CA',
-		// 	description:
-		// 		'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-		// 	image: TechSummit2025Image,
-		// 	category: 'Vietnam Tech Summit'
-		// }
+		{
+			id: 'tech-summit-2025',
+			title: 'Annual Tech Summit 2025',
+			date: 'August 22-23, 2025',
+			time: '9:00 AM - 5:00 PM PST',
+			location: 'Silicon Valley, CA',
+			description:
+				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
+			image: TechSummit2025Image,
+			category: 'Vietnam Tech Summit'
+		}
 	];
 
 	const pastEvents = [
@@ -152,10 +152,10 @@
 									<i class="fas fa-map-marker-alt w-5"></i>
 									<span>{event.location}</span>
 								</div>
-								<div class="flex items-center text-gray-600">
+								<!-- <div class="flex items-center text-gray-600">
 									<i class="fas fa-clock w-5"></i>
 									<span>{event.time}</span>
-								</div>
+								</div> -->
 							</div>
 							<a
 								href={`/events/${event.id}`}

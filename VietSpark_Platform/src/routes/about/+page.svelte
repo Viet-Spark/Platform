@@ -71,12 +71,12 @@
 			image: VyHuynhImage,
 			linkedIn: 'https://linkedin.com/'
 		},
-		{
-			name: 'Nga Nguyen',
-			title: 'Marketing Lead',
-			image: NgaNguyenImage,
-			linkedIn: 'https://linkedin.com/'
-		},
+		// {
+		// 	name: 'Nga Nguyen',
+		// 	title: 'Marketing Lead',
+		// 	image: NgaNguyenImage,
+		// 	linkedIn: 'https://linkedin.com/'
+		// },
 		{
 			name: 'Dung Nguyen',
 			title: 'Program Lead',
@@ -89,12 +89,12 @@
 			image: LeePhamImage,
 			linkedIn: 'https://linkedin.com/'
 		},
-		{
-			name: 'Thanh Thao Nguyen',
-			title: 'Program Lead',
-			image: ThanhThaoNguyenImage,
-			linkedIn: 'https://linkedin.com/'
-		},
+		// {
+		// 	name: 'Thanh Thao Nguyen',
+		// 	title: 'Program Lead',
+		// 	image: ThanhThaoNguyenImage,
+		// 	linkedIn: 'https://linkedin.com/'
+		// },
 		{
 			name: 'Uyen Tran',
 			title: 'Operations Lead',
@@ -119,12 +119,12 @@
 			image: placeHolderAvatar,
 			linkedIn: 'https://linkedin.com/'
 		},
-		{
-			name: 'Vy Ho',
-			title: 'Marketing Lead',
-			image: VyHoImage,
-			linkedIn: 'https://linkedin.com/'
-		},
+		// {
+		// 	name: 'Vy Ho',
+		// 	title: 'Marketing Lead',
+		// 	image: VyHoImage,
+		// 	linkedIn: 'https://linkedin.com/'
+		// },
 		{
 			name: 'Hellen Trinh',
 			title: 'Fundraising Lead',
