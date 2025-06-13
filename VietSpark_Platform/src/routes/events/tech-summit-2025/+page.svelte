@@ -7,7 +7,7 @@
 		title: 'Annual Tech Summit 2025',
 		date: 'August 22-23, 2025',
 		time: '9:00 AM - 5:00 PM PST',
-		location: 'San Francisco, CA',
+		location: 'Silicon Valley, CA',
 		description:
 			'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
 		image: TechSummit2025Image,
@@ -31,10 +31,10 @@
 						<i class="fas fa-calendar-day mr-2"></i>
 						<span>{event.date}</span>
 					</div>
-					<div class="flex items-center">
+					<!-- <div class="flex items-center">
 						<i class="fas fa-clock mr-2"></i>
 						<span>{event.time}</span>
-					</div>
+					</div> -->
 					<div class="flex items-center">
 						<i class="fas fa-map-marker-alt mr-2"></i>
 						<span>{event.location}</span>
@@ -67,39 +67,39 @@
 				</div>
 
 				<div class="prose prose-lg max-w-none">
-					<h2>{@html "📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b>"}</h2>
+					<h2>{@html "📣 <b>VIETNAM TECH SUMMIT 2025</b> IS OFFICIALLY BACK - OPEN <b>EARLY BIRD</b> REGISTRATION"}</h2>
 					
-					<p>{@html "After three successful years, drawing over 400 professionals and tech enthusiasts just last year alone, <b>Vietnam Tech Summit 2025</b> is officially back!"}</p>
+					<p>{@html `After three successful years, drawing over 400 professionals and tech enthusiasts just last year alone, <b><a href="https://www.linkedin.com/company/vietnam-business-professional-in-tech/" style="color: blue;">Viet Spark</a></b>, VietBay, <b><a href="https://www.linkedin.com/company/visemi/" style="color: blue;">VISEMI Foundation</a></b>, and <b><a href="https://www.linkedin.com/company/aiforvietnam/" style="color: blue;">AI for Vietnam</a></b> - is officially back!`}</p>
 					<p>{@html "Get ready for an exciting 2-day journey of breakthrough ideas and meaningful connections — where the Vietnamese tech community across the U.S. gathers to <b>connect - share - and unlock new opportunities.</b>"}</p>
 					<p>{@html "🗓️ <b>When? August 22-23, 2025</b>"}</p>
 					<p>{@html "📍 <b>Where? Silicon Valley, CA</b>"}</p>
 					<p><br></p>
-					<p>{@html "📣 <b>What's waiting for you at Vietnam Tech Summit 2025?</b>"}</p>
+					<p>{@html "📣 <i><b>What's waiting for you at Vietnam Tech Summit 2025?</b></i>"}</p>
 					<p>{@html "✨ <b>In-depth Panel Discussions</b> featuring top experts on the hottest topics: AI and Semiconductors."}</p>
-					<p>{@html "✨ <b>Vietnam AI Stars 2025 – Grand Finale:</b> The first AI-focused competition designed for Vietnamese talents. Finalist teams will pitch their AI projects live in front of an all-star panel of judges and compete for amazing prizes — including cash awards, 1:1 mentoring/coaching by industry leaders, investment opportunities, and global visibility."}</p>
+					<p>{@html "✨ <b>Vietnam AI Stars 2025 – Grand Finale:</b> The first AI-focused competition designed for Vietnamese talents. Finalist teams will <b>pitch their AI projects live</b> in front of an all-star panel of judges and compete for amazing prizes — including cash awards, 1:1 mentoring/coaching by industry leaders, investment opportunities, and global visibility."}</p>
 
 					<p>{@html "<b>Judging Panel includes:</b>"}</p>
 					<ul>
-						<li>{@html "Mr. Quoc Le – Google Fellow, Google DeepMind"}</li>
-						<li>{@html "Mr. Hung Tran – CEO | Co-Founder, AI for Vietnam"}</li>
-						<li>{@html "Ms. Huyen Chip – Computer Scientist, Founder of Claypot AI, Amazon Bestselling Author"}</li>
-						<li>{@html "Mr. Hien Luu – Senior Engineering Manager, Zoox"}</li>
+						<li>{@html '<a href="https://www.linkedin.com/in/quoc-v-le-319b5a8/" style="color: blue;">Mr. Quoc Le</a> – <a href="https://www.linkedin.com/company/google/" style="color: blue;">Google</a> Fellow, <a href="https://www.linkedin.com/company/googledeepmind/" style="color: blue;">Google DeepMind</a>'}</li>
+						<li>{@html '<a href="https://www.linkedin.com/in/hungtrv/" style="color: blue;">Mr. Hung Tran</a> – CEO | Co-Founder, <a href="https://www.linkedin.com/company/aiforvietnam/" style="color: blue;">AI for Vietnam</a>'}</li>
+						<li>{@html '<a href="https://www.linkedin.com/in/chiphuyen/" style="color: blue;">Ms. Huyen Chip, M.Sc.</a> – Computer Scientist, Founder of Claypot AI, Amazon Bestselling Author'}</li>
+						<li>{@html '<a href="https://www.linkedin.com/in/chiphuyen/" style="color: blue;">Mr. Hien Luu, M.Sc.</a> – Senior Engineering Manager, <a href="https://www.linkedin.com/company/zoox-inc/" style="color: blue;">Zoox</a>'}</li>
 					</ul>
 
 					<p>{@html "✨ <b>Live Music & Networking Night:</b> A cozy yet vibrant kickoff party with live music – perfect for building authentic connections with speakers, professionals, and the broader Vietnamese tech community."}</p>
 					<p>{@html "✨ <b>10+ Hands-on Workshops</b> across 4 time slots: Covering a wide range of topics from AI, Semiconductors to career skills in Software, Data, Product, and Business."}</p>
 					
 					<p>{@html "✨ <b>Company Tours</b> to top tech headquarters like Google, Microsoft, and TikTok: Get an exclusive look into how the tech giants operate in real life."}</p>
-					<p>{@html "<b>Note</b>: Company Tours is complimentary and free of charge to Vietnam Tech Summit participants. Limited spots available, early registration priority. The organizing committee reserves the right to determine the final participant list"}</p>
+					<p>{@html "<i><b>Note</b></i>: Company Tours is complimentary and free of charge to Vietnam Tech Summit participants. Limited spots available, early registration priority. The organizing committee reserves the right to determine the final participant list"}</p>
 					<p><br></p>
 					<p>{@html "👉 <b>Register today to receive Early Bird tickets at discounted prices!</b>"}</p>
-					<p>{@html "📌 Registration link: <a href='https://bit.ly/VietnamTechSummit2025'style='color: blue; '>https://bit.ly/VietnamTechSummit2025</a>"}</p>
+					<p>{@html "📌 Registration link: <a href='https://lnkd.in/eR--8Ya2'style='color: blue; '>https://lnkd.in/eR--8Ya2</a>"}</p>
 
-					<p>{@html "Don' miss out - this summer will be more vibrant than ever with the Tech Summit!"}</p>
-					<p>{@html "📣 <b>Follow the Viet Spark fanpage to stay updated with the latest news and announcements for the event!</b>"}</p>
+					<p>{@html "<b>Don't miss out - this summer will be more vibrant than ever with the Tech Summit!</b>"}</p>
+					<p>{@html "<b>📩 Email:</b> <span style='color: blue;'>contact@vietspark.org</span>"}</p>					<!-- <p>{@html "📣 <b>Follow the Viet Spark fanpage to stay updated with the latest news and announcements for the event!</b>"}</p>
 					<p>{@html "We can't wait to see you at the upcoming activities of <b>Vietnam Tech Summit 2025!</b>"}</p>
 
-					<h2>{@html "📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b>"}</h2>
+					<h2>{@html "📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b>"}</h2> -->
 				</div>
 			</div>
 
@@ -116,7 +116,7 @@
 								<p>{event.date}</p>
 							</div>
 						</li>
-						<li class="flex items-start">
+						<!-- <li class="flex items-start">
 							<div class="text-primary mr-3 mt-1">
 								<i class="fas fa-clock"></i>
 							</div>
@@ -124,7 +124,7 @@
 								<strong>Time</strong>
 								<p>{event.time}</p>
 							</div>
-						</li>
+						</li> -->
 						<li class="flex items-start">
 							<div class="text-primary mr-3 mt-1">
 								<i class="fas fa-map-marker-alt"></i>
@@ -155,9 +155,9 @@
 								Register Now
 							</button>
 						</a>
-						<p class="mt-2 text-center text-sm text-gray-600">
+						<!-- <p class="mt-2 text-center text-sm text-gray-600">
 							Limited seats available. VietSpark members receive special pricing.
-						</p>
+						</p> -->
 					</div>
 				</div>
 
@@ -165,9 +165,7 @@
 					<h3 class="mb-4 text-xl font-bold">Share This Event</h3>
 					<div class="flex space-x-4">
 						<a
-							href="https://facebook.com/sharer/sharer.php?u={encodeURIComponent(
-								`https://vietspark.org/events/tech-summit-2023`
-							)}"
+							href="https://www.facebook.com/share/1ZYMGM3fwC/"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="text-gray-600 hover:text-blue-600"
@@ -175,7 +173,7 @@
 						>
 							<i class="fab fa-facebook-f text-xl"></i>
 						</a>
-						<a
+						<!-- <a
 							href="https://twitter.com/intent/tweet?url={encodeURIComponent(
 								`https://vietspark.org/events/tech-summit-2023`
 							)}&text={encodeURIComponent(event.title)}"
@@ -185,11 +183,9 @@
 							aria-label="Share on Twitter"
 						>
 							<i class="fab fa-twitter text-xl"></i>
-						</a>
+						</a> -->
 						<a
-							href="https://www.linkedin.com/sharing/share-offsite/?url={encodeURIComponent(
-								`https://vietspark.org/events/tech-summit-2023`
-							)}"
+							href="https://www.linkedin.com/posts/vietnam-business-professional-in-tech_%F0%9D%90%95%F0%9D%90%88%F0%9D%90%84%F0%9D%90%93%F0%9D%90%8D%F0%9D%90%80%F0%9D%90%8C-%F0%9D%90%93%F0%9D%90%84%F0%9D%90%82%F0%9D%90%87-%F0%9D%90%92%F0%9D%90%94%F0%9D%90%8C%F0%9D%90%8C%F0%9D%90%88%F0%9D%90%93-%F0%9D%9F%90%F0%9D%9F%8E%F0%9D%9F%90%F0%9D%9F%93-activity-7336960846851432448-k6-B?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAvBykkBuk--cmHKO-h7qvlSz22QDsIz5SU"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="text-gray-600 hover:text-blue-700"
@@ -198,9 +194,7 @@
 							<i class="fab fa-linkedin-in text-xl"></i>
 						</a>
 						<a
-							href="mailto:?subject={encodeURIComponent(event.title)}&body={encodeURIComponent(
-								`Check out this event: https://vietspark.org/events/tech-summit-2023`
-							)}"
+							href="https://app.promotix.com/events/details/Vietnam-Tech-Summit-2025-tickets?referrer=eve[…]DX-IlgwrOjeyJ1ErZ4OUqAgDbUxlyOHFw_aem_zp2DcT2orcDULncg2QVeKw"
 							class="text-gray-600 hover:text-green-500"
 							aria-label="Share via Email"
 						>

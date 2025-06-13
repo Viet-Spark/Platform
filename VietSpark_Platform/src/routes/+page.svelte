@@ -7,6 +7,7 @@
 	import { authUser } from '$lib/stores/authStore';
 
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
+	import TechSummit2025Image from '$lib/images/Events/2025/TechSummit2025Image.jpg';
 	import VietBayLogo from '$lib/images/Partners/VietBayLogo.jpg';
 	import AIforVietNamFoundationLogo from '$lib/images/Partners/AIforVietNamFoundationLogo.jpg';
 	import VISEMIFoundationLogo from '$lib/images/Partners/VISEMIFoundationLogo.jpg';
@@ -49,8 +50,7 @@
 				Connect, learn, and grow with a community of like-minded professionals.
 			</p>
 			<div class="flex flex-wrap gap-4">
-				<!-- <a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100" -->
-				<a href="/events/tech-summit-content" class="btn text-primary bg-white hover:bg-gray-100"
+				<a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100"
 					>Tech Summit 2025</a
 				>
 				{#if !$authUser}
@@ -187,9 +187,9 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-			<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
+			<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
-					<img src={TechSummitImage} alt="TechSummitImage" class="h-48 w-full object-cover" />
+					<img src={TechSummit2025Image} alt="TechSummitImage" class="h-48 w-full object-cover" />
 				</div>
 				<div class="p-6">
 					<div class="text-primary mb-2 text-sm font-semibold">Aug 22-23, 2025</div>
@@ -201,7 +201,7 @@
 						>Learn more →</a
 					>
 				</div>
-			</div> -->
+			</div>
 
 			<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 				<div class="flex h-48 items-center justify-center bg-blue-200">
