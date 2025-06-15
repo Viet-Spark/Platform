@@ -95,12 +95,12 @@
 		// 	image: ThanhThaoNguyenImage,
 		// 	linkedIn: 'https://linkedin.com/'
 		// },
-		{
-			name: 'Uyen Tran',
-			title: 'Operations Lead',
-			image: UyenTranImage,
-			linkedIn: 'https://linkedin.com/'
-		},
+		// {
+		// 	name: 'Uyen Tran',
+		// 	title: 'Operations Lead',
+		// 	image: UyenTranImage,
+		// 	linkedIn: 'https://linkedin.com/'
+		// },
 		{
 			name: 'Tu Nhi Phung',
 			title: 'Lead Project Manager',
