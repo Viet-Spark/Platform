@@ -66,9 +66,9 @@
 					{/if}
 					<a href="/profile" class="text-primary text-sm hover:underline">
 						<div class="text-primary relative flex flex-col cursor-pointer items-center justify-center h-8 w-8 rounded-full bg-blue-200 text-lg font-bold">
-							{#if $profileData.profileImage}
+							{#if $profileData.profileImage || $authUser.profileImage || $userData?.profileImage}
 								<img
-									src={$profileData.profileImage}
+									src={$profileData.profileImage || $authUser.profileImage || $userData?.profileImage}
 									alt="Profile"
 									class="inset-0 h-8 w-8 rounded-full"
 								/>
