@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
+	import {profileData} from '$lib/stores/profileStore';
 	import { addSubscriber, newsletterError, newsletterLoading } from '$lib/stores/newsletterStore';
 
 	let isMobileMenuOpen = false;
@@ -60,12 +61,22 @@
 
 			<div class="flex items-center space-x-4">
 				{#if $authUser}
-					<a href="/profile" class="text-primary text-sm hover:underline">
-						{$userData?.email || $authUser.email}
-					</a>
 					{#if $userData?.isAdmin}
 						<a href="/admin" class="text-primary text-sm hover:underline"> Admin Dashboard </a>
 					{/if}
+					<a href="/profile" class="text-primary text-sm hover:underline">
+						<div class="text-primary relative flex flex-col cursor-pointer items-center justify-center h-8 w-8 rounded-full bg-blue-200 text-lg font-bold">
+							{#if $profileData.profileImage}
+								<img
+									src={$profileData.profileImage}
+									alt="Profile"
+									class="inset-0 h-8 w-8 rounded-full"
+								/>
+							{:else}
+								{($authUser.name ||  $userData?.name || 'V').charAt(0).toUpperCase()}
+							{/if}
+						</div>
+					</a>
 				{:else}
 					<a href="/login" class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white">
 						Login

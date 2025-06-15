@@ -16,7 +16,12 @@ export const profileData = writable({
     interests: ['Web Development', 'AI/ML', 'Community Building'],
     profileImage: null,
     events: [],
-    isAdmin: false
+    isAdmin: false, 
+    subscriptions: {
+        newsletters: false, 
+        events: false, 
+        mentorship: false
+    }
 });
 
 export const profileLoading = writable(false);
@@ -46,7 +51,17 @@ export async function getUserProfile(userId) {
             // Ensure field mappings are consistent - convert displayName to name if needed
             const profileInfo = {
                 ...userData,
-                name: userData.name || userData.displayName || 'VietSpark Member'
+                name: userData.name || userData.displayName || 'VietSpark Member', 
+                displayName: userData.displayName || userData.name || 'VietSpark Member', 
+                title: userData.title || '',
+                company: userData.company || '',
+                location: userData.location || '',
+                bio: userData.bio || '',
+                interests: userData.interests || [],
+                profileImage: userData.profileImage || null,
+                events: userData.events || [],
+                isAdmin: userData.isAdmin || false, 
+                subscriptions: userData.subscriptions || { newsletters: false, events: false, mentorship: false}
             };
 
             profileData.set(profileInfo);
@@ -68,7 +83,8 @@ export async function getUserProfile(userId) {
                 interests: ['Web Development', 'AI/ML', 'Community Building'],
                 profileImage: null,
                 events: [],
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(), 
+                subscriptions: { newsletters: false, events: false, mentorship: false }
             };
 
             try {
