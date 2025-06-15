@@ -80,8 +80,8 @@
 
 					<p>{@html "<b>Judging Panel includes:</b>"}</p>
 					<ul>
-						<li>{@html '<a href="https://www.linkedin.com/in/quoc-v-le-319b5a8/" style="color: blue;">Mr. Quoc Le</a> – <a href="https://www.linkedin.com/company/google/" style="color: blue;">Google</a> Fellow, <a href="https://www.linkedin.com/company/googledeepmind/" style="color: blue;">Google DeepMind</a>'}</li>
-						<li>{@html '<a href="https://www.linkedin.com/in/hungtrv/" style="color: blue;">Mr. Hung Tran</a> – CEO | Co-Founder, <a href="https://www.linkedin.com/company/aiforvietnam/" style="color: blue;">AI for Vietnam</a>'}</li>
+						<li>{@html '<a href="https://www.linkedin.com/in/quoc-v-le-319b5a8/" style="color: blue;">Mr. Quoc Le, Ph.D</a> – <a href="https://www.linkedin.com/company/google/" style="color: blue;">Google</a> Fellow, <a href="https://www.linkedin.com/company/googledeepmind/" style="color: blue;">Google DeepMind</a>'}</li>
+						<li>{@html '<a href="https://www.linkedin.com/in/hungtrv/" style="color: blue;">Mr. Hung Tran, Ph.D</a> – CEO | Co-Founder, <a href="https://www.linkedin.com/company/aiforvietnam/" style="color: blue;">AI for Vietnam</a>'}</li>
 						<li>{@html '<a href="https://www.linkedin.com/in/chiphuyen/" style="color: blue;">Ms. Huyen Chip, M.Sc.</a> – Computer Scientist, Founder of Claypot AI, Amazon Bestselling Author'}</li>
 						<li>{@html '<a href="https://www.linkedin.com/in/chiphuyen/" style="color: blue;">Mr. Hien Luu, M.Sc.</a> – Senior Engineering Manager, <a href="https://www.linkedin.com/company/zoox-inc/" style="color: blue;">Zoox</a>'}</li>
 					</ul>
@@ -132,7 +132,7 @@
 							<div>
 								<strong>Location</strong>
 								<p>{event.location}</p>
-								<p class="text-sm">123 Main Street, San Francisco, CA 94105</p>
+								<!-- <p class="text-sm">123 Main Street, San Francisco, CA 94105</p> -->
 							</div>
 						</li>
 						<li class="flex items-start">
