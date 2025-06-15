@@ -276,10 +276,10 @@
 				<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
 					<div class="lg:col-span-2">
 						<div class="rounded-lg bg-white p-6 shadow-md">
-							<h2 class="mb-4 text-2xl font-bold">About Me</h2>
+							<h2 class="mb-3 text-lg font-bold">About Me</h2>
 							<p class="mb-6 text-gray-700">{$profileData.bio || 'No bio information yet.'}</p>
 
-							<h3 class="mb-3 text-lg font-bold">Interests</h3>
+							<h2 class="mb-3 text-lg font-bold">Interests</h2>
 							<div class="mb-6 flex flex-wrap gap-2">
 								{#if $profileData.interests && $profileData.interests.length > 0}
 									{#each $profileData.interests as interest}
@@ -292,7 +292,7 @@
 								{/if}
 							</div>
 
-							<h3 class="mb-3 text-lg font-bold">Recent Events</h3>
+							<h2 class="mb-3 text-lg font-bold">Recent Events</h2>
 							{#if $profileData.events && $profileData.events.length > 0}
 								<div class="space-y-4">
 									{#each $profileData.events.slice(0, 2) as event}
@@ -378,7 +378,7 @@
 				</div>
 			{:else if activeTab === 'Events'}
 				<div class="rounded-lg bg-white p-6 shadow-md">
-					<h2 class="mb-6 text-2xl font-bold">My Events</h2>
+					<h2 class="mb-6 text-lg font-bold">My Events</h2>
 
 					{#if $profileData.events && $profileData.events.length > 0}
 						<div class="space-y-4">
@@ -414,7 +414,7 @@
 				</div>
 			{:else if activeTab === 'Mentorship'}
 				<div class="rounded-lg bg-white p-6 shadow-md">
-					<h2 class="mb-6 text-2xl font-bold">Mentorship Program</h2>
+					<h2 class="mb-6 text-lg font-bold">Mentorship Program</h2>
 
 					<div class="py-8 text-center">
 						<div class="mb-4 text-5xl text-gray-400">
@@ -441,7 +441,7 @@
 				</div>
 			{:else if activeTab === 'Settings'}
 				<div class="rounded-lg bg-white p-6 shadow-md">
-					<h2 class="mb-6 text-2xl font-bold">Account Settings</h2>
+					<h2 class="mb-6 text-lg font-bold">Account Settings</h2>
 
 					<form
 						class="space-y-6"
@@ -453,7 +453,9 @@
 										title: $profileData.title,
 										company: $profileData.company,
 										location: $profileData.location,
-										bio: $profileData.bio
+										bio: $profileData.bio, 
+										interests: $profileData.interests, 
+										subscriptions: $profileData.subscriptions
 									});
 								} catch (error) {
 									console.error('Error updating profile:', error);
@@ -598,15 +600,27 @@
 							<h3 class="mb-4 text-lg font-bold">Email Preferences</h3>
 							<div class="space-y-3">
 								<label class="flex items-center">
-									<input type="checkbox" class="text-primary h-5 w-5 rounded" checked />
+									<input 
+										type="checkbox" 
+										class="text-primary h-5 w-5 rounded" 
+										bind:checked={$profileData.subscriptions.events} 
+									/>
 									<span class="ml-2 text-gray-700">Event announcements</span>
 								</label>
 								<label class="flex items-center">
-									<input type="checkbox" class="text-primary h-5 w-5 rounded" checked />
+									<input 
+										type="checkbox" 
+										class="text-primary h-5 w-5 rounded" 
+										bind:checked={$profileData.subscriptions.newsletters} 
+									/>
 									<span class="ml-2 text-gray-700">Newsletter</span>
 								</label>
 								<label class="flex items-center">
-									<input type="checkbox" class="text-primary h-5 w-5 rounded" />
+									<input 
+										type="checkbox" 
+										class="text-primary h-5 w-5 rounded" 
+										bind:checked={$profileData.subscriptions.mentorship} 
+									/>
 									<span class="ml-2 text-gray-700">Mentorship opportunities</span>
 								</label>
 							</div>
