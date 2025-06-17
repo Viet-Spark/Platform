@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage';
 import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
-import { db, storage } from '$lib/firebase/firebase';
+import { db } from '$lib/firebase/firebase';
 import { authUser } from './authStore';
 import { get } from 'svelte/store';
 
@@ -133,6 +133,7 @@ export async function uploadProfileImage(userId, file) {
 
     try {
         // Create a storage reference
+        const storage = getStorage();
         const storageRef = ref(storage, `profile-images/${userId}`);
 
         // Upload the file

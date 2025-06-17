@@ -270,10 +270,6 @@
 </section>
 
 <style>
-	.hero-section {
-		position: relative;
-		overflow: hidden;
-	}
 
 	.btn {
 		display: inline-block;
