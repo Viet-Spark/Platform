@@ -64,6 +64,10 @@
 
         if (object === 'volunteers') {
             try {
+                await aboutHandlers.updateAbout({
+                    volunteers: $aboutStore.volunteers,
+                    lastUpdated: new Date().toISOString()
+                });
                 await aboutHandlers.uploadVolunteerImage($aboutStore.volunteers[index].id, file);
             } catch (error) {
                 console.error('Upload Volunteer Image Error:', error);
@@ -73,6 +77,10 @@
             }
         } else if (object === 'directors') {
             try {
+                await aboutHandlers.updateAbout({
+                    boardOfDirectors: $aboutStore.boardOfDirectors,
+                    lastUpdated: new Date().toISOString()
+                });
                 await aboutHandlers.uploadBoardOfDirectorsImage($aboutStore.boardOfDirectors[index].id, file);
             } catch (error) {
                 console.error('Upload Board of Directors Image Error:', error);
@@ -82,6 +90,10 @@
             }
         } else if (object === 'advisors') {
             try {
+                await aboutHandlers.updateAbout({
+                    advisoryBoard: $aboutStore.advisoryBoard,
+                    lastUpdated: new Date().toISOString()
+                });
                 await aboutHandlers.uploadAdvisoryBoardImage($aboutStore.advisoryBoard[index].id, file);
             } catch (error) {
                 console.error('Upload Advisory Board Image Error:', error); 
@@ -269,7 +281,7 @@
 						<div>
 							<label for="whatWeDo" class="mb-2 block font-bold text-gray-700">What We Do</label>
                             <textarea
-								id="whatWeDoTitle"
+								id="whatWeDo"
 								rows="2"
                                 placeholder="Summary"
                                 bind:value={$aboutStore.whatWeDo.summary}
@@ -353,6 +365,9 @@
                                                 type="button"
                                                 class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
                                                 on:click={() => {
+                                                    if (!value.list) {
+                                                        value.list = [];
+                                                    }
                                                     const newBulletPoints = [...value.list];
                                                     newBulletPoints.push('');
                                                     const newPillars = [...$aboutStore.whatWeDo.pillars];
