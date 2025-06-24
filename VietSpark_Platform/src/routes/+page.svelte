@@ -12,6 +12,8 @@
 	import AIforVietNamFoundationLogo from '$lib/images/Partners/AIforVietNamFoundationLogo.jpg';
 	import VISEMIFoundationLogo from '$lib/images/Partners/VISEMIFoundationLogo.jpg';
 
+	import {aboutStore } from '$lib/stores/aboutStore';
+
 	const Partners = [
 		{
 			name: 'VietBay',
@@ -130,50 +132,24 @@
 			<h2 class="mb-4 text-3xl font-bold">What We Do</h2>
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			<p class="mx-auto max-w-3xl text-lg text-gray-600">
-				We help Vietnamese professionals in the U.S. who demonstrate their commitment to learning,
-				growing and paying it forward to come together through three pillars.
+				{$aboutStore.whatWeDo.summary}
 			</p>
 		</div>
 
 		<div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-3">
-			<div class="rounded-lg bg-white p-6 shadow-md">
-				<div
-					class="text-primary mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-rocket text-2xl"></i>
+			{#each $aboutStore.whatWeDo.pillars as pillar}
+				<div class="rounded-lg bg-white p-6 shadow-md">
+					<div
+						class="text-primary mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
+					>
+						<i class="fas {pillar.iconName} text-2xl"></i>
+					</div>
+					<h3 class="mb-2 text-xl font-bold">{pillar.title}</h3>
+					<p class="text-gray-600">
+						{pillar.description}
+					</p>
 				</div>
-				<h3 class="mb-2 text-xl font-bold">Career Development</h3>
-				<p class="text-gray-600">
-					Provide educational events and mentoring programs to help members land a job in tech or
-					advance their career.
-				</p>
-			</div>
-
-			<div class="rounded-lg bg-white p-6 shadow-md">
-				<div
-					class="text-primary mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-users text-2xl"></i>
-				</div>
-				<h3 class="mb-2 text-xl font-bold">Bonding</h3>
-				<p class="text-gray-600">
-					Accelerate a sharing community, a go-to place to ask questions, share perspectives on Tech
-					news/trends, or to look for partners.
-				</p>
-			</div>
-
-			<div class="rounded-lg bg-white p-6 shadow-md">
-				<div
-					class="text-primary mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-handshake text-2xl"></i>
-				</div>
-				<h3 class="mb-2 text-xl font-bold">Networking</h3>
-				<p class="text-gray-600">
-					Provide networking opportunities to senior employees in Tech companies for industry
-					insights, company insights or job referrals.
-				</p>
-			</div>
+			{/each}
 		</div>
 	</div>
 </section>

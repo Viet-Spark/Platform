@@ -12,6 +12,7 @@
 
 	const navItems = [
 		{ href: '/admin', label: 'Dashboard' },
+		{ href: '/admin/aboutUs', label: 'About Us' },
 		{ href: '/admin/events', label: 'Events' },
 		{ href: '/admin/blog', label: 'Blog' },
 		{ href: '/admin/partners', label: 'Partners' },
