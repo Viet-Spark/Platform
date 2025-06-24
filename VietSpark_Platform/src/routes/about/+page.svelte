@@ -1,149 +1,11 @@
 <script>
 	import placeHolderAvatar from '$lib/images/About/placeHolderAvatar.jpg';
-	import IonahImage from '$lib/images/About/Ionah.jpg';
-	import HanhMaiImage from '$lib/images/About/HanhMai.jpg';
-    import VanLeImage from '$lib/images/About/VanLe.jpg';
-    import TanPhanImage from '$lib/images/About/TanPhan.jpg';
-    import NhuVoImange from '$lib/images/About/NhuVo.jpg';
-
-    import HienLuuImage from '$lib/images/About/HienLuu.jpg';
-
-    import VyHuynhImage from '$lib/images/About/VyHuynh.jpg';
-    import NgaNguyenImage from '$lib/images/About/NgaNguyen.jpg';
-    import DungNguyenImage from '$lib/images/About/DungNguyen.jpg';
-    import LeePhamImage from '$lib/images/About/LeePham.jpg';
-    import ThanhThaoNguyenImage from '$lib/images/About/ThanhThaoNguyen.jpg';
-    import UyenTranImage from '$lib/images/About/UyenTran.jpg';
-    import TuNhiImage from '$lib/images/About/TuNhi.jpg';
-    import VyHoImage from '$lib/images/About/VyHo.jpg';
-    import HellenTrinhImage from '$lib/images/About/HellenTrinh.jpg';
-    import HongNhungImage from '$lib/images/About/HongNhung.jpg';
-    import QuanNguyenImage from '$lib/images/About/QuanNguyen.jpg';
+	import { aboutStore } from '$lib/stores/aboutStore';
+    import {marked} from 'marked';
 
 	// Team members data (to be expanded with real data)
-    import HistoryImage from '$lib/images/About/HistoryImage.jpg';
-	const boardMembers = [
-		{
-			name: 'Ionah Hang Nguyen',
-			title: 'Founder',
-			image: IonahImage,
-			linkedIn: 'https://www.linkedin.com/in/ionah-hang-nguyen-60b59922/'
-		},
-		{
-			name: 'Hanh Mai',
-			title: 'Chief Executive Officer ',
-			image: HanhMaiImage,
-			linkedIn: 'https://www.linkedin.com/in/hanhmaihhm'
-		},
-		{
-			name: 'Van Le',
-			title: 'Director of Fundraising and Finance',
-			image: VanLeImage,
-			linkedIn: 'https://www.linkedin.com/in/van-hong-le'
-		},
-		{
-			name: 'Nhu Vo',
-			title: 'Director of Operations',
-			image: NhuVoImange,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Tan Phan',
-			title: 'Director of Programs',
-			image: TanPhanImage,
-			linkedIn: 'https://www.linkedin.com/in/tanphanvan'
-		}
-	];
- 
-	const advisoryBoard = [
-		{
-			name: 'Hien Luu',
-			title: 'Advisor Board Member',
-			image: HienLuuImage,
-			linkedIn: 'https://www.linkedin.com/in/hienluu/'
-		}
-	];
+    import HistoryImage from '$lib/images/About/HistoryImage.jpg'; 
 
-	const volunteers = [
-		{
-			name: 'Vy Huynh',
-			title: 'Design Lead',
-			image: VyHuynhImage,
-			linkedIn: 'https://linkedin.com/'
-		},
-		// {
-		// 	name: 'Nga Nguyen',
-		// 	title: 'Marketing Lead',
-		// 	image: NgaNguyenImage,
-		// 	linkedIn: 'https://linkedin.com/'
-		// },
-		{
-			name: 'Dung Nguyen',
-			title: 'Program Lead',
-			image: DungNguyenImage,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Lee Pham',
-			title: 'Sr. Technical Program Manager',
-			image: LeePhamImage,
-			linkedIn: 'https://linkedin.com/'
-		},
-		// {
-		// 	name: 'Thanh Thao Nguyen',
-		// 	title: 'Program Lead',
-		// 	image: ThanhThaoNguyenImage,
-		// 	linkedIn: 'https://linkedin.com/'
-		// },
-		// {
-		// 	name: 'Uyen Tran',
-		// 	title: 'Operations Lead',
-		// 	image: UyenTranImage,
-		// 	linkedIn: 'https://linkedin.com/'
-		// },
-		{
-			name: 'Tu Nhi Phung',
-			title: 'Lead Project Manager',
-			image: TuNhiImage,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Han Phung',
-			title: 'Lead Project Manager',
-			image: placeHolderAvatar,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Uyen Truong',
-			title: 'Program Lead',
-			image: placeHolderAvatar,
-			linkedIn: 'https://linkedin.com/'
-		},
-		// {
-		// 	name: 'Vy Ho',
-		// 	title: 'Marketing Lead',
-		// 	image: VyHoImage,
-		// 	linkedIn: 'https://linkedin.com/'
-		// },
-		{
-			name: 'Hellen Trinh',
-			title: 'Fundraising Lead',
-			image: HellenTrinhImage,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Hong Nhung',
-			title: 'Fundraising Lead',
-			image: HongNhungImage,
-			linkedIn: 'https://linkedin.com/'
-		},
-		{
-			name: 'Quan Nguyen',
-			title: 'Lead Project Manager',
-			image: QuanNguyenImage,
-			linkedIn: 'https://linkedin.com/'
-		},
-	];
 </script>
 
 <svelte:head>
@@ -172,20 +34,7 @@
 				<h2 class="mb-6 text-3xl font-bold">Our History</h2>
 				<div class="bg-primary mb-6 h-1 w-24"></div>
 				<p class="mb-4 text-gray-700">
-					Viet Spark was founded in 2020 by a group of passionate US-based Vietnamese MBAs 
-					who recognized the need for a platform connecting Vietnamese professionals with the tech industry. 
-					Originally known as <em>Vietnamese Business Professionals in Tech</em
-					>, our organization has grown into a dynamic community focused on mentorship, 
-					knowledge-sharing, and collaboration.
-				</p>
-				<p class="mb-4 text-gray-700">
-					Over the years, we've hosted impactful events, fostered valuable connections, and witnessed our members' growth. 
-					From our signature Tech Summit to our empowering Mentorship Program, our journey has been marked by 
-					stories of resilience, success, and collective progress.
-				</p>
-				<p class="text-gray-700">
-					Join us as we continue to shape the future of Viet Spark, where passion fuels purpose, 
-					and every individual has the opportunity to spark their own success story.
+					{@html marked.parse($aboutStore.history)}
 				</p>
 			</div>
 			<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100 overflow-hidden">
@@ -208,10 +57,7 @@
 				</div>
 				<h2 class="mb-4 text-2xl font-bold">Our Mission</h2>
 				<p class="text-gray-700">
-					Our mission is to inspire, educate, and connect individuals who share a common vision of
-					excellence in technology. We strive to create a supportive environment where Vietnamese
-					professionals can develop their skills, expand their networks, and achieve their career
-					goals in the tech industry.
+					{$aboutStore.mission}
 				</p>
 			</div>
 
@@ -223,9 +69,7 @@
 				</div>
 				<h2 class="mb-4 text-2xl font-bold">Our Vision</h2>
 				<p class="text-gray-700">
-					We aim to empower Vietnamese professionals to take the lead in tech. 
-					We envision a future where Vietnamese professionals hold influential leadership roles across the tech industry, 
-					bringing their unique perspectives and talents to foster innovation and create lasting, positive change.
+					{$aboutStore.vision}
 				</p>
 			</div>
 		</div>
@@ -241,55 +85,17 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-			<div class="rounded-lg bg-gray-50 p-6 text-center transition-shadow hover:shadow-md">
-				<div
-					class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-briefcase text-2xl"></i>
+			{#each $aboutStore.coreValues as coreValue} 
+				<div class="rounded-lg bg-gray-50 p-6 text-center transition-shadow hover:shadow-md">
+					<div
+						class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
+					>
+						<i class="fas {coreValue.iconName} text-2xl"></i>
+					</div>
+					<h3 class="mb-2 text-xl font-bold">{coreValue.name}</h3>
+					<p class="text-gray-600">{coreValue.description}</p>
 				</div>
-				<h3 class="mb-2 text-xl font-bold">Professionalism</h3>
-				<p class="text-gray-600">We uphold high standards in all our interactions and endeavors.</p>
-			</div>
-
-			<div class="rounded-lg bg-gray-50 p-6 text-center transition-shadow hover:shadow-md">
-				<div
-					class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-book text-2xl"></i>
-				</div>
-				<h3 class="mb-2 text-xl font-bold">Knowledge</h3>
-				<p class="text-gray-600">We value continuous learning and the pursuit of expertise.</p>
-			</div>
-
-			<div class="rounded-lg bg-gray-50 p-6 text-center transition-shadow hover:shadow-md">
-				<div
-					class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-hands-helping text-2xl"></i>
-				</div>
-				<h3 class="mb-2 text-xl font-bold">Sharing</h3>
-				<p class="text-gray-600">We believe in generously sharing insights and opportunities.</p>
-			</div>
-
-			<div class="rounded-lg bg-gray-50 p-6 text-center transition-shadow hover:shadow-md">
-				<div
-					class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-handshake text-2xl"></i>
-				</div>
-				<h3 class="mb-2 text-xl font-bold">Trust</h3>
-				<p class="text-gray-600">We foster relationships built on integrity and mutual respect.</p>
-			</div>
-
-			<div class="rounded-lg bg-gray-50 p-6 text-center transition-shadow hover:shadow-md">
-				<div
-					class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-users text-2xl"></i>
-				</div>
-				<h3 class="mb-2 text-xl font-bold">Diversity</h3>
-				<p class="text-gray-600">We celebrate diverse perspectives and inclusive collaboration.</p>
-			</div>
+			{/each}
 		</div>
 	</div>
 </section>
@@ -301,68 +107,29 @@
 			<h2 class="mb-4 text-3xl font-bold">What We Do</h2>
 			<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			<p class="mx-auto mb-8 max-w-3xl text-lg text-gray-600">
-				We help Vietnamese professionals in the U.S. who demonstrate their commitment to learning,
-				growing and paying it forward to come together through three pillars.
+				{$aboutStore.whatWeDo.summary}
 			</p>
 		</div>
 
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-			<div class="rounded-lg bg-white p-8 shadow-md">
-				<div
-					class="text-primary mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-rocket text-2xl"></i>
+			{#each $aboutStore.whatWeDo.pillars as pillar}
+				<div class="rounded-lg bg-white p-8 shadow-md">
+					<div
+						class="text-primary mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
+					>
+						<i class="fas {pillar.iconName} text-2xl"></i>
+					</div>
+					<h3 class="mb-4 text-xl font-bold">{pillar.title}</h3>
+					<p class="mb-4 text-gray-700">
+						{pillar.description}
+					</p>
+					<ul class="list-inside list-disc space-y-2 text-gray-600">
+						{#each pillar.list as highlight}
+							<li>{highlight}</li>
+						{/each}
+					</ul>
 				</div>
-				<h3 class="mb-4 text-xl font-bold">Career Development</h3>
-				<p class="mb-4 text-gray-700">
-					Provide educational events and mentoring program to help members land a job in tech or
-					advance their career.
-				</p>
-				<ul class="list-inside list-disc space-y-2 text-gray-600">
-					<li>Resume workshops and career coaching</li>
-					<li>Technical skill development sessions</li>
-					<li>Interview preparation and practice</li>
-					<li>Personalized mentorship opportunities</li>
-				</ul>
-			</div>
-
-			<div class="rounded-lg bg-white p-8 shadow-md">
-				<div
-					class="text-primary mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-users text-2xl"></i>
-				</div>
-				<h3 class="mb-4 text-xl font-bold">Bonding</h3>
-				<p class="mb-4 text-gray-700">
-					Accelerate a sharing community, a go-to place to ask questions, share perspectives on Tech
-					news/trends, or to look for partners.
-				</p>
-				<ul class="list-inside list-disc space-y-2 text-gray-600">
-					<li>Community forums and discussion groups</li>
-					<li>Tech trend analysis and discussions</li>
-					<li>Collaborative problem-solving</li>
-					<li>Social events and cultural celebrations</li>
-				</ul>
-			</div>
-
-			<div class="rounded-lg bg-white p-8 shadow-md">
-				<div
-					class="text-primary mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-				>
-					<i class="fas fa-handshake text-2xl"></i>
-				</div>
-				<h3 class="mb-4 text-xl font-bold">Networking</h3>
-				<p class="mb-4 text-gray-700">
-					Provide networking opportunities to senior employees in Tech companies for industry
-					insights, company insights or job referrals.
-				</p>
-				<ul class="list-inside list-disc space-y-2 text-gray-600">
-					<li>Industry-specific networking events</li>
-					<li>Company tours and information sessions</li>
-					<li>Professional mixers and meetups</li>
-					<li>Job fairs and recruitment partnerships</li>
-				</ul>
-			</div>
+			{/each}
 		</div>
 	</div>
 </section>
@@ -376,10 +143,10 @@
 		</div>
 
 		<div class="flex w-full item-center justify-center gap-6">
-			{#each boardMembers.slice(0,2) as member}
+			{#each $aboutStore.boardOfDirectors.slice(0,2) as member}
 				<div class="rounded-lg bg-white p-6 text-center shadow-md w-130">
 					<img
-						src={member.image}
+						src={member.profileImage}
 						alt={member.name}
 						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
 					/>
@@ -401,10 +168,10 @@
 		<div class="mt-6"></div>
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-			{#each boardMembers.slice(2,5) as member}
+			{#each $aboutStore.boardOfDirectors.slice(2,5) as member}
 				<div class="rounded-lg bg-white p-6 text-center shadow-md">
 					<img
-						src={member.image}
+						src={member.profileImage}
 						alt={member.name}
 						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
 					/>
@@ -434,10 +201,10 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 item-center">
-			{#each advisoryBoard as member}
+			{#each $aboutStore.advisoryBoard as member}
 				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
 					<img
-						src={member.image}
+						src={member.profileImage}
 						alt={member.name}
 						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
 					/>
@@ -467,10 +234,10 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-7">
-			{#each volunteers as member}
+			{#each $aboutStore.volunteers as member}
 				<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
 					<img
-						src={member.image}
+						src={member.profileImage || placeHolderAvatar}
 						alt={member.name}
 						class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
 					/>

@@ -4,7 +4,9 @@
 	import { userData } from '$lib/stores/userStore';
 	import {profileData} from '$lib/stores/profileStore';
 	import { addSubscriber, newsletterError, newsletterLoading } from '$lib/stores/newsletterStore';
-
+	import { aboutHandlers } from '$lib/stores/aboutStore';
+	import { onMount } from 'svelte';
+	
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
 	let newsletterMessage = '';
@@ -23,6 +25,9 @@
 			newsletterMessage = error.message;
 		}
 	}
+	onMount(async () => {
+		await aboutHandlers.getAboutUs();
+	});
 
 	$: console.log('user', $userData);
 </script>
