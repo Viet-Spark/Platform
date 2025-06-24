@@ -1,7 +1,7 @@
 // @ts-nocheck
 // template for stores file dealing with wathlist collection inside our firebase
 import { writable } from 'svelte/store';
-import { db } from '$lib/firebase/firebase';
+import { db, storage } from '$lib/firebase/firebase';
 import {
     addDoc,
     deleteDoc,
