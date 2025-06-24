@@ -119,7 +119,7 @@
 					>
 						<i class="fas {pillar.iconName} text-2xl"></i>
 					</div>
-					<h3 class="mb-4 text-xl font-bold">{pillar.name}</h3>
+					<h3 class="mb-4 text-xl font-bold">{pillar.title}</h3>
 					<p class="mb-4 text-gray-700">
 						{pillar.description}
 					</p>
