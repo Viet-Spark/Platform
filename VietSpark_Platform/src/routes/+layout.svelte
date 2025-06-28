@@ -6,6 +6,9 @@
 	import { addSubscriber, newsletterError, newsletterLoading } from '$lib/stores/newsletterStore';
 	import { aboutHandlers } from '$lib/stores/aboutStore';
 	import { onMount } from 'svelte';
+	import { homeHandlers } from '$lib/stores/homeStore';
+	import { fetchPartners } from '$lib/stores/partnerStore';
+	import { fetchFAQs } from '$lib/stores/faqStore';
 	
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
@@ -27,6 +30,9 @@
 	}
 	onMount(async () => {
 		await aboutHandlers.getAboutUs();
+		await homeHandlers.getHome();
+		await fetchPartners();
+		await fetchFAQs();
 	});
 
 	$: console.log('user', $userData);
@@ -104,7 +110,7 @@
 				<a href="/" class="mobile-nav-link">Home</a>
 				<a href="/about" class="mobile-nav-link">About Us</a>
 				<a href="/events" class="mobile-nav-link">Events</a>
-				<a href="/blog" class="mobile-nav-link">Blog</a>
+				<!-- <a href="/blog" class="mobile-nav-link">Blog</a> -->
 				<a href="/work-with-us" class="mobile-nav-link">Work With Us</a>
 				<a href="/contact" class="mobile-nav-link">Contact</a>
 				<a href="/donate" class="mobile-nav-link">Donate</a>

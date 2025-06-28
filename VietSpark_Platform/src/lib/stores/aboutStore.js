@@ -17,6 +17,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 // about store state
 export const aboutStore = writable({
     history: '',
+    historyImage: '',
     mission: '',
     vision: '',
     coreValues: [],
@@ -237,4 +238,46 @@ export const aboutHandlers = {
         }
     },
 
+    // Upload history image to Firebase Storage
+    uploadHistoryImage: async (file) => {
+        aboutLoading.set(true);
+        aboutError.set(null);
+
+        try {
+            // Create a storage reference
+            const storageRef = ref(storage, `history-images/history.jpg`);
+
+            // Upload the file
+            const snapshot = await uploadBytes(storageRef, file);
+
+            // Get the download URL
+            const downloadURL = await getDownloadURL(snapshot.ref);
+
+            // Get current about data
+            const aboutRef = doc(db, 'aboutUs', 'main');
+            const aboutSnap = await getDoc(aboutRef);
+            const currentAbout = aboutSnap.data();
+
+            // Update the about data with the updated history image
+            await updateDoc(aboutRef, { 
+                historyImage: downloadURL, 
+                lastUpdated: new Date().toISOString()
+            });
+
+            // Update the store
+            aboutStore.update(currentData => ({
+                ...currentData,
+                historyImage: downloadURL,
+                lastUpdated: new Date().toISOString()
+            }));
+
+            return downloadURL;
+        } catch (error) {
+            aboutError.set(error.message);
+            console.error('Error uploading history image:', error);
+            throw error;
+        } finally {
+            aboutLoading.set(false);
+        }
+    }
 };

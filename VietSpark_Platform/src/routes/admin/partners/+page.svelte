@@ -31,14 +31,17 @@
 	}
 </script>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto">
 	{#if !isDataReady}
 		<div class="flex h-screen items-center justify-center">
 			<p class="text-xl">Loading...</p>
 		</div>
 	{:else}
-		<div class="mb-8 flex items-center justify-between">
-			<h1 class="text-3xl font-bold">Manage Partners</h1>
+		<div class="flex flex-col items-center justify-center bg-primary text-white p-4 mb-8">
+			<h1 class="text-2xl font-bold">Partners</h1>
+			<p>Manage VietSpark's Partners</p>
+		</div>
+		<div class="mb-8 flex items-center justify-end">
 			<a
 				href="/admin/partners/new"
 				class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white"
@@ -46,7 +49,6 @@
 				Add New Partner
 			</a>
 		</div>
-
 		{#if $partnersLoading}
 			<div class="flex h-32 items-center justify-center">
 				<p>Loading partners...</p>
@@ -60,7 +62,7 @@
 				{#each $partners as partner}
 					<div class="rounded-lg bg-white p-6 shadow-md">
 						<div class="mb-4 flex items-center justify-between">
-							<img src={partner.logo} alt="{partner.name} logo" class="h-16 w-16 object-contain" />
+							<img src={partner.image} alt="{partner.name} logo" class="h-16 w-16 object-contain" />
 							<div class="flex space-x-2">
 								<a
 									href="/admin/partners/{partner.id}/edit"
@@ -77,14 +79,6 @@
 							</div>
 						</div>
 						<h3 class="mb-2 text-xl font-semibold">{partner.name}</h3>
-						<p class="mb-4 text-gray-600">{partner.description}</p>
-						<div class="flex flex-wrap gap-2">
-							{#each partner.tags as tag}
-								<span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
-									{tag}
-								</span>
-							{/each}
-						</div>
 						{#if partner.website}
 							<a
 								href={partner.website}

@@ -3,9 +3,6 @@
 	import { aboutStore, aboutLoading } from '$lib/stores/aboutStore';
     import {marked} from 'marked';
 
-	// Team members data (to be expanded with real data)
-    import HistoryImage from '$lib/images/About/HistoryImage.jpg'; 
-
 </script>
 
 <svelte:head>
@@ -57,7 +54,7 @@
 				</div>
 				<div class="flex h-96 items-center justify-center rounded-lg bg-gray-100 overflow-hidden">
 					<!-- Placeholder for history image -->
-					<img src={HistoryImage} alt="History" class="object-cover w-full"/>
+					<img src={$aboutStore.historyImage} alt="History" class="object-cover w-full"/>
 				</div>
 			</div>
 		</div>
@@ -251,7 +248,7 @@
 				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			</div>
 
-			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-7">
+			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
 				{#each $aboutStore.volunteers as member}
 					<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
 						<img
