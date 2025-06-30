@@ -3,19 +3,23 @@
 	import { authUser, logout, authLoading } from '$lib/stores/authStore';
 	import { aboutStore, aboutLoading, aboutError, aboutHandlers } from '$lib/stores/aboutStore';
 	import { goto } from '$app/navigation';
+    import { userData } from '$lib/stores/userStore';
 	import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
 
     let fileInputs = {
+        history: {},
         volunteers: {},
         directors: {},
         advisors: {}
     }
 	let isUploading = {
+        history: {},
         volunteers: {},
         directors: {},
         advisors: {}
     };
 	let localImagePreviews = {
+        history: {},
         volunteers: {},
         directors: {},
         advisors: {}   
@@ -24,6 +28,16 @@
 	let loadingError = null;
 	let loadingTimeout;
 	let isSaving = false;
+    let isDataReady = false;
+
+    $: if ($authUser && $userData) {
+		isDataReady = true;
+	}
+
+	$: if (isDataReady && $authUser && !$userData?.isAdmin) {
+		goto('/');
+	}
+
 
 	// Function to generate unique IDs
 	function generateUniqueId() {
@@ -42,13 +56,19 @@
 
 		// Check file type
 		if (!file.type.startsWith('image/')) {
-			uploadError = 'Please select an image file';
+			uploadError = {
+                object: object, 
+                message: 'Please select an image file'
+            };
 			return;
 		}
 
 		// Check file size (max 2MB)
 		if (file.size > 2 * 1024 * 1024) {
-			uploadError = 'Image size should be less than 2MB';
+			uploadError = {
+                object: object, 
+                message: 'Image size should be less than 2MB'
+            };
 			return;
 		}
 
@@ -71,7 +91,10 @@
                 await aboutHandlers.uploadVolunteerImage($aboutStore.volunteers[index].id, file);
             } catch (error) {
                 console.error('Upload Volunteer Image Error:', error);
-                uploadError = `Upload Volunteer Image Failed: ${error.message}`;
+                uploadError = {
+                    object: object, 
+                    message: `Upload Volunteer Image Failed: ${error.message}`
+                };
             } finally {
                 isUploading[object][index] = false;
             }
@@ -84,7 +107,10 @@
                 await aboutHandlers.uploadBoardOfDirectorsImage($aboutStore.boardOfDirectors[index].id, file);
             } catch (error) {
                 console.error('Upload Board of Directors Image Error:', error);
-                uploadError = `Upload Board of Directors Image Failed: ${error.message}`;
+                uploadError = {
+                    object: object, 
+                    message: `Upload Board of Directors Image Failed: ${error.message}`
+                };
             } finally {
                 isUploading[object][index] = false;
             }
@@ -97,9 +123,24 @@
                 await aboutHandlers.uploadAdvisoryBoardImage($aboutStore.advisoryBoard[index].id, file);
             } catch (error) {
                 console.error('Upload Advisory Board Image Error:', error); 
-                uploadError = `Upload Advisory Board Image Failed: ${error.message}`;
+                uploadError = {
+                    object: object, 
+                    message: `Upload Advisory Board Image Failed: ${error.message}`
+                };
             } finally {
                 isUploading[object][index] = false;
+            } 
+        } else if (object === 'history') {
+            try {
+                await aboutHandlers.uploadHistoryImage(file);
+            } catch (error) {
+                console.error('Upload History Image Error:', error);
+                uploadError = {
+                    object: object, 
+                    message: `Upload History Image Failed: ${error.message}`
+                };
+            } finally {
+                isUploading[object] = false;
             }
         }
     }
@@ -163,7 +204,7 @@
 			{/if}
 		</div>
 	</div>
-{:else if $authUser}
+{:else if isDataReady}
 	<div class="flex flex-col items-center justify-center bg-primary text-white p-4">
 		<h1 class="text-2xl font-bold">About Us</h1>
 		<p>Manage VietSpark's About Us Page</p>
@@ -180,6 +221,7 @@
                                 isSaving = true;
                                 await aboutHandlers.updateAbout({
                                     history: $aboutStore.history,
+                                    historyImage: $aboutStore.historyImage,
                                     mission: $aboutStore.mission,
                                     vision: $aboutStore.vision,
                                     coreValues: $aboutStore.coreValues,
@@ -190,6 +232,7 @@
                                     lastUpdated: new Date().toISOString()
                                 });
                                 alert('About Us updated successfully!');
+                                uploadError = null;
                             } catch (error) {
                                 console.error('Error updating about us:', error);
                                 alert(`Error updating about us: ${error.message}`);
@@ -207,6 +250,64 @@
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
 							></textarea>
 						</div>
+
+                        <div>
+							<label for="historyImage" class="mb-2 block text-gray-700 font-bold">History Image</label>
+                            {#if uploadError && uploadError.object === 'history'}
+								<div class="mb-4 rounded-md bg-red-50 p-4 text-red-700">
+									{uploadError.message}
+								</div>
+							{/if}
+                            <input
+                                type="file"
+                                id="historyImage"
+                                accept="image/*"
+                                style="display: none;"
+                                bind:this={fileInputs["history"][0]}
+                                on:change={(e) => handleFileChange(e, "history", 0)}
+                            />
+                            <div
+                                class="text-primary relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden bg-blue-200 text-4xl font-bold"
+                                on:click={() => handleAvatarClick("history", 0)}
+                                on:keydown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space') {
+                                        e.preventDefault();
+                                        handleAvatarClick("history", 0);
+                                    }
+                                }}
+                                role="button"
+                                tabindex="0"
+                                aria-label="Upload history picture"
+                            >
+                                {#if isUploading["history"][0]}
+                                    <div
+                                        class="absolute inset-0 flex items-center justify-center bg-blue-200 bg-opacity-80"
+                                    >
+                                        <div
+                                            class="h-24 w-24 animate-spin rounded-full border-2 border-white border-t-transparent"
+                                        ></div>
+                                    </div>
+                                {:else if localImagePreviews["history"][0]}
+                                    <img
+                                        src={localImagePreviews["history"][0]}
+                                        alt="Profile Preview"
+                                        class="absolute inset-0 h-full w-full object-cover"
+                                    />
+                                {:else if $aboutStore.historyImage}
+                                    <img
+                                        src={$aboutStore.historyImage}
+                                        alt="Profile"
+                                        class="absolute inset-0 h-full w-full object-cover"
+                                    />
+                                {:else}
+                                    <img
+                                    src={defaultProfile}
+                                    alt="Default Profile"
+                                    class="absolute inset-0 h-full w-full object-cover"
+                                />
+                                {/if}
+                            </div>
+                        </div>
 
 						<div>
 							<label for="mission" class="mb-2 block font-bold text-gray-700">Mission</label>
@@ -491,6 +592,11 @@
                                     </button>
                                 </div>
                             {/each}
+                            {#if uploadError && uploadError.object === 'directors'}
+                                <div class="mb-4 rounded-md bg-red-50 p-4 text-red-700">
+                                    {uploadError.message}
+                                </div>
+                            {/if}
                             <button
                                 type="button"
                                 class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
@@ -600,6 +706,11 @@
                                     </button>
                                 </div>
                             {/each}
+                            {#if uploadError && uploadError.object === 'advisors'}
+								<div class="mb-4 rounded-md bg-red-50 p-4 text-red-700">
+									{uploadError.message}
+								</div>
+							{/if}
                             <button
                                 type="button"
                                 class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
@@ -618,11 +729,6 @@
 
                         <div>
 							<label for="volunteers" class="mb-2 block font-bold text-gray-700">Volunteers</label>
-							{#if uploadError}
-								<div class="mb-4 rounded-md bg-red-50 p-4 text-red-700">
-									{uploadError}
-								</div>
-							{/if}
 							{#each $aboutStore.volunteers as volunteer, index}
                                 <div class="mb-4 flex gap-4 items-center rounded-lg bg-blue-100 p-4 shadow-md">
                                     <input
@@ -714,6 +820,11 @@
                                     </button>
                                 </div>
                             {/each}
+                            {#if uploadError && uploadError.object === 'volunteers'}
+                                <div class="mb-4 rounded-md bg-red-50 p-4 text-red-700">
+                                    {uploadError.message}
+                                </div>
+                            {/if}
                             <button
                                 type="button"
                                 class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
@@ -758,7 +869,7 @@
 				<i class="fas fa-user-lock"></i>
 			</div>
 			<h2 class="mb-4 text-2xl font-bold">Please Log In</h2>
-			<p class="mb-6 text-gray-600">You need to be logged in to view your profile.</p>
+			<p class="mb-6 text-gray-600">You need to be logged in and an admin to view the admin page for About Us.</p>
 			<a href="/login" class="btn bg-primary hover:bg-primary-dark text-white">Log In</a>
 		</div>
 	</div>

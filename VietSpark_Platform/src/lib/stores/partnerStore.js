@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy } from 'firebase/firestore';
-import { db } from '$lib/firebase/firebase';
+import { db, storage } from '$lib/firebase/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 // Create a writable store for partners
 export const partners = writable([]);
@@ -23,6 +24,7 @@ export const fetchPartners = async () => {
             ...doc.data()
         }));
         partners.set(partnersList);
+        console.log("Partners found in Firestore: ", partnersList);
         partnersError.set(null);
     } catch (error) {
         console.error('Error fetching partners:', error);
@@ -76,5 +78,33 @@ export const deletePartner = async (partnerId) => {
         console.error('Error deleting partner:', error);
         partnersError.set(error.message);
         throw error;
+    }
+};
+
+ // Upload about image to Firebase Storage
+export const uploadPartnerImage = async (partnerId, file) => {
+    partnersLoading.set(true);
+    partnersError.set(null);
+
+    try {
+        // Create a storage reference
+        const storageRef = ref(storage, `partners-images/${partnerId}`);
+
+        // Upload the file
+        const snapshot = await uploadBytes(storageRef, file);
+
+        // Get the download URL
+        const downloadURL = await getDownloadURL(snapshot.ref);
+
+        // Update the partner image with the image URL
+        await updatePartner(partnerId, { image: downloadURL });
+
+        return downloadURL;
+    } catch (error) {
+        partnersError.set(error.message);
+        console.error('Error uploading image:', error);
+        throw error;
+    } finally {
+        partnersLoading.set(false);
     }
 };

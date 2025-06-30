@@ -12,11 +12,13 @@
 
 	const navItems = [
 		{ href: '/admin', label: 'Dashboard' },
+		{ href: '/admin/home', label: 'Home' },
 		{ href: '/admin/aboutUs', label: 'About Us' },
 		{ href: '/admin/events', label: 'Events' },
 		{ href: '/admin/blog', label: 'Blog' },
 		{ href: '/admin/partners', label: 'Partners' },
-		{ href: '/admin/newsletter', label: 'Newsletter' }
+		{ href: '/admin/newsletter', label: 'Newsletter' },
+		{ href: '/admin/faqs', label: 'FAQs' },
 	];
 </script>
 

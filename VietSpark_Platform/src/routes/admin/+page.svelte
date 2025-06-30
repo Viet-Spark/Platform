@@ -7,6 +7,7 @@
 	import { blogPosts, blogLoading, fetchBlogPosts } from '$lib/stores/blogStore';
 	import { partners, partnersLoading, fetchPartners } from '$lib/stores/partnerStore';
 	import { subscribers, newsletterLoading, fetchSubscribers } from '$lib/stores/newsletterStore';
+	import { faqs, faqsLoading} from '$lib/stores/faqStore';
 
 	let isDataReady = false;
 
@@ -84,6 +85,19 @@
 					<p class="text-3xl font-bold">{$partners.length}</p>
 					<a href="/admin/partners" class="text-primary mt-4 inline-block hover:underline"
 						>Manage Partners →</a
+					>
+				{/if}
+			</div>
+
+			<!-- FAQs Card -->
+			<div class="rounded-lg bg-white p-6 shadow-md">
+				<h2 class="mb-4 text-xl font-semibold">FAQs</h2>
+				{#if $faqsLoading}
+					<p>Loading...</p>
+				{:else}
+					<p class="text-3xl font-bold">{$faqs.length}</p>
+					<a href="/admin/faqs" class="text-primary mt-4 inline-block hover:underline"
+						>Manage FAQs →</a
 					>
 				{/if}
 			</div>
