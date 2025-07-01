@@ -1,11 +1,56 @@
 import { writable } from 'svelte/store';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '$lib/firebase/firebase';
+import { doc, getDoc, setDoc, updateDoc, collection, getDocs} from 'firebase/firestore';
+import { db, storage } from '$lib/firebase/firebase';
 
 // Create stores
 export const userData = writable(null);
 export const userLoading = writable(true);
 export const userError = writable(null);
+export const usersList = writable(null);
+
+// Get user data from firebase
+export async function getUsers() {
+    userLoading.set(true);
+    userError.set(null);
+
+    try {
+        const usersRef = collection(db, 'users');
+        const snapshot = await getDocs(usersRef);
+        const users = snapshot.docs.map(doc => (
+            {
+                uid: doc.id,
+                ...doc.data()
+            }
+        ));
+        usersList.set(users);
+    } catch (error) {
+        userError.set(error.message);
+        throw error;
+    } finally {
+        userLoading.set(false);
+    }
+}
+
+// Update user data, this is used for admin to update user data
+export async function updateUser(uid, data) {
+    userLoading.set(true);
+    userError.set(null);
+
+    try {
+        const userRef = doc(db, 'users', uid);
+        await updateDoc(userRef, {
+            ...data,
+            updatedAt: new Date().toISOString()
+        });
+        await getUsers();
+    } catch (error) {
+        console.error('Error updating user:', error);
+        userError.set(error.message);
+        throw error;
+    } finally {
+        userLoading.set(false);
+    }
+}
 
 // Initialize or update user data
 export async function initializeUserData(uid, email) {

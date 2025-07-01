@@ -14,7 +14,10 @@ export const partnersError = writable(null);
 
 // Function to fetch all partners
 export const fetchPartners = async () => {
+
     partnersLoading.set(true);
+    partnersError.set(null);
+
     try {
         const partnersRef = collection(db, 'partners');
         const q = query(partnersRef, orderBy('name', 'asc'));
@@ -25,10 +28,10 @@ export const fetchPartners = async () => {
         }));
         partners.set(partnersList);
         console.log("Partners found in Firestore: ", partnersList);
-        partnersError.set(null);
     } catch (error) {
         console.error('Error fetching partners:', error);
         partnersError.set(error.message);
+        throw error;
     } finally {
         partnersLoading.set(false);
     }
@@ -36,6 +39,9 @@ export const fetchPartners = async () => {
 
 // Function to create a new partner
 export const createPartner = async (partnerData) => {
+    partnersLoading.set(true);
+    partnersError.set(null);
+
     try {
         const partnersRef = collection(db, 'partners');
         const docRef = await addDoc(partnersRef, {
@@ -49,11 +55,16 @@ export const createPartner = async (partnerData) => {
         console.error('Error creating partner:', error);
         partnersError.set(error.message);
         throw error;
+    } finally {
+        partnersLoading.set(false);
     }
 };
 
 // Function to update a partner
 export const updatePartner = async (partnerId, partnerData) => {
+    partnersLoading.set(true);
+    partnersError.set(null);
+
     try {
         const partnerRef = doc(db, 'partners', partnerId);
         await updateDoc(partnerRef, {
@@ -65,11 +76,16 @@ export const updatePartner = async (partnerId, partnerData) => {
         console.error('Error updating partner:', error);
         partnersError.set(error.message);
         throw error;
+    } finally {
+        partnersLoading.set(false);
     }
 };
 
 // Function to delete a partner
 export const deletePartner = async (partnerId) => {
+    partnersLoading.set(true);
+    partnersError.set(null);
+
     try {
         const partnerRef = doc(db, 'partners', partnerId);
         await deleteDoc(partnerRef);
@@ -78,6 +94,8 @@ export const deletePartner = async (partnerId) => {
         console.error('Error deleting partner:', error);
         partnersError.set(error.message);
         throw error;
+    } finally {
+        partnersLoading.set(false);
     }
 };
 

@@ -5,11 +5,11 @@
 	import { userData } from '$lib/stores/userStore';
 	import { slide } from 'svelte/transition';
 	import { faqs, faqsLoading, fetchFAQs, deleteFAQ, renameCategory, deleteCategory, faqsError } from '$lib/stores/faqStore';
+	import { faqCategories, faqCategoriesLoading, faqCategoriesError, removeFaqCategory, updateFaqCategory, addFaqCategory } from '$lib/stores/faqCategoryStore';
 	import { writable } from 'svelte/store';
 
 	let isDataReady = false;
-    let categories = writable([]);
-	let activeCategory = null;
+	let activeCategoryId = null;
 	let expandedQuestions = new Set();
 
 	$: if ($authUser && $userData) {
@@ -20,12 +20,9 @@
 		goto('/');
 	}
 
-	onMount(async () => {
-		await fetchFAQs();
-        categories.set(new Set($faqs.map(faq => faq.category)));
-        categories.set(Array.from($categories).sort());
-        activeCategory = $categories[0];
-	});
+	$: if ($faqCategories.length > 0) {
+		activeCategoryId = $faqCategories[0].id;
+	}
 
 	async function handleDelete(id) {
 		if (confirm('Are you sure you want to delete this FAQ?')) {
@@ -43,39 +40,40 @@
 		expandedQuestions = expandedQuestions;
 	}
 
-	function setActiveCategory(categoryName) {
-		activeCategory = categoryName;
+	function setActiveCategoryId(id) {
+		activeCategoryId = id;
 		expandedQuestions.clear();
 		expandedQuestions = expandedQuestions;
 	}
 
 	function getActiveCategoryFaqs() {
-		const activeFAQs = $faqs.filter((faq) => faq.category === activeCategory);
+		const activeFAQs = $faqs.filter((faq) => faq.categoryId === activeCategoryId);
 		return activeFAQs;
 	}
 
-	async function handleRenameCategory(oldCategory, newCategory) {
+	async function handleRenameCategory(id, newCategory) {
 		try {
-			await renameCategory(oldCategory, newCategory);
-			categories.set(new Set($faqs.map(faq => faq.category)));
-			categories.set(Array.from($categories).sort());
-        	activeCategory = newCategory;
+			await updateFaqCategory(id, newCategory);
 		} catch (error) {
 			console.error('Error renaming category:', error);
 		}
 	}
 	
-	async function handleDeleteCategory(category) {
+	async function handleDeleteCategory(id) {
 		try {	
-			await deleteCategory(category);
-			categories.set(new Set($faqs.map(faq => faq.category)));
-			categories.set(Array.from($categories).sort());
-        	activeCategory = $categories[0];
+			await removeFaqCategory(id);
+			activeCategoryId = $faqCategories[0].id;
 		} catch (error) {
 			console.error('Error deleting category:', error);
 		}
 	}
 
+	async function handleAddCategory() {
+		const newCategory = prompt('Enter new category name:');
+		if (newCategory) {
+			activeCategoryId = await addFaqCategory(newCategory);
+		}
+	}
 </script>
 
 <div class="container mx-auto">
@@ -112,37 +110,45 @@
 					<div class="sticky top-24 rounded-lg border border-gray-200 bg-white p-4">
 						<h2 class="mb-4 text-xl font-bold">Categories</h2>
 						<nav class="space-y-2">
-							{#each $categories as category}
+							{#each $faqCategories as category}
 								<button
 									type="button"
 									class="mb-2 block w-full cursor-pointer rounded-lg px-6 py-3 text-left text-lg font-medium transition-colors hover:bg-gray-100"
-									class:bg-primary={category === activeCategory}
-									class:text-white={category === activeCategory}
-									class:bg-gray-50={category !== activeCategory}
-									class:text-gray-800={category !== activeCategory}
-									on:click={() => setActiveCategory(category)}
-									on:keydown={(e) => e.key === 'Enter' && setActiveCategory(category)}
+									class:bg-primary={category.id === activeCategoryId}
+									class:text-white={category.id === activeCategoryId}
+									class:bg-gray-50={category.id !== activeCategoryId}
+									class:text-gray-800={category.id !== activeCategoryId}
+									on:click={() => setActiveCategoryId(category.id)}
+									on:keydown={(e) => e.key === 'Enter' && setActiveCategoryId(category.id)}
 								>
-									{category}
+									{category.name}
 								</button>
 							{/each}
+							<button 
+								type="button"
+								class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white"
+								on:click={() => handleAddCategory()}
+								on:keydown={(e) => e.key === 'Enter' && handleAddCategory()}
+							>
+								+
+							</button>
 						</nav>
 					</div>
 				</div>
 			
 				<div class="lg:col-span-3">
-					{#each $categories as category}
-						{#if activeCategory === category}
+					{#each $faqCategories as category}
+						{#if activeCategoryId === category.id}
 							<div>
 								<div class="flex space-x-2 mx-4 mb-4 items-center justify-between">
-									<h2 class=" flex text-3xl font-bold ">{category}</h2>
+									<h2 class=" flex text-3xl font-bold ">{category.name}</h2>
 									<div class="flex gap-4">
 										<button
 											class="text-blue-600 hover:text-blue-800"
 											on:click={() => {
 												const newCategory = prompt('Enter new category name:');
-												if (newCategory && newCategory !== category) {
-													handleRenameCategory(category, newCategory);
+												if (newCategory && newCategory !== category.name) {
+													handleRenameCategory(category.id, newCategory);
 												}
 											}}
 										>
@@ -152,7 +158,7 @@
 											class="text-red-600 hover:text-red-800"
 											on:click={() => {
 												if (confirm('Are you sure you want to delete this category?')) {
-													handleDeleteCategory(category);
+													handleDeleteCategory(category.id);
 												}
 											}}
 										>
@@ -162,7 +168,7 @@
 								</div>
 								
 								<div class="space-y-4">
-									{#each getActiveCategoryFaqs(category) as faq, i}
+									{#each getActiveCategoryFaqs(category.id) as faq, i}
 										<div
 											class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm"
 										>

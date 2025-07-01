@@ -8,6 +8,7 @@
 	import { partners, partnersLoading, fetchPartners } from '$lib/stores/partnerStore';
 	import { subscribers, newsletterLoading, fetchSubscribers } from '$lib/stores/newsletterStore';
 	import { faqs, faqsLoading} from '$lib/stores/faqStore';
+	import { usersList, userLoading, userError, updateUser } from '$lib/stores/userStore';
 
 	let isDataReady = false;
 
@@ -111,6 +112,19 @@
 					<p class="text-3xl font-bold">{$subscribers.length}</p>
 					<a href="/admin/newsletter" class="text-primary mt-4 inline-block hover:underline"
 						>Manage Subscribers →</a
+					>
+				{/if}
+			</div>
+
+			<!-- Users Card -->
+			<div class="rounded-lg bg-white p-6 shadow-md">
+				<h2 class="mb-4 text-xl font-semibold">Users</h2>
+				{#if $userLoading}
+					<p>Loading...</p>
+				{:else}
+					<p class="text-3xl font-bold">{$usersList.length}</p>
+					<a href="/admin/users" class="text-primary mt-4 inline-block hover:underline"
+						>Manage Users →</a
 					>
 				{/if}
 			</div>

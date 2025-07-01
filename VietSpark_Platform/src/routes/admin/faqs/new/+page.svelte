@@ -5,18 +5,16 @@
 	import { userData } from '$lib/stores/userStore';
 	import { createFAQ, faqs} from '$lib/stores/faqStore';
     import { writable } from 'svelte/store';
-    import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
+    import { faqCategories, faqCategoriesLoading, faqCategoriesError} from '$lib/stores/faqCategoryStore';
 
 	let isDataReady = false;
 	let faqData = writable({
-        category: '',
-        newCategory: '',
+        categoryId: '',
 		question: '',
 		answer: '',
 	});
     let isUploading = false;
     let uploadError = null;
-    let categories = [];
 
 	$: if ($authUser && $userData) {
 		isDataReady = true;
@@ -25,11 +23,7 @@
 	$: if (isDataReady && $authUser && !$userData?.isAdmin) {
 		goto('/');
 	}
-    onMount(async () => {
-        categories = new Set($faqs.map(faq => faq.category));
-        categories.add('Others')
-        categories = Array.from(categories).sort();
-    });
+
 
 	async function handleSubmit() {
         uploadError = null;
@@ -39,7 +33,7 @@
             await createFAQ({
                 question: $faqData.question,
                 answer: $faqData.answer,
-                category: $faqData.category === 'Others' ? $faqData.newCategory : $faqData.category
+                categoryId: $faqData.categoryId
             });
             goto('/admin/faqs');
 		} catch (error) {
@@ -77,24 +71,13 @@
                             <label for="category" class="block text-sm font-bold text-gray-700">Category</label>
                             <select 
                                 id="category" 
-                                bind:value={$faqData.category} 
+                                bind:value={$faqData.categoryId} 
                                 class="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                             >
-                                {#each categories as category}
-                                    <option value={category}>{category}</option>
+                                {#each $faqCategories as category}
+                                    <option value={category.id}>{category.name}</option>
                                 {/each}
                             </select>
-                            {#if $faqData.category === 'Others'}
-                                <label for="newCategory" class="block mt-4 text-sm font-bold text-gray-700">New Category Name</label>
-                                <input
-                                    type="text"
-                                    id="newCategory"
-                                    bind:value={$faqData.newCategory}
-                                    placeholder="Enter new category name"
-                                    class="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                    required
-                                />
-                            {/if}
                         </div>
                         <div>
                             <label for="question" class="block text-sm font-bold text-gray-700">Question</label>

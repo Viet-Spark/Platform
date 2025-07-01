@@ -1,5 +1,6 @@
 <script>
 	import { faqs, faqsLoading } from '$lib/stores/faqStore';
+	import { faqCategories } from '$lib/stores/faqCategoryStore';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
@@ -12,8 +13,9 @@
 	let formError = false;
 	let contactFaqs = writable([]);
 
-	$: if ($faqs) {
-		contactFaqs.set($faqs.filter(faq => faq.category === 'Contact'));
+	$: if ($faqs.length > 0 && $faqCategories.length > 0) {
+		const contactFaqCategoryId = $faqCategories.find(category => category.name === 'Contact').id;
+		contactFaqs.set($faqs.filter(faq => faq.categoryId === contactFaqCategoryId));
 		console.log("Contact FAQs: ", $contactFaqs);
 	}
 

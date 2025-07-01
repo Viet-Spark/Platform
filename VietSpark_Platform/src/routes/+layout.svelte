@@ -9,6 +9,8 @@
 	import { homeHandlers } from '$lib/stores/homeStore';
 	import { fetchPartners } from '$lib/stores/partnerStore';
 	import { fetchFAQs } from '$lib/stores/faqStore';
+	import { getUsers } from '$lib/stores/userStore';
+	import { fetchFaqCategories } from '$lib/stores/faqCategoryStore';
 	
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
@@ -33,6 +35,8 @@
 		await homeHandlers.getHome();
 		await fetchPartners();
 		await fetchFAQs();
+		await getUsers();
+		await fetchFaqCategories();
 	});
 
 	$: console.log('user', $userData);
