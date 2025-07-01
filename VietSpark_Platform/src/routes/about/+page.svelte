@@ -157,33 +157,8 @@
 				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			</div>
 
-			<div class="flex w-full item-center justify-center gap-6">
-				{#each $aboutStore.boardOfDirectors.slice(0,2) as member}
-					<div class="rounded-lg bg-white p-6 text-center shadow-md w-130">
-						<img
-							src={member.profileImage}
-							alt={member.name}
-							class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
-						/>
-						<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
-						<p class="mb-3 text-gray-600">{member.title}</p>
-						<a
-							href={member.linkedIn}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="text-primary hover:text-primary-dark"
-							aria-label={`${member.name}'s LinkedIn profile`}
-						>
-							<i class="fab fa-linkedin text-xl"></i>
-						</a>
-					</div>
-				{/each}
-			</div>
-
-			<div class="mt-6"></div>
-
-			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				{#each $aboutStore.boardOfDirectors.slice(2,5) as member}
+			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+				{#each $aboutStore.boardOfDirectors as member}
 					<div class="rounded-lg bg-white p-6 text-center shadow-md">
 						<img
 							src={member.profileImage}

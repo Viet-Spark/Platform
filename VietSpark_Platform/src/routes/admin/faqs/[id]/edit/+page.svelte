@@ -6,13 +6,13 @@
 	import { userData } from '$lib/stores/userStore';
 	import { faqs, updateFAQ } from '$lib/stores/faqStore';
     import { writable } from 'svelte/store';
+    import { faqCategories, faqCategoriesLoading, faqCategoriesError} from '$lib/stores/faqCategoryStore';
 
 	let isDataReady = false;
 	let faqData = writable({
 		question: '',
 		answer: '',
-		category: '', 
-        newCategory: ''
+		categoryId: '', 
 	});
 
 	$: if ($authUser && $userData) {
@@ -23,25 +23,19 @@
 		goto('/');
 	}
 
-    let categories = [];
     let isUploading = false;
     let uploadError = null;
 
 	let faqId = $page.params.id;
 
 	onMount(async () => {
-        categories = new Set($faqs.map(faq => faq.category));
-        categories.add('Others')
-        categories = Array.from(categories).sort();
 		if (faqId) {
 			const faq = $faqs.find((f) => f.id === faqId);
 			if (faq) {
 				faqData.set({
                     question: faq.question,
                     answer: faq.answer,
-                    category: faq.category,
-                    id: faq.id, 
-                    newCategory: ''
+                    categoryId: faq.categoryId,
 				});
 			} else {
 				// FAQs not found, redirect back to FAQs list
@@ -58,7 +52,7 @@
             await updateFAQ(faqId, {
                 question: $faqData.question,
                 answer: $faqData.answer,
-                category: $faqData.category
+                categoryId: $faqData.categoryId
             });
             goto('/admin/faqs');
 		} catch (error) {
@@ -97,24 +91,13 @@
                             <label for="category" class="block text-sm font-bold text-gray-700">Category</label>
                             <select 
                                 id="category" 
-                                bind:value={$faqData.category} 
+                                bind:value={$faqData.categoryId} 
                                 class="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
                             >
-                                {#each categories as category}
-                                    <option value={category}>{category}</option>
+                                {#each $faqCategories as category}
+                                    <option value={category.id}>{category.name}</option>
                                 {/each}
                             </select>
-                            {#if $faqData.category === 'Others'}
-                                <label for="newCategory" class="block mt-4 text-sm font-bold text-gray-700">New Category Name</label>
-                                <input
-                                    type="text"
-                                    id="newCategory"
-                                    bind:value={$faqData.newCategory}
-                                    placeholder="Enter new category name"
-                                    class="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                    required
-                                />
-                            {/if}
                         </div>
                         <div>
                             <label for="question" class="block text-sm font-bold text-gray-700">Question</label>
@@ -127,12 +110,12 @@
                         </div>
                         <div>
                             <label for="answer" class="block text-sm font-bold text-gray-700">Answer</label>
-                            <input
-                                type="text"
+                            <textarea
                                 id="answer"
+                                rows="2"
                                 bind:value={$faqData.answer}
                                 class="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                            />
+                            ></textarea>
                         </div>
                         <div class="flex justify-end space-x-4">
                             <a

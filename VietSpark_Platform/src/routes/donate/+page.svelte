@@ -2,6 +2,7 @@
 	import { faqs, faqsLoading } from '$lib/stores/faqStore';
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { faqCategories } from '$lib/stores/faqCategoryStore';
 
 	// Donation amount options
 	const donationOptions = [25, 50, 100, 250, 500];
@@ -16,8 +17,9 @@
 	let donationMessage = '';
 	let donationFaqs = writable([]);
 
-	$: if ($faqs) {
-		donationFaqs.set($faqs.filter(faq => faq.category === 'Donation'));
+	$: if ($faqs.length > 0 && $faqCategories.length > 0) {
+		const donationFaqCategoryId = $faqCategories.find(category => category.name === 'Donation').id;
+		donationFaqs.set($faqs.filter(faq => faq.categoryId === donationFaqCategoryId));
 		console.log("Donation FAQs: ", $donationFaqs);
 	}
 

@@ -505,34 +505,6 @@
 							/>
 						</div>
 
-						<div class="flex items-center justify-between rounded-lg border p-4">
-							<div>
-								<h3 class="font-medium text-gray-700">Admin Access</h3>
-								<p class="text-sm text-gray-600">Toggle admin privileges for your account</p>
-							</div>
-							<label class="relative inline-flex cursor-pointer items-center">
-								<input
-									type="checkbox"
-									class="peer sr-only"
-									bind:checked={$userData.isAdmin}
-									on:change={async () => {
-										if ($authUser && $authUser.uid) {
-											try {
-												await updateUserData($authUser.uid, { isAdmin: $userData.isAdmin });
-											} catch (error) {
-												console.error('Error updating admin status:', error);
-												// Revert the change if update fails
-												$userData.isAdmin = !$userData.isAdmin;
-											}
-										}
-									}}
-								/>
-								<div
-									class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300"
-								></div>
-							</label>
-						</div>
-
 						<div>
 							<label for="location" class="mb-2 block font-medium text-gray-700">Location</label>
 							<input

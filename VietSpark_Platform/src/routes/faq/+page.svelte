@@ -2,22 +2,20 @@
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { faqs, faqsLoading} from '$lib/stores/faqStore';
+	import { faqCategories } from '$lib/stores/faqCategoryStore';
 
 	// FAQ data structure
-	let categories = null;
 	let isDataReady = false;
-	let activeCategory = null;
+	let activeCategoryId = null;
 	let expandedQuestions = new Set();
 
-	$: if ($faqs) {
-		categories = new Set($faqs.map(faq => faq.category));
-        categories = Array.from(categories).sort();
-		activeCategory = categories[0];
+	$: if ($faqCategories.length > 0) {
+		activeCategoryId = $faqCategories[0].id;
 		isDataReady = true;
 	}
 
-	function setActiveCategory(categoryName) {
-		activeCategory = categoryName;
+	function setActiveCategoryId(id) {
+		activeCategoryId = id;
 		expandedQuestions.clear();
 		expandedQuestions = expandedQuestions;
 	}
@@ -31,8 +29,8 @@
 		expandedQuestions = expandedQuestions;
 	}
 
-	function getFAQsFromCategory(category) {
-		const FAQs = $faqs.filter((faq) => faq.category === category);
+	function getFAQsFromCategory(categoryId) {
+		const FAQs = $faqs.filter((faq) => faq.categoryId === categoryId);
 		return FAQs;
 	}
 
@@ -52,8 +50,8 @@
 		const query = searchQuery.toLowerCase();
 		searchResults = [];
 
-		categories.forEach((category) => {
-			getFAQsFromCategory(category).forEach((faq) => {
+		$faqCategories.forEach((category) => {
+			getFAQsFromCategory(category.id).forEach((faq) => {
 				if (
 					faq.question.toLowerCase().includes(query) ||
 					faq.answer.toLowerCase().includes(query)
@@ -193,18 +191,18 @@
 						<div class="sticky top-24 rounded-lg border border-gray-200 bg-white p-4">
 							<h2 class="mb-4 text-xl font-bold">Categories</h2>
 							<nav class="space-y-2">
-								{#each categories as category}
+								{#each $faqCategories as category}
 									<button
 										type="button"
 										class="mb-2 block w-full cursor-pointer rounded-lg px-6 py-3 text-left text-lg font-medium transition-colors hover:bg-gray-100"
-										class:bg-primary={category === activeCategory}
-										class:text-white={category=== activeCategory}
-										class:bg-gray-50={category !== activeCategory}
-										class:text-gray-800={category !== activeCategory}
-										on:click={() => setActiveCategory(category)}
-										on:keydown={(e) => e.key === 'Enter' && setActiveCategory(category)}
+										class:bg-primary={category.id === activeCategoryId}
+										class:text-white={category.id=== activeCategoryId}
+										class:bg-gray-50={category.id !== activeCategoryId}
+										class:text-gray-800={category.id !== activeCategoryId}
+										on:click={() => setActiveCategoryId(category.id)}
+										on:keydown={(e) => e.key === 'Enter' && setActiveCategoryId(category.id)}
 									>
-										{category}
+										{category.name}
 									</button>
 								{/each}
 							</nav>
@@ -213,13 +211,13 @@
 
 					<!-- FAQ Content -->
 					<div class="lg:col-span-3">
-						{#each categories as category}
-							{#if activeCategory === category}
+						{#each $faqCategories as category}
+							{#if activeCategoryId === category.id}
 								<div>
-									<h2 class="mb-6 text-3xl font-bold">{category}</h2>
+									<h2 class="mb-6 text-3xl font-bold">{category.name}</h2>
 
 									<div class="space-y-4">
-										{#each getFAQsFromCategory(category) as faq, i}
+										{#each getFAQsFromCategory(category.id) as faq, i}
 											<div
 												class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm"
 											>
