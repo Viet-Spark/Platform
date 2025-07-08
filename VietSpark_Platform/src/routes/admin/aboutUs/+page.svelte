@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { authUser, logout, authLoading } from '$lib/stores/authStore';
 	import { aboutStore, aboutLoading, aboutError, aboutHandlers } from '$lib/stores/aboutStore';
+    import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
 	import { goto } from '$app/navigation';
     import { userData } from '$lib/stores/userStore';
 	import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
@@ -243,12 +244,12 @@
 					>
 						<div>
 							<label for="history" class="mb-2 block text-gray-700 font-bold">History</label>
-							<textarea
-								id="history"
-                                rows="10"
+							<MarkdownEditor
                                 bind:value={$aboutStore.history}
-								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
-							></textarea>
+                                id="history"
+                                placeholder=""
+                                onInput={(newValue) => $aboutStore.history = newValue}
+                            />
 						</div>
 
                         <div>

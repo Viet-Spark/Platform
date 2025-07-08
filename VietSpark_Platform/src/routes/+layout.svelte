@@ -11,7 +11,9 @@
 	import { fetchFAQs } from '$lib/stores/faqStore';
 	import { getUsers } from '$lib/stores/userStore';
 	import { fetchFaqCategories } from '$lib/stores/faqCategoryStore';
-	
+	import { eventHandlers } from '$lib/stores/eventStore2';
+	import { eventCategories, fetchEventCategories } from '$lib/stores/eventCategoryStore';
+
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
 	let newsletterMessage = '';
@@ -37,6 +39,8 @@
 		await fetchFAQs();
 		await getUsers();
 		await fetchFaqCategories();
+		await eventHandlers.getEvents();
+		await fetchEventCategories();
 	});
 
 	$: console.log('user', $userData);

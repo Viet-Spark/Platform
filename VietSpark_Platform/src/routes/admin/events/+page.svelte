@@ -3,17 +3,18 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import { events, eventsLoading, fetchEvents, deleteEvent } from '$lib/stores/eventStore';
+	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
 	import {
 		eventCategories,
 		addEventCategory,
 		removeEventCategory,
 		fetchEventCategories
 	} from '$lib/stores/eventCategoryStore';
+	import { writable } from 'svelte/store';
 
 	let isDataReady = false;
 	let filterStatus = 'all'; // all, upcoming, past
-	let filteredEvents = [];
+	let filteredEvents = writable([]);
 	let newCategory = '';
 	let isAddingCategory = false;
 	let isRemovingCategory = false;
@@ -26,10 +27,11 @@
 		goto('/');
 	}
 
-	$: filteredEvents = $events
+	$: if ($eventStore.events) {
+		filteredEvents.set($eventStore.events
 		.filter((event) => {
 			const now = new Date();
-			const eventDate = new Date(event.date);
+			const eventDate = new Date(event.eventDate.start.seconds * 1000);
 
 			if (filterStatus === 'upcoming') {
 				return eventDate >= now;
@@ -38,15 +40,12 @@
 			}
 			return true;
 		})
-		.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-	onMount(async () => {
-		await Promise.all([fetchEvents(), fetchEventCategories()]);
-	});
+		.sort((a, b) => new Date(b.date) - new Date(a.date)));
+	}
 
 	async function handleDelete(id) {
 		if (confirm('Are you sure you want to delete this event?')) {
-			await deleteEvent(id);
+			await eventHandlers.deleteEvent(id);
 		}
 	}
 
@@ -65,14 +64,14 @@
 		}
 	}
 
-	async function handleRemoveCategory(category) {
+	async function handleRemoveCategory(categoryName, id) {
 		if (
-			confirm(`Are you sure you want to remove the category "${category}"?`) &&
+			confirm(`Are you sure you want to remove the category "${categoryName}"?`) &&
 			!isRemovingCategory
 		) {
 			try {
 				isRemovingCategory = true;
-				await removeEventCategory(category);
+				await removeEventCategory(id);
 			} catch (error) {
 				console.error('Error removing category:', error);
 				alert('Failed to remove category. Please try again.');
@@ -106,9 +105,9 @@
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
 				{#each $eventCategories as category}
 					<div class="flex items-center justify-between rounded-md bg-gray-50 p-3">
-						<span class="font-medium">{category}</span>
+						<span class="font-medium">{category.name}</span>
 						<button
-							on:click={() => handleRemoveCategory(category)}
+							on:click={() => handleRemoveCategory(category.name, category.id)}
 							class="text-red-600 hover:text-red-800 disabled:opacity-50"
 							disabled={isRemovingCategory}
 						>
@@ -159,23 +158,34 @@
 		</div>
 	</div>
 
-	{#if $eventsLoading}
+	{#if $eventStore.isLoading}
 		<div class="py-8 text-center">Loading...</div>
-	{:else if filteredEvents.length === 0}
+	{:else if $filteredEvents.length === 0}
 		<div class="py-8 text-center text-gray-500">No events found</div>
 	{:else}
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{#each filteredEvents as event}
+			{#each $filteredEvents as event}
 				<div class="overflow-hidden rounded-lg bg-white shadow">
 					{#if event.coverImage}
 						<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
+					{:else}
+						<div class="h-48 w-full bg-primary-300"></div>
 					{/if}
 					<div class="p-4">
 						<h3 class="mb-2 text-xl font-semibold">{event.title}</h3>
-						<p class="mb-4 text-gray-600">{event.description}</p>
 						<div class="flex items-center justify-between">
 							<span class="text-sm text-gray-500">
-								{new Date(event.date).toLocaleDateString()}
+								{#if event.eventDate?.start}
+									{new Date(event.eventDate.start.seconds * 1000).toLocaleString('en-US', {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric',
+										hour: '2-digit',
+										minute: '2-digit'
+									})}
+								{:else}
+									Date not set
+								{/if}
 							</span>
 							<div class="flex gap-2">
 								<a

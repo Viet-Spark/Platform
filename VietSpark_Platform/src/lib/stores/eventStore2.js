@@ -1,7 +1,7 @@
 // @ts-nocheck
 // template for stores file dealing with wathlist collection inside our firebase
 import { writable } from 'svelte/store';
-import { db } from '$lib/firebase/firebase.client';
+import { db, storage } from '$lib/firebase/firebase';
 import {
     addDoc,
     deleteDoc,
@@ -9,17 +9,16 @@ import {
     getDoc,
     getDocs,
     collection,
-    doc
+    doc,
+    query,
+    orderBy
 } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-
-const eventsRef = collection(db, 'events');
 
 // Event store state
 export const eventStore = writable({
     isLoading: true,
     events: [],
-    currentEvent: null
 });
 
 
@@ -29,9 +28,15 @@ export const eventHandlers = {
     // Fetch all events
     getEvents: async () => {
         try {
-            const snapshot = await getDocs(eventsRef);
-            const events = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            eventStore.set({ isLoading: false, events });
+            const eventsRef = collection(db, 'events');
+            const q = query(eventsRef, orderBy('eventDate.start', 'desc'));
+            const querySnapshot = await getDocs(q);
+            const eventsList = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            console.log('Events fetched:', eventsList);
+            eventStore.set({ isLoading: false, events: eventsList });
         } catch (error) {
             console.error('Error fetching events:', error);
         }
@@ -45,15 +50,14 @@ export const eventHandlers = {
             if (eventDoc.exists()) {
                 eventStore.update(state => ({
                     ...state,
-                    isLoading: false,
-                    currentEvent: { id: eventDoc.id, ...eventDoc.data() }
+                    isLoading: false
                 }));
+                return eventDoc.data();
             } else {
                 console.warn(`Event with ID ${eventId} does not exist.`);
                 eventStore.update(state => ({
                     ...state,
-                    isLoading: false,
-                    currentEvent: null
+                    isLoading: false
                 }));
             }
         } catch (error) {
@@ -64,10 +68,12 @@ export const eventHandlers = {
     // Add a new event
     createEvent: async (eventData) => {
         try {
+            const eventsRef = collection(db, 'events');
             const newEventRef = await addDoc(eventsRef, {
                 ...eventData,
                 imageUrls: [] // Initialize with an empty imageUrls array
             });
+            eventHandlers.getEvents();
             return newEventRef.id;
         } catch (error) {
             console.error('Error creating event:', error);
@@ -101,6 +107,7 @@ export const eventHandlers = {
         try {
             const eventRef = doc(db, 'events', eventId);
             await updateDoc(eventRef, eventData);
+            eventHandlers.getEvents();
             return eventId;
         } catch (error) {
             console.error('Error updating event:', error);
@@ -110,16 +117,16 @@ export const eventHandlers = {
 
     // Delete a event
     deleteEvent: async (eventId) => {
-        const confirmation = window.confirm('Are you sure you want to delete this event?');
-        if (confirmation) {
-            try {
-                const eventRef = doc(db, 'events', eventId);
-                await deleteDoc(eventRef);
-                alert('Event successfully deleted.');
-            } catch (error) {
-                console.error('Error deleting event:', error);
-            }
+        try {
+            const eventRef = doc(db, 'events', eventId);
+            await deleteDoc(eventRef);
+            alert('Event successfully deleted.');
+            eventHandlers.getEvents();
+        } catch (error) {
+            console.error('Error deleting event:', error);
+            throw error;
         }
+        
     },
 
     // Fetch a event image URL
@@ -132,5 +139,84 @@ export const eventHandlers = {
             console.error('Error fetching image URL:', error);
             throw error;
         }
-    }
+    },
+
+
+    // Upload cover image
+    uploadCoverImage: async (file, eventId) => {
+        const fileRef = ref(storage, `events/${eventId}/cover_${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+    },
+    
+    // Upload multiple images to event gallery
+    uploadMultipleImages: async (files, eventId) => {
+        const uploadPromises = files.map(async (file) => {
+            const fileRef = ref(storage, `events/${eventId}/gallery/${Date.now()}_${file.name}`);
+            await uploadBytes(fileRef, file);
+            return await getDownloadURL(fileRef);
+        });
+    
+        return await Promise.all(uploadPromises);
+    }, 
+
+    // Upload speaker images
+    uploadSpeakerImages: async (file, { eventId, speakerId }) => {
+        const fileRef = ref(storage, `events/${eventId}/speakers/${speakerId}/profile_${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+    },
+    
+    // Upload sponsor logo
+    uploadSponsorLogo: async (file, { eventId, sponsorId }) => {
+        const fileRef = ref(storage, `events/${eventId}/sponsors/${sponsorId}/logo_${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+    }, 
+
+    // Upload video
+    uploadVideo: async (file, eventId) => {
+        const fileRef = ref(storage, `events/${eventId}/videos/${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+    }, 
+
+    // Upload multiple videos
+    uploadMultipleVideos: async (files, eventId) => {
+        const uploadPromises = files.map(async (file) => {
+            const fileRef = ref(storage, `events/${eventId}/videos/${Date.now()}_${file.name}`);
+            await uploadBytes(fileRef, file);
+            return await getDownloadURL(fileRef);
+        });
+    
+        return await Promise.all(uploadPromises);
+    }, 
+
+    // Upload program schedule images
+    uploadProgramScheduleImages: async (files, eventId, programId) => {
+        const uploadPromises = files.map(async (file) => {
+            const fileRef = ref(storage, `events/${eventId}/program/${programId}/${Date.now()}_${file.name}`);
+            await uploadBytes(fileRef, file);
+            return await getDownloadURL(fileRef);
+        });
+        return await Promise.all(uploadPromises);
+    },
+
+    // Upload testimonials images
+    uploadTestimonialsImages: async (files, eventId, testimonialId) => {
+        const uploadPromises = files.map(async (file) => {
+            const fileRef = ref(storage, `events/${eventId}/testimonials/${testimonialId}/${Date.now()}_${file.name}`);
+            await uploadBytes(fileRef, file);
+            return await getDownloadURL(fileRef);
+        });
+        return await Promise.all(uploadPromises);
+    },
+
+    // Upload testimonials video
+    uploadTestimonialsVideo: async (file, eventId, testimonialId) => {
+        const fileRef = ref(storage, `events/${eventId}/testimonials/${testimonialId}/video_${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+    },
+
 };

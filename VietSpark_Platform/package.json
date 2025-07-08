@@ -43,9 +43,18 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
+		"@types/dompurify": "^3.0.5",
+		"dompurify": "^3.2.6",
 		"firebase": "^11.6.0",
 		"flowbite": "^3.1.2",
 		"flowbite-svelte": "^0.48.6",
-		"marked": "^15.0.12"
+		"lucide-svelte": "^0.525.0",
+		"marked": "^15.0.12",
+		"prosemirror-commands": "^1.7.1",
+		"prosemirror-example-setup": "^1.2.3",
+		"prosemirror-history": "^1.4.1",
+		"prosemirror-markdown": "^1.13.2",
+		"prosemirror-state": "^1.4.3",
+		"prosemirror-view": "^1.40.0"
 	}
 }

@@ -3,20 +3,28 @@
 	import TechSummit2025Image from '$lib/images/Events/2025/TechSummit2025Image.jpg';
 	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
 	import FallForumImage from '$lib/images/Events/FallForumImage.jpg';
+	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
+	import { eventCategories } from '$lib/stores/eventCategoryStore';
+	import { writable } from 'svelte/store';
 	// Sample events data (to be replaced with actual data from a database/API)
-	const upcomingEvents = [
-		{
-			id: 'tech-summit-2025',
-			title: 'Annual Tech Summit 2025',
-			date: 'August 22-23, 2025',
-			time: '9:00 AM - 5:00 PM PST',
-			location: 'Silicon Valley, CA',
-			description:
-				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			image: TechSummit2025Image,
-			category: 'Vietnam Tech Summit'
-		}
-	];
+
+	let upcomingEvents = writable([]);
+	let categories = writable([]);
+
+	$: if ($eventStore.events) {
+		upcomingEvents.set($eventStore.events
+		.filter((event) => {
+			const now = new Date();
+			const eventDate = new Date(event.eventDate.start.seconds * 1000);
+
+			return eventDate >= now;
+		})
+		.sort((a, b) => new Date(b.date) - new Date(a.date)));
+	}
+
+	$: if ($eventCategories) {
+		categories.set(['All', ...$eventCategories.map((c) => c)]);
+	}
 
 	const pastEvents = [
 		{
@@ -62,16 +70,23 @@
 		}
 	];
 
+	function getEventCategory(id) {
+		return $eventCategories.find((c) => c.id === id).name;
+	}
+
+	function formatDate(timestamp) {
+        if (!timestamp || !timestamp.seconds) return '';
+        return new Date(timestamp.seconds * 1000).toLocaleDateString();
+    }
+
 	
 	// Filter events by category
 	let selectedCategory = 'All';
-	// const categories = ['All', 'Vietnam Tech Summit', 'Break Into Tech', 'Networking', 'Vietnam – US Fall Forum'];
-	const categories = ['All', 'Vietnam Tech Summit', 'Break Into Tech', 'Vietnam – US Fall Forum'];
 
 	$: filteredUpcomingEvents =
 		selectedCategory === 'All'
-			? upcomingEvents
-			: upcomingEvents.filter((event) => event.category === selectedCategory);
+			? $upcomingEvents
+			: $upcomingEvents.filter((event) => event.eventCategoryId === selectedCategory);
 
 	$: filteredPastEvents =
 		selectedCategory === 'All'
@@ -107,15 +122,15 @@
 		<div class="flex flex-wrap items-center justify-between">
 			<h2 class="mb-4 text-2xl font-bold md:mb-0">Browse Events</h2>
 			<div class="flex flex-wrap gap-2">
-				{#each categories as category}
+				{#each $categories as category}
 					<button
 						class="rounded-full px-4 py-2 text-sm font-medium transition-colors {selectedCategory ===
 						category
 							? 'bg-primary text-white'
 							: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
-						on:click={() => setCategory(category)}
+						on:click={() => setCategory(category.id || category)}
 					>
-						{category}
+						{category.name || category}
 					</button>
 				{/each}
 			</div>
@@ -135,22 +150,22 @@
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 				{#each filteredUpcomingEvents as event}
 					<div class="overflow-hidden rounded-lg bg-white shadow-md">
-						<img src={event.image} alt={event.title} class="h-48 w-full object-cover" />
+						<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
 						<div class="p-6">
 							<div class="mb-2 flex items-start justify-between">
 								<span
 									class="text-primary inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold"
 								>
-									{event.category}
+									{getEventCategory(event.eventCategoryId)}
 								</span>
-								<span class="text-gray-600">{event.date}</span>
+								<span class="text-gray-600">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</span>
 							</div>
 							<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
-							<p class="mb-4 text-gray-600">{event.description}</p>
+							<p class="mb-4 text-gray-600">{event.shortDescription}</p>
 							<div class="mb-4">
 								<div class="mb-2 flex items-center text-gray-600">
 									<i class="fas fa-map-marker-alt w-5"></i>
-									<span>{event.location}</span>
+									<span>{event.location.displayText}</span>
 								</div>
 								<!-- <div class="flex items-center text-gray-600">
 									<i class="fas fa-clock w-5"></i>
@@ -169,7 +184,7 @@
 			</div>
 		{:else}
 			<div class="py-12 text-center">
-				<p class="text-gray-600">No upcoming {selectedCategory.toLowerCase()} events found.</p>
+				<p class="text-gray-600">No upcoming events found.</p>
 				<button class="text-primary mt-4 hover:underline" on:click={() => setCategory('All')}>
 					View all events
 				</button>
