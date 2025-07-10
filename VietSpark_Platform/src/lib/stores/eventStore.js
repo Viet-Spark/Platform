@@ -14,6 +14,7 @@ export const eventsError = writable(null);
 // Function to fetch all events
 export const fetchEvents = async () => {
     eventsLoading.set(true);
+    
     try {
         const eventsRef = collection(db, 'events');
         const q = query(eventsRef, orderBy('date', 'desc'));
@@ -38,6 +39,10 @@ export const createEvent = async (eventData) => {
         const eventsRef = collection(db, 'events');
         const docRef = await addDoc(eventsRef, {
             ...eventData,
+            eventDate: {
+                start: eventData.eventDate.start instanceof Date ? eventData.eventDate.start.toISOString() : eventData.eventDate.start,
+                end: eventData.eventDate.end instanceof Date ? eventData.eventDate.end.toISOString() : eventData.eventDate.end
+            },
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         });
@@ -56,6 +61,10 @@ export const updateEvent = async (eventId, eventData) => {
         const eventRef = doc(db, 'events', eventId);
         await updateDoc(eventRef, {
             ...eventData,
+            eventDate: {
+                start: eventData.eventDate.start instanceof Date ? eventData.eventDate.start.toISOString() : eventData.eventDate.start,
+                end: eventData.eventDate.end instanceof Date ? eventData.eventDate.end.toISOString() : eventData.eventDate.end
+            },
             updatedAt: new Date().toISOString()
         });
         await fetchEvents(); // Refresh the events list

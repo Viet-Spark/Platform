@@ -15,6 +15,27 @@
 	import { aboutStore, aboutLoading } from '$lib/stores/aboutStore';
 	import { homeStore, homeLoading } from '$lib/stores/homeStore';
 	import { partners, partnersLoading } from '$lib/stores/partnerStore';
+	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
+	import { eventCategories } from '$lib/stores/eventCategoryStore';
+	import { writable } from 'svelte/store';
+
+	let upcomingEvents = writable([]);
+
+	$: if ($eventStore.events) {
+		upcomingEvents.set($eventStore.events
+		.filter((event) => {
+			const now = new Date();
+			const eventDate = new Date(event.eventDate.start.seconds * 1000);
+
+			return eventDate >= now;
+		})
+		.sort((a, b) => new Date(b.date) - new Date(a.date)));
+	}
+
+	function formatDate(timestamp) {
+        if (!timestamp || !timestamp.seconds) return '';
+        return new Date(timestamp.seconds * 1000).toLocaleDateString();
+    }
 
 </script>
 
@@ -26,7 +47,7 @@
 	/>
 </svelte:head>
 
-{#if $homeLoading || $aboutLoading || $partnersLoading}
+{#if $homeLoading || $aboutLoading || $partnersLoading || eventStore.isLoading}
 	<div class="flex min-h-screen items-center justify-center">
 		<div class="text-center">
 			<div class="border-primary inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-t-2"></div>
@@ -153,19 +174,21 @@
 
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
 				<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
-					<div class="flex h-48 items-center justify-center bg-blue-200">
-						<img src={TechSummit2025Image} alt="TechSummitImage" class="h-48 w-full object-cover" />
-					</div>
-					<div class="p-6">
-						<div class="text-primary mb-2 text-sm font-semibold">Aug 22-23, 2025</div>
-						<h3 class="mb-2 text-xl font-bold">Tech Summit 2025</h3>
-						<p class="mb-4 text-gray-600">
-							Join us for a day of inspiring talks, networking, and workshops from industry leaders.
-						</p>
-						<a href="/events/tech-summit-2025" class="text-primary font-medium hover:underline"
-							>Learn more →</a
-						>
-					</div>
+					{#each $upcomingEvents as event}
+						<div class="flex h-48 items-center justify-center bg-blue-200">
+							<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
+						</div>
+						<div class="p-6">
+							<div class="text-primary mb-2 text-sm font-semibold">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</div>
+							<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
+							<p class="mb-4 text-gray-600">
+								{event.shortDescription}
+							</p>
+							<a href="/events/{event.id}" class="text-primary font-medium hover:underline"
+								>Learn more →</a
+							>
+						</div>
+					{/each}
 				</div>
 
 				<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">

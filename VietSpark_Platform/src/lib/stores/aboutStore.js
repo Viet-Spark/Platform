@@ -21,11 +21,10 @@ export const aboutStore = writable({
     mission: '',
     vision: '',
     coreValues: [],
-    whatWeDo: [],
+    whatWeDo: {},
     boardOfDirectors: [],
     advisoryBoard: [],
     volunteers: [],
-    faqs: []
 });
 
 export const aboutLoading = writable(false);
@@ -52,24 +51,6 @@ export const aboutHandlers = {
                 }
             } else {
                 console.warn('No abouts found, create default about us');
-                try {
-                    // Create a default about us document
-                    const aboutInfo = {
-                        id: 'main',
-                        createdAt: new Date().toISOString()
-                    };
-                    
-                    // Use setDoc to create the document with a specific ID
-                    const aboutDocRef = doc(db, 'aboutUs', 'main');
-                    await setDoc(aboutDocRef, aboutInfo);
-                    
-                    console.log('Default about us document created successfully');
-                    aboutStore.set(aboutInfo);
-                    return aboutInfo;
-                } catch (createError) {
-                    console.error('Error creating default about us:', createError);
-                    throw createError;
-                }
             }
         } catch (error) {
             console.error('Error fetching abouts:', error);

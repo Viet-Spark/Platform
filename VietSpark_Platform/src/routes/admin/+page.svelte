@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import { events, eventsLoading, fetchEvents } from '$lib/stores/eventStore';
+	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
 	import { blogPosts, blogLoading, fetchBlogPosts } from '$lib/stores/blogStore';
 	import { partners, partnersLoading, fetchPartners } from '$lib/stores/partnerStore';
 	import { subscribers, newsletterLoading, fetchSubscribers } from '$lib/stores/newsletterStore';
@@ -38,7 +38,7 @@
 	}
 
 	onMount(async () => {
-		await Promise.all([fetchEvents(), fetchBlogPosts(), fetchPartners(), fetchSubscribers()]);
+		await Promise.all([eventHandlers.getEvents(), fetchBlogPosts(), fetchPartners(), fetchSubscribers()]);
 	});
 </script>
 
@@ -54,10 +54,10 @@
 			<!-- Events Card -->
 			<div class="rounded-lg bg-white p-6 shadow-md">
 				<h2 class="mb-4 text-xl font-semibold">Events</h2>
-				{#if $eventsLoading}
+				{#if $eventStore.isLoading}
 					<p>Loading...</p>
 				{:else}
-					<p class="text-3xl font-bold">{$events.length}</p>
+					<p class="text-3xl font-bold">{$eventStore.events.length}</p>
 					<a href="/admin/events" class="text-primary mt-4 inline-block hover:underline"
 						>Manage Events →</a
 					>

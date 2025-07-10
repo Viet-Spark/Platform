@@ -66,12 +66,17 @@
 	$: if (isEditing && eventId) {
 		event = $eventStore.events.find((e) => e.id === eventId);
 		if (event) {
+			// Only update fields that come from the store, preserve temp fields
+			const oldTestimonials = eventData.testimonials;
 			eventData = {
+				...eventData,
 				...event,
 				eventDate: {
 					start: formatDateForInput(event.eventDate?.start),
 					end: formatDateForInput(event.eventDate?.end)
-				}
+				},
+				// If testimonials already have temp fields, keep them
+				testimonials: oldTestimonials.length > 0 ? oldTestimonials : (event.testimonials || [])
 			};
 			if (eventData.programSchedule) {
 				eventData.programSchedule = eventData.programSchedule.map(item => {
@@ -84,7 +89,6 @@
 					return item;
 				})
 			}
-			console.log(eventData.programSchedule)
 		}
 	}
 
@@ -232,7 +236,7 @@
 	function validateVideoFile(file) {
 		const validationError = validateFile(file, {
 			allowedTypes: ['video/mp4', 'video/webm'],
-			maxSizeMB: 100
+			maxSizeMB: 150
 		});
 		return validationError;
 	}
@@ -296,17 +300,28 @@
 	}
 
 	function handleVideosUpload(event) {
-		eventData.tempVideoFiles = [...eventData.tempVideoFiles, ...event.detail.files];
-		// Create temporary preview URLs
-		event.detail.files.forEach(file => {
+		const files = event.detail?.files || [];
+		if (!files.length) return;
+
+		// Initialize arrays if they don't exist
+		eventData.tempVideoFiles ??= [];
+		eventData.videos ??= [];
+
+		files.forEach(file => {
 			const validationError = validateVideoFile(file);
 			if (validationError) {
 				uploadError = validationError;
+				console.warn("Video validation failed:", uploadError);
 				return;
 			}
+
+			// Store the file and its preview URL
+			eventData.tempVideoFiles = [...eventData.tempVideoFiles, file];
 			const previewUrl = URL.createObjectURL(file);
-			eventData.videos = [...eventData.videos, previewUrl];
+			eventData.videos.push(previewUrl);
+
 		});
+		console.log("Video:", eventData)
 	}
 
 	function handleSponsorLogoUpload(event) {
@@ -402,11 +417,9 @@
 		
 		eventData.testimonials = eventData.testimonials.map(testimonial => {
 			if (testimonial.id === testimonialId) {
-				// Cleanup previous preview URL if it exists
-				if (testimonial.videoUrl && testimonial.videoUrl.startsWith('blob:')) {
+				if (testimonial.videoUrl?.startsWith('blob:')) {
 					URL.revokeObjectURL(testimonial.videoUrl);
 				}
-				
 				return {
 					...testimonial,
 					tempVideoFile: file,
@@ -415,10 +428,12 @@
 			}
 			return testimonial;
 		});
+		eventData = { ...eventData, testimonials: [...eventData.testimonials] };
+		console.log(eventData.testimonials)
 	}
 
 	async function handleSubmit(e) {
-		console.log('Form submission started');
+		console.log('Form submission started', eventData);
 		isSubmitting = true;
 		error = null;
 
@@ -476,8 +491,10 @@
 
 			// Upload videos
 			let videoUrls = eventData.videos.filter(url => !url.startsWith('data:') && !url.startsWith('blob:')); // Keep existing URLs
+			console.log(eventData.tempVideoFiles); 
 			if (eventData.tempVideoFiles?.length > 0) {
 				const newUrls = await eventHandlers.uploadMultipleVideos(eventData.tempVideoFiles, eventId);
+				console.log(newUrls);
 				videoUrls = [...videoUrls, ...newUrls];
 			}
 
@@ -1321,6 +1338,7 @@
 														controls
 														class="w-full rounded-lg"
 														aria-label="Testimonial video"
+														style="height: 400px;"
 													>
 														<track kind="captions" />
 													</video>
@@ -1328,7 +1346,11 @@
 														type="button"
 														class="absolute top-1 right-1 rounded-full p-1 bg-white text-red-500 hover:text-red-800 shadow-sm"
 														on:click={() => {
-															eventData.testimonials[index].videoUrl = '';
+															eventData.testimonials = eventData.testimonials.map((t, i) =>
+																i === index
+																	? { ...t, videoUrl: '', tempVideoFile: null }
+																	: t
+															);
 														}}
 														aria-label="Remove testimonial video"
 													>
