@@ -63,34 +63,36 @@
 	let uploadError = null;
 	let activeTab = 'details'; // Possible values: details, speakers, testimonials, sponsors, program
 
-	$: if (isEditing && eventId) {
-		event = $eventStore.events.find((e) => e.id === eventId);
-		if (event) {
-			// Only update fields that come from the store, preserve temp fields
-			const oldTestimonials = eventData.testimonials;
-			eventData = {
-				...eventData,
-				...event,
-				eventDate: {
-					start: formatDateForInput(event.eventDate?.start),
-					end: formatDateForInput(event.eventDate?.end)
-				},
-				// If testimonials already have temp fields, keep them
-				testimonials: oldTestimonials.length > 0 ? oldTestimonials : (event.testimonials || [])
-			};
-			if (eventData.programSchedule) {
-				eventData.programSchedule = eventData.programSchedule.map(item => {
-					if (item.startTime) {
-						item.startTime = formatDateForInput(item.startTime);
-					}
-					if (item.endTime) {
-						item.endTime = formatDateForInput(item.endTime);
-					}
-					return item;
-				})
+	onMount(() => {
+		if (isEditing && eventId) {
+			event = $eventStore.events.find((e) => e.id === eventId);
+			if (event) {
+				// Only update fields that come from the store, preserve temp fields
+				const oldTestimonials = eventData.testimonials;
+				eventData = {
+					...eventData,
+					...event,
+					eventDate: {
+						start: formatDateForInput(event.eventDate?.start),
+						end: formatDateForInput(event.eventDate?.end)
+					},
+					// If testimonials already have temp fields, keep them
+					testimonials: oldTestimonials.length > 0 ? oldTestimonials : (event.testimonials || [])
+				};
+				if (eventData.programSchedule) {
+					eventData.programSchedule = eventData.programSchedule.map(item => {
+						if (item.startTime) {
+							item.startTime = formatDateForInput(item.startTime);
+						}
+						if (item.endTime) {
+							item.endTime = formatDateForInput(item.endTime);
+						}
+						return item;
+					})
+				}
 			}
 		}
-	}
+	});
 
 	// Function to format date for datetime-local input
 	const formatDateForInput = (timestamp) => {

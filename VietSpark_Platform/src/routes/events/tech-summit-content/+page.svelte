@@ -1,86 +1,36 @@
 <script>
-	import EventPlaceHolderImage from '$lib/images/Events/EventPlaceHolderImage.jpg';
-	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
-	import TechSummit2025Image from '$lib/images/Events/2025/TechSummit2025Image.jpg';
-	import { eventImages } from '$lib/images/Events/imgEvents.js';
-	// Event data (to be replaced with API/database data later)
-	const events = [
-		{
-			title: 'Annual Tech Summit 2025',
-			date: 'August 22-23, 2025',
-			time: '9:00 AM - 5:00 PM PST',
-			location: 'San Francisco, CA',
-			description:
-				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [TechSummit2025Image],
-			category: 'Tech Summit',
-			content:[
-				"<p>📣 <b>VIETNAM TECH SUMMIT 2025 IS OFFICIALLY BACK - OPEN EARLY BIRD REGISTRATION</b></p>",
-			]
-		},
-		{
-			title: 'Annual Tech Summit 2024',
-			date: 'August 16-17, 2024',
-			time: '9:00 AM - 5:00 PM PST',
-			location: 'San Francisco, CA',
-			description:
-				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [
-				eventImages.IMG_2024_1,eventImages.IMG_2024_2,eventImages.IMG_2024_3,eventImages.IMG_2024_4,eventImages.IMG_2024_5,
-				eventImages.IMG_2024_6,eventImages.IMG_2024_7,eventImages.IMG_2024_8,eventImages.IMG_2024_9,eventImages.IMG_2024_10,
-			],
-			category: 'Tech Summit',
-			content:[
-				"<p>Tech Summit 2024 was hosted in Bay Area in August 2024, attracting over 400 tech enthusiasts who gathered to explore the latest industry trends and share insights that push the boundaries of AI and career development. Day 1 featured exclusive tours of Google and Microsoft Headquarters, offering attendees a unique opportunity to witness the cutting-edge work being done at two of the world’s most influential tech companies. After the tours, the evening was capped off with a lively Networking Night, complete with live Co Band music, providing a relaxed and enjoyable setting for participants to forge meaningful connections and reflect on the day's experiences.</p>",
-				"<p>The event continued with keynotes outlining the latest AI trends, leading into the highly anticipated panel discussion, \"AI: Beyond the Horizon\". Thought leaders <strong>Trieu Trinh</strong>, <strong>Ray Nguyen</strong>, <strong>Hung Hoang Nguyen</strong>, and <strong>Tuoc Luong</strong> shared their visions for the future of AI, sparking dynamic conversations about how this transformative technology will shape the industry.</p>",
-				"<p>Day 2 featured a new Speed Mentoring session, offering personalized advice across four specialized tracks: Start-up, Product, Software Engineering, and Data. Participants also attended 11 in-depth workshops on AI, product development, and career growth, including sessions like \"Implementing LLM Virtual Assistants in Vietnam\" and \"How to Bring AI from Research to Product.\" The day concluded with a final networking session and a raffle, leaving participants reflecting on the knowledge and connections gained.</p>",
-			]
-		},
-		{
-			title: 'Annual Tech Summit 2023',
-			date: 'August 11-13, 2023',
-			time: '9:00 AM - 5:00 PM PST',
-			location: 'San Francisco, CA',
-			description:
-				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [
-				eventImages.IMG_2023_1,eventImages.IMG_2023_2,eventImages.IMG_2023_3,eventImages.IMG_2023_4,eventImages.IMG_2023_5,
-				eventImages.IMG_2023_6,eventImages.IMG_2023_7,eventImages.IMG_2023_8,eventImages.IMG_2023_9,eventImages.IMG_2023_10,
-			],
-			category: 'Tech Summit',
-			content:[
-				"<p>Following the success of Tech Summit 2022, Tech Summit 2023 in the Bay Area brought together over 300 participants for a dynamic two-day event filled with insightful panels, engaging workshops, and valuable networking.</p>",
-				"<p>Day 1 featured exclusive tours of Google and Microsoft Headquarters, offering attendees an inside look at two of the world’s most innovative companies</p>",
-				"<p>Day 2’s spotlight panel, “The Impact of AI on Our Careers” explored the rapid evolution of AI and its transformative influence on the tech industry. Esteemed speakers from top companies like Got It, Doordash, Adobe, and FPT Software shared cutting-edge insights into AI applications in tech, from machine learning advancements to AI-driven product development. The day also featured hands-on workshops, ranging from career growth in data analytics to strategies for excelling in software engineering. As the day concluded, attendees had the chance to connect with fellow professionals and experience the innovation of Vinfast’s automotive technology through an exclusive test drive, further emphasizing the diverse impact of tech in today’s world.</p>",
-				"<p>The third and final day of the summit wrapped up with a relaxing Outdoor BBQ Party, offering a chance for attendees to unwind, reflect, and build lasting connections in a casual setting. Tech Summit 2023 successfully captured the pulse of the AI trend and left participants inspired and equipped for the next steps in their tech careers.</p>",
-				"<p>Check out the event in the media <a href='https://vtv.vn/the-gioi/tech-summit-2023-thu-hut-thanh-nien-sinh-vien-viet-nam-tai-my-20230815114650564.htm?fbclid=IwAR3tyFST7GfIO7lDHlNSQYJ4y41Wg2Z2l6s3_WrxRKTqs3bKmqJCxvsTuzE_aem_ASHvtmvALX9IrCGLMnvWLF-yzw5L_4wiW7mIUkxQmxDJDJZS063L3fwazDuafkp-pLRXB2xmpO4o05TU5W7y7BMK'>here</a> </p>",
-				"<p>The day also featured hands-on workshops, ranging from career growth in data analytics to strategies for excelling in software engineering. As the day concluded, attendees had the chance to connect with fellow professionals and experience the innovation of Vinfast’s automotive technology through an exclusive test drive, further emphasizing the diverse impact of tech in today’s world.</p>",
-				"<p>The third and final day of the summit wrapped up with a relaxing Outdoor BBQ Party, offering a chance for attendees to unwind, reflect, and build lasting connections in a casual setting. Tech Summit 2023 successfully captured the pulse of the AI trend and left participants inspired and equipped for the next steps in their tech careers.</p>",
-			]
-		},
-		{
-			title: 'Annual Tech Summit 2022',
-			date: 'September 16-18, 2022',
-			time: '9:00 AM - 5:00 PM PST',
-			location: 'Seattle, WA',
-			description:
-				'Join us for a day of inspiring talks, networking, and workshops from industry leaders.',
-			images: [
-				eventImages.IMG_2022_1,eventImages.IMG_2022_2,eventImages.IMG_2022_3,eventImages.IMG_2022_4,eventImages.IMG_2022_5,
-				eventImages.IMG_2022_6,eventImages.IMG_2022_7,eventImages.IMG_2022_8,eventImages.IMG_2022_9,eventImages.IMG_2022_10,
-			],
-			category: 'Tech Summit',
-			content:[
-				"<p>The inaugural Tech Summit 2022, organized by Viet Spark and Seattle Vietnamese Professionals & Students (SVPS), took place in Seattle, WA, from September 16-18, attracting over 100 attendees. The event kicked off with a tour of Microsoft Headquarters, followed by a relaxed Happy Hour, offering participants a chance to connect with industry leaders.</p>",
-				"<p>Day 2 featured a Tech Industry Outlook Post-Covid panel with prominent speakers from Microsoft, Amazon, Meta, and more, discussing current tech trends and the evolving job market. Workshops covering topics like career growth in tech, breaking into the industry, and personal finance for tech professionals gave attendees practical skills to advance their careers.</p>",
-				"<p>The summit concluded on Day 3 with an Outdoor Team Building event at Volunteer Park and a Networking BBQ, providing a relaxed setting for participants to reflect on the weekend’s discussions and form lasting connections.</p>",
-				"<p>Check out the event in the media <a href='https://youtu.be/hFLKIsWHQ5k?t=124'>here</a>",
-				"<p>The inaugural Tech Summit 2022, organized by Viet Spark and Seattle Vietnamese Professionals & Students (SVPS), took place in Seattle, WA, from September 16-18, attracting over 100 attendees. The event kicked off with a tour of Microsoft Headquarters, followed by a relaxed Happy Hour, offering participants a chance to connect with industry leaders.</p>",
-				"<p>Day 2 featured a Tech Industry Outlook Post-Covid panel with prominent speakers from Microsoft, Amazon, Meta, and more, discussing current tech trends and the evolving job market. Workshops covering topics like career growth in tech, breaking into the industry, and personal finance for tech professionals gave attendees practical skills to advance their careers.</p>",
-				"<p>The summit concluded on Day 3 with an Outdoor Team Building event at Volunteer Park and a Networking BBQ, providing a relaxed setting for participants to reflect on the weekend’s discussions and form lasting connections.</p>",
-			]
+	import {eventStore} from '$lib/stores/eventStore2'; 
+	import {writable} from 'svelte/store'; 
+	import { eventCategories, eventCategoriesLoading, eventCategoriesError } from '$lib/stores/eventCategoryStore';
+	import { getGenerativeModel } from 'firebase/vertexai';
+
+	let upcomingEvents = writable([]);
+	let pastEvents = writable([]);
+	let dataIsReady = false; 
+
+	$: if ($eventStore.events && $eventCategories) {
+		const techSummitCategory = $eventCategories.filter((c) => c.name === 'Vietnam Tech Summit'); 
+		if (techSummitCategory.length > 0) {
+			const techSummitId = techSummitCategory[0].id;
+			upcomingEvents.set($eventStore.events.filter((event) => {
+					const now = new Date();
+					const eventDate = new Date(event.eventDate.start.seconds * 1000);
+
+					return eventDate >= now && event.eventCategoryId === techSummitId;
+				})
+				.sort((a, b) => new Date(b.date) - new Date(a.date)));
+
+			pastEvents.set($eventStore.events.filter((event) => {
+					const now = new Date();
+					const eventDate = new Date(event.eventDate.start.seconds * 1000);
+
+					return eventDate < now && event.eventCategoryId === techSummitId;
+				})
+				.sort((a, b) => new Date(b.date) - new Date(a.date)));
+			dataIsReady = true;
 		}
-	];
+		
+	}
 
 	// For images carousel
 	/* 
@@ -90,229 +40,294 @@
   		1: 0,  // for event 1, current slide is image 0
 	}
 	*/
-	let currentSlide = {};
 
-  // Initialize currentSlide index for each event
-  $: events.forEach((event, i) => {
-    if (!(i in currentSlide)) {
-      currentSlide[i] = 0;
+	function formatDate(timestamp) {
+        if (!timestamp || !timestamp.seconds) return '';
+        return new Date(timestamp.seconds * 1000).toLocaleDateString();
     }
-  });
 
-  function prev(i, length) {
-    currentSlide[i] = (currentSlide[i] - 1 + length) % length;
-  }
+	function formatTime(timestamp) {
+		if (!timestamp || !timestamp.seconds) return '';
 
-  function next(i, length) {
-    currentSlide[i] = (currentSlide[i] + 1) % length;
-  }
+		const date = new Date(timestamp.seconds * 1000);
+
+		const formatAMPM = date => {
+			let hours = date.getHours();
+			let minutes = date.getMinutes();
+			const ampm = hours >= 12 ? 'PM' : 'AM';
+			hours = hours % 12 || 12; // Convert to 12-hour format
+			minutes = String(minutes).padStart(2, '0');
+			return `${hours}:${minutes} ${ampm}`;
+		};
+
+		return formatAMPM(date);
+	}
+
+	function getTimezoneAbbreviation(date = new Date()) {
+		// Convert date to string and extract abbreviation from parentheses
+		const match = date.toString().match(/\(([^)]+)\)/);
+		if (match && match[1]) {
+			return match[1].split(' ').map(word => word[0]).join('');
+		}
+		return 'UTC'; // fallback if no match
+	}
+
+
 </script>
 
 <svelte:head>
-	{#each events as event}
-		<title>{event.title} - VietSpark Events</title>
-		<meta name="description" content={event.description} />
-	{/each}
+	<title>VietSpark Tech Summit Events</title>
+	<meta name="description" content="Upcoming and past Tech Summit events organized by VietSpark to connect, educate, and empower Vietnamese professionals in tech."/>
 </svelte:head>
 
-{#each events as event, i}
-<div>
-	<!-- Event Hero Section -->
-	<section class="bg-primary py-16 text-white">
-		<div class="container mx-auto px-4">
-			<div class="flex items-center justify-between">
-				<div>
-					<h1 class="mb-4 text-4xl font-bold">{event.title}</h1>
-					<div class="flex items-center space-x-4 text-lg">
-						<div class="flex items-center">
-							<i class="fas fa-calendar-day mr-2"></i>
-							<span>{event.date}</span>
+{#if !dataIsReady }
+	<div class="flex min-h-screen items-center justify-center">
+		<div class="text-center">
+			<div
+				class="border-primary inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-t-2"
+			></div>
+			<p class="mt-4 text-gray-600">Loading Tech Summit Events...</p>
+		</div>
+	</div>
+{:else}
+	{#if $upcomingEvents.length} 
+		{#each $upcomingEvents as event, i}
+			<section class="bg-primary py-16 text-white">
+				<div class="container mx-auto px-4">
+					<div class="flex items-center justify-between">
+						<div>
+							<h1 class="mb-4 text-4xl font-bold">{event.title}</h1>
+							<div class="flex items-center space-x-4 text-lg">
+								<div class="flex items-center">
+									<i class="fas fa-calendar-day mr-2"></i>
+									<span>{formatDate(event.eventDate?.start)} - {formatDate(event.eventDate?.end)}</span>
+								</div>
+								<div class="flex items-center">
+									<i class="fas fa-clock mr-2"></i>
+									<span>{formatTime(event.eventDate?.start)} - {formatTime(event.eventDate?.end)} {getTimezoneAbbreviation()}</span>
+								</div>
+								{#if event.location?.displayText}
+									<div class="flex items-center">
+										<i class="fas fa-map-marker-alt mr-2"></i>
+										<span>{event.location.displayText}</span>
+									</div>
+								{/if}
+							</div>
 						</div>
-						<div class="flex items-center">
-							<i class="fas fa-clock mr-2"></i>
-							<span>{event.time}</span>
-						</div>
-						<div class="flex items-center">
-							<i class="fas fa-map-marker-alt mr-2"></i>
-							<span>{event.location}</span>
-						</div>
+						<a
+							href="/events"
+							class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
+						>
+							Back to Events
+						</a>
 					</div>
 				</div>
-				<a
-					href="/events"
-					class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
-				>
-					Back to Events
-				</a>
-			</div>
-		</div>
-	</section>
-
-	<!-- Event Content -->
-	<section class="py-16">
-		<div class="container mx-auto px-4">
-			<div class="grid grid-cols-1 gap-12 lg:grid-cols-3">
-				<div class="lg:col-span-2">
-					
-					{#if event.images.length > 1}
-						<div class="relative w-full" style="height: 400px;">
+			</section>
+	
+			<!-- Event Content -->
+			<section class="py-16">
+				<div class="container mx-auto px-4">
+					<div class="grid grid-cols-1 gap-12 lg:grid-cols-3">
+						<div class="lg:col-span-2">
+							{#if event.coverImage}
 							<img
-								src={event.images[currentSlide[i]]}
-								alt={event.title}
-								class="w-full rounded-lg object-cover shadow-md"
-								style="height: 400px;"
-							/>
-							<!-- Left arrow -->
-							<button
-								on:click={() => {console.log(event.images[i]); return prev(i, event.images.length)}}
-								aria-label="Previous image"
-								class="opacity-50 absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-30 text-white p-5 rounded-full hover:bg-opacity-50 transition-all duration-200 w-14 h-14 flex items-center justify-center text-xl cursor-pointer"
-							>
-								‹
-							</button>
-							<!-- Right arrow -->
-							<button
-								on:click={() => next(i, event.images.length)}
-								aria-label="Next image"
-								class="opacity-50 absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-30 text-white p-5 rounded-full hover:bg-opacity-50 transition-all duration-200 w-14 h-14 flex items-center justify-center text-xl cursor-pointer"
-							>
-								›
-							</button>
-
-						</div>
-					{:else if event.images.length === 1}
-						<div class="flex justify-center">
-							<img
-								src={event.images[0]}
+								src={event.coverImage}
 								alt={event.title}
 								class="mb-8 h-full rounded-lg object-cover shadow-md"
 								style="height: 400px;"
 							/>
+							{/if}
+							<div class="prose prose-lg max-w-none">
+								<a 
+									href={`/events/${event.id}`}
+									class="btn bg-primary hover:bg-primary-dark text-center text-white">
+									Learn more
+								</a>
+							</div>
 						</div>
-					{/if}
-					
-					<div class="prose prose-lg max-w-none">
-						{#each event.content as paragraph}
-							<p>{@html paragraph}</p>
-						{/each}
+		
+						<div class="lg:col-span-1">
+							<div class="mb-8 rounded-lg bg-gray-50 p-6 shadow-sm">
+								<h3 class="mb-4 text-xl font-bold">Event Details</h3>
+								<ul class="space-y-4">
+									<li class="flex items-start">
+										<div class="text-primary mr-3 mt-1">
+											<i class="fas fa-calendar-alt"></i>
+										</div>
+										<div>
+											<strong>Date</strong>
+											<p>{formatDate(event.eventDate?.start)} - {formatDate(event.eventDate?.end)}</p>
+										</div>
+									</li>
+									<li class="flex items-start">
+										<div class="text-primary mr-3 mt-1">
+											<i class="fas fa-clock"></i>
+										</div>
+										<div>
+											<strong>Time</strong>
+											<p>{formatTime(event.eventDate?.start)} - {formatTime(event.eventDate?.end)} {getTimezoneAbbreviation()}</p>
+										</div>
+									</li>
+									{#if event.location?.displayText}
+										<li class="flex items-start">
+											<div class="text-primary mr-3 mt-1">
+												<i class="fas fa-map-marker-alt"></i>
+											</div>
+											<div>
+												<strong>Location</strong>
+												<p>{event.location.displayText}</p>
+											</div>
+										</li>
+									{/if}
+									{#if event.earlyBirdRegistrationPricing && event.registrationPricing}
+										<li class="flex items-start">
+											<div class="text-primary mr-3 mt-1">
+												<i class="fas fa-ticket-alt"></i>
+											</div>
+											<div>
+												<strong>Registration</strong>
+												<p>${event.earlyBirdRegistrationPricing} - ${event.registrationPricing} (Early bird pricing available)</p>
+											</div>
+										</li>
+									{/if}
+								</ul>
+		
+								{#if event.registrationLink}
+									<div class="mt-6">
+										<a href={event.registrationLink}
+											aria-label="Register for {event.title}"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											<button class="btn bg-primary hover:underline hover:bg-primary-dark w-full text-white">
+												Register Now
+											</button>
+										</a>
+									</div>
+								{/if}
+							</div>
+		
+							{#if event.socialMediaLinks}
+								<div class="rounded-lg bg-gray-50 p-6 shadow-sm">
+									<h3 class="mb-4 text-xl font-bold">Share This Event</h3>
+									<div class="flex space-x-4">
+										{#if event.socialMediaLinks.facebook}
+											<a
+												href={event.socialMediaLinks.facebook}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-gray-600 hover:text-blue-600"
+												aria-label="Share on Facebook"
+											>
+												<i class="fab fa-facebook-f text-xl"></i>
+											</a>
+										{/if}
+										{#if event.socialMediaLinks.x}
+											<a
+												href={event.socialMediaLinks.x}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-gray-600 hover:text-blue-600"
+												aria-label="Share on X"
+											>
+												<i class="fab fa-twitter text-xl"></i>
+											</a>
+										{/if}
+										{#if event.socialMediaLinks.linkedIn}
+											<a
+												href={event.socialMediaLinks.linkedIn}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-gray-600 hover:text-blue-600"
+												aria-label="Share on LinkedIn"
+											>
+												<i class="fab fa-linkedin-in text-xl"></i>
+											</a>
+										{/if}
+										{#if event.socialMediaLinks.email}
+											<a
+												href={event.socialMediaLinks.email}
+												target="_blank"
+												rel="noopener noreferrer"
+												class="text-gray-600 hover:text-blue-600"
+												aria-label="Share via Email"
+											>   
+												<i class="fas fa-envelope text-xl"></i>
+											</a>
+										{/if}
+									</div>
+								</div>
+							{/if}
+						</div>
 					</div>
 				</div>
-				{#if i === 0}
-					<div class="lg:col-span-1">
-						<div class="mb-8 rounded-lg bg-gray-50 p-6 shadow-sm">
-							<h3 class="mb-4 text-xl font-bold">Event Details</h3>
-							<ul class="space-y-4">
-								<li class="flex items-start">
-									<div class="text-primary mr-3 mt-1">
-										<i class="fas fa-calendar-alt"></i>
-									</div>
-									<div>
-										<strong>Date</strong>
-										<p>{event.date}</p>
-									</div>
-								</li>
-								<li class="flex items-start">
-									<div class="text-primary mr-3 mt-1">
-										<i class="fas fa-clock"></i>
-									</div>
-									<div>
-										<strong>Time</strong>
-										<p>{event.time}</p>
-									</div>
-								</li>
-								<li class="flex items-start">
-									<div class="text-primary mr-3 mt-1">
-										<i class="fas fa-map-marker-alt"></i>
-									</div>
-									<div>
-										<strong>Location</strong>
-										<p>{event.location}</p>
-										<p class="text-sm">123 Main Street, San Francisco, CA 94105</p>
-									</div>
-								</li>
-								<li class="flex items-start">
-									<div class="text-primary mr-3 mt-1">
-										<i class="fas fa-ticket-alt"></i>
-									</div>
-									<div>
-										<strong>Registration</strong>
-										<p>$30 - $70 (Early bird pricing available)</p>
-									</div>
-								</li>
-							</ul>
+			</section>
+	
+		{/each}
+		{:else}
+			<!-- Hero Section -->
+			<section class="bg-primary py-16 text-white">
+				<div class="container mx-auto px-4 text-center">
+					<h1 class="mb-4 text-4xl font-bold">VietSpark Tech Summit Events</h1>
+					<p class="mx-auto max-w-3xl text-xl">
+						Connect, learn, and grow through our educational and networking events.
+					</p>
+				</div>
+			</section>
+		{/if}
 
-							
-							<div class="mt-6">
-								<a href="https://bit.ly/VietnamTechSummit2025" 
-								aria-label="Register for Vietnam Tech Summit 2025"
-								target="_blank"
-								>
-									<button class="btn bg-primary hover:underline hover:bg-primary-dark w-full text-white">
-										Register Now
-									</button>
-								</a>
-								<p class="mt-2 text-center text-sm text-gray-600">
-									Limited seats available. VietSpark members receive special pricing.
-								</p>
-							</div>
-						</div>
-
-						<div class="rounded-lg bg-gray-50 p-6 shadow-sm text-gray-600">
-							<h3 class="mb-4 text-xl font-bold">Share This Event</h3>
-							<div class="flex space-x-4">
-								<a
-									href="https://facebook.com/sharer/sharer.php?u={encodeURIComponent(
-										`https://vietspark.org/events/tech-summit-content`
-									)}"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="text-gray-600 hover:text-blue-600"
-									aria-label="Share on Facebook"
-								>
-									<i class="fab fa-facebook-f text-xl"></i>
-								</a>
-								<a
-									href="https://twitter.com/intent/tweet?url={encodeURIComponent(
-										`https://vietspark.org/events/tech-summit-content`
-									)}&text={encodeURIComponent(event.title)}"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="text-gray-600 hover:text-blue-400"
-									aria-label="Share on Twitter"
-								>
-									<i class="fab fa-twitter text-xl"></i>
-								</a>
-								<a
-									href="https://www.linkedin.com/sharing/share-offsite/?url={encodeURIComponent(
-										`https://vietspark.org/events/tech-summit-content`
-									)}"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="text-gray-600 hover:text-blue-700"
-									aria-label="Share on LinkedIn"
-								>
-									<i class="fab fa-linkedin-in text-xl"></i>
-								</a>
-								<a
-									href="mailto:?subject={encodeURIComponent(event.title)}&body={encodeURIComponent(
-										`Check out this event: https://vietspark.org/events/tech-summit-content`
-									)}"
-									class="text-gray-600 hover:text-green-500"
-									aria-label="Share via Email"
-								>
-									<i class="fas fa-envelope text-xl"></i>
-								</a>
-							</div>
-						</div>
-					</div>
-				{/if}
+	<!-- Past Events -->
+	<section class="bg-gray-50 py-16">
+		<div class="container mx-auto px-4">
+			<div class="mb-12 text-center">
+				<h2 class="mb-4 text-3xl font-bold">Previous Tech Summit Events</h2>
+				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 			</div>
+
+			{#if $pastEvents.length > 0}
+				<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+					{#each $pastEvents as event}
+						<div class="overflow-hidden rounded-lg bg-white shadow-md">
+							<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
+							<div class="p-6">
+								<div class="mb-2 flex items-start justify-between">
+									<span
+										class="text-primary inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold"
+									>
+										Vietnam Tech Summit
+									</span>
+									<span class="text-gray-600">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</span>
+								</div>
+								<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
+								<p class="mb-4 text-gray-600">{event.shortDescription}</p>
+								<div class="mb-4">
+									<div class="mb-2 flex items-center text-gray-600">
+										<i class="fas fa-map-marker-alt w-5"></i>
+										<span>{event.location.displayText}</span>
+									</div>
+									<!-- <div class="flex items-center text-gray-600">
+										<i class="fas fa-clock w-5"></i>
+										<span>{event.time}</span>
+									</div> -->
+								</div>
+								<a
+									href={`/events/${event.id}`}
+									class="btn bg-primary hover:bg-primary-dark w-full text-center text-white"
+								>
+									View Details
+								</a>
+							</div>
+						</div>
+					{/each}
+				</div>
+			{:else}
+				<div class="py-12 text-center">
+					<p class="text-gray-600">No previous events found.</p>
+				</div>
+			{/if}
 		</div>
 	</section>
-</div>
-{/each}
-
-
+{/if}
 
 
 <!-- Related Events -->
