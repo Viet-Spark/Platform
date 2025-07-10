@@ -68,6 +68,32 @@
         }).format(date);
     }
 
+    function formatTime(timestamp) {
+		if (!timestamp || !timestamp.seconds) return '';
+
+		const date = new Date(timestamp.seconds * 1000);
+
+		const formatAMPM = date => {
+			let hours = date.getHours();
+			let minutes = date.getMinutes();
+			const ampm = hours >= 12 ? 'PM' : 'AM';
+			hours = hours % 12 || 12; // Convert to 12-hour format
+			minutes = String(minutes).padStart(2, '0');
+			return `${hours}:${minutes} ${ampm}`;
+		};
+
+		return formatAMPM(date);
+	}
+
+    function getTimezoneAbbreviation(date = new Date()) {
+		// Convert date to string and extract abbreviation from parentheses
+		const match = date.toString().match(/\(([^)]+)\)/);
+		if (match && match[1]) {
+			return match[1].split(' ').map(word => word[0]).join('');
+		}
+		return 'UTC'; // fallback if no match
+	}
+
     function parseMarkdown(content) {
         if (!content) return 'No description available';
         // First parse markdown to HTML
@@ -126,6 +152,10 @@
                         <div class="flex items-center">
                             <i class="fas fa-calendar-day mr-2"></i>
                             <span>{formatDate($event.eventDate?.start)} - {formatDate($event.eventDate?.end)}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-clock mr-2"></i>
+                            <span>{formatTime($event.eventDate?.start)} - {formatTime($event.eventDate?.end)} {getTimezoneAbbreviation()}</span>
                         </div>
                         {#if $event.location?.displayText}
                             <div class="flex items-center">
@@ -396,6 +426,15 @@
                                 <div>
                                     <strong>Date</strong>
                                     <p>{formatDate($event.eventDate?.start)} - {formatDate($event.eventDate?.end)}</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="text-primary mr-3 mt-1">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <strong>Time</strong>
+                                    <p>{formatTime($event.eventDate?.start)} - {formatTime($event.eventDate?.end)} {getTimezoneAbbreviation()}</p>
                                 </div>
                             </li>
                             {#if $event.location?.displayText}
