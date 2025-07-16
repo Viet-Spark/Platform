@@ -143,7 +143,7 @@
                 {#if type === 'cover'}
                     Drop your cover image here
                 {:else if type === 'gallery'}
-                    Drop your gallery images here
+                    Drop your images here
                 {:else if type === 'sponsors'}
                     Drop your sponsor logo here
                 {:else if type === 'programImages'}

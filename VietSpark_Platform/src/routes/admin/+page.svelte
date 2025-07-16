@@ -4,7 +4,7 @@
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
 	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
-	import { blogPosts, blogLoading, fetchBlogPosts } from '$lib/stores/blogStore';
+	import { blogs, blogHandlers, blogLoading, blogError } from '$lib/stores/blogStore';
 	import { partners, partnersLoading, fetchPartners } from '$lib/stores/partnerStore';
 	import { subscribers, newsletterLoading, fetchSubscribers } from '$lib/stores/newsletterStore';
 	import { faqs, faqsLoading} from '$lib/stores/faqStore';
@@ -38,7 +38,7 @@
 	}
 
 	onMount(async () => {
-		await Promise.all([eventHandlers.getEvents(), fetchBlogPosts(), fetchPartners(), fetchSubscribers()]);
+		await Promise.all([eventHandlers.getEvents(), blogHandlers.getBlogs(), fetchPartners(), fetchSubscribers()]);
 	});
 </script>
 
@@ -70,7 +70,7 @@
 				{#if $blogLoading}
 					<p>Loading...</p>
 				{:else}
-					<p class="text-3xl font-bold">{$blogPosts.length}</p>
+					<p class="text-3xl font-bold">{$blogs.length}</p>
 					<a href="/admin/blog" class="text-primary mt-4 inline-block hover:underline"
 						>Manage Blog →</a
 					>
