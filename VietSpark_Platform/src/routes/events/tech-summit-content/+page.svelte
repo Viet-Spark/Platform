@@ -2,7 +2,6 @@
 	import {eventStore} from '$lib/stores/eventStore2'; 
 	import {writable} from 'svelte/store'; 
 	import { eventCategories, eventCategoriesLoading, eventCategoriesError } from '$lib/stores/eventCategoryStore';
-	import { getGenerativeModel } from 'firebase/vertexai';
 
 	let upcomingEvents = writable([]);
 	let pastEvents = writable([]);

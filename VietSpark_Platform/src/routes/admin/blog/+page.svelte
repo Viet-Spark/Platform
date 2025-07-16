@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import { blogPosts, blogLoading, fetchBlogPosts, deleteBlogPost } from '$lib/stores/blogStore';
+	import { blogs, blogHandlers, blogLoading, blogError } from '$lib/stores/blogStore';
 
 	let isDataReady = false;
 
@@ -15,13 +15,19 @@
 		goto('/');
 	}
 
-	onMount(async () => {
-		await fetchBlogPosts();
-	});
-
 	async function handleDelete(id) {
 		if (confirm('Are you sure you want to delete this blog post?')) {
-			await deleteBlogPost(id);
+			await blogHandlers.deleteBlog(id);
+		}
+	}
+
+	async function handlePublish(post) {
+		if (confirm('Are you sure you want to publish this blog post?')) {
+			await blogHandlers.updateBlog(post.id, {
+				...post,
+				published: true,
+				publishedAt: new Date().toISOString()
+			});
 		}
 	}
 </script>
@@ -46,7 +52,7 @@
 			<div class="flex h-32 items-center justify-center">
 				<p>Loading blog posts...</p>
 			</div>
-		{:else if $blogPosts.length === 0}
+		{:else if $blogs.length === 0}
 			<div class="rounded-lg bg-gray-100 p-8 text-center">
 				<p class="text-gray-600">No blog posts found. Create your first post!</p>
 			</div>
@@ -63,15 +69,15 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each $blogPosts as post}
+						{#each $blogs as post}
 							<tr class="border-b hover:bg-gray-50">
 								<td class="px-4 py-3">
-									<a href="/blog/{post.slug}" class="text-primary hover:underline" target="_blank">
+									<a href="/blog/{post.id}" class="text-primary hover:underline" target="_blank">
 										{post.title}
 									</a>
 								</td>
 								<td class="px-4 py-3">{post.author}</td>
-								<td class="px-4 py-3">{new Date(post.date).toLocaleDateString()}</td>
+								<td class="px-4 py-3">{new Date(post.createdAt).toLocaleDateString()}</td>
 								<td class="px-4 py-3">
 									<span
 										class="rounded-full px-2 py-1 text-sm"
@@ -88,6 +94,14 @@
 										<a href="/admin/blog/{post.id}/edit" class="text-blue-600 hover:text-blue-800">
 											Edit
 										</a>
+ 									{#if !post.published}
+ 										<button
+ 											on:click={() => handlePublish(post)}
+ 											class="text-green-600 hover:text-green-800"
+ 										>
+ 											Publish
+ 										</button>
+ 									{/if}
 										<button
 											on:click={() => handleDelete(post.id)}
 											class="text-red-600 hover:text-red-800"

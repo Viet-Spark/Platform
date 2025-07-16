@@ -71,7 +71,6 @@ export const eventHandlers = {
             const eventsRef = collection(db, 'events');
             const newEventRef = await addDoc(eventsRef, {
                 ...eventData,
-                imageUrls: [] // Initialize with an empty imageUrls array
             });
             eventHandlers.getEvents();
             return newEventRef.id;
