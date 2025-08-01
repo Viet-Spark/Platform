@@ -2,7 +2,6 @@ import { writable } from 'svelte/store';
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy, getDoc } from 'firebase/firestore';
 import { db, storage } from '$lib/firebase/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { CandlestickChart } from 'lucide-svelte';
 
 // Create a writable store for blog posts
 export const blogs = writable([]);

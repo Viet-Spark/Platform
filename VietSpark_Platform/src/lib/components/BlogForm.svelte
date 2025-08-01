@@ -1,9 +1,10 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import MarkdownEditor from './MarkdownEditor.svelte';
+    import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
     import { page } from '$app/stores';
 	import { goto } from '$app/navigation'; 
     import MediaUploader from '$lib/components/MediaUploader.svelte';
+    import { validateFile, validateImageFile } from '$lib/utils/validator.js';
 
     export let blog = {
         title: '',
@@ -32,29 +33,6 @@
     let popularTags = [
         "Industry Xplained", "Tech Summit", "Break Into Tech", "Mentorship", "Diversity"
     ];
-
-    function validateFile(file, { allowedTypes, maxSizeMB }) {
-		if (!file) return 'No file provided';
-		
-		if (!allowedTypes.includes(file.type)) {
-			return `Invalid file type. Allowed types: ${allowedTypes.join(', ')}`;
-		}
-
-		const maxSizeBytes = maxSizeMB * 1024 * 1024;
-		if (file.size > maxSizeBytes) {
-			return `File size must be less than ${maxSizeMB}MB`;
-		}
-
-		return null;
-	}
-
-    function validateImageFile(file) {
-		const validationError = validateFile(file, {
-			allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
-			maxSizeMB: 2
-		});
-		return validationError;
-	}
 
     // Handle file input change
     function handleFileChange(event) {
