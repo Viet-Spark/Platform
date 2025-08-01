@@ -9,6 +9,7 @@
     export let testimonialId = undefined;
     export let sponsorId = undefined;
     export let programItemId = undefined;
+    export let projectIndex = undefined;
 
     const dispatch = createEventDispatcher();
 
@@ -23,7 +24,11 @@
         speakers: Users,
         testimonialsImages: ImageIcon,
         testimonialsVideo: Video,
-        videos: Video
+        videos: Video, 
+        profile: Users, 
+        project: ImageIcon, 
+        images: ImageIcon,
+        image: ImageIcon
     }[type];
 
     function handleDragEnter(e) {
@@ -99,6 +104,12 @@
             } else if (type === 'testimonialsVideo') {
                 if (!testimonialId) throw new Error('Testimonial ID is required for testimonial video uploads');
                 dispatch('upload', { files, testimonialId });
+            } else if (type === 'profile') {
+                if (!testimonialId) throw new Error('Testimonial ID is required for testimonial image upload');
+                dispatch('upload', { files, testimonialId });
+            } else if (type === 'project') {
+                if (projectIndex == null || projectIndex == undefined) throw new Error('Project index is required for project images upload');
+                dispatch('upload', { files, projectIndex });
             } else {
                 dispatch('upload', { files });
             }
@@ -156,6 +167,14 @@
                     Drop testimonial video here
                 {:else if type === 'programImages'}
                     Drop program images here
+                {:else if type === 'profile'}
+                    Drop profile image here
+                {:else if type === 'project'}
+                    Drop project images here
+                {:else if type === 'images'}
+                    Drop images here
+                {:else if type === 'image'}
+                Drop image here
                 {:else}
                     Drop your videos here
                 {/if}
@@ -163,12 +182,10 @@
             <p class="text-xs text-gray-400">
                 {#if type === 'videos'}
                     MP4 or WebM, max 150MB {multiple ? `(up to ${maxFiles} files)` : ''}
-                {:else if type === 'testimonialsImages'}
-                    PNG, JPG or WebP, max 5MB {multiple ? `(up to ${maxFiles} files)` : ''}
                 {:else if type === 'testimonialsVideo'}
                     MP4 or WebM, max 150MB {multiple ? `(up to ${maxFiles} files)` : ''}
                 {:else}
-                    PNG, JPG or WebP, max {type === 'speakers' ? '2' : '5'}MB {multiple ? `(up to ${maxFiles} files)` : ''}
+                    PNG, JPG or WebP, max 5MB {multiple ? `(up to ${maxFiles} files)` : ''}
                 {/if}
             </p>
         </div>

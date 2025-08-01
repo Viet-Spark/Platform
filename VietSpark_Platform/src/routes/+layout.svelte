@@ -14,6 +14,8 @@
 	import { eventHandlers } from '$lib/stores/eventStore2';
 	import { eventCategories, fetchEventCategories } from '$lib/stores/eventCategoryStore';
 	import { blogs, blogHandlers } from '$lib/stores/blogStore';
+	import { programs, programHandlers} from '$lib/stores/programStore';
+	import { projects, projectHandlers} from '$lib/stores/projectStore';
 
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
@@ -43,6 +45,8 @@
 		await eventHandlers.getEvents();
 		await fetchEventCategories();
 		await blogHandlers.getBlogs();
+		await programHandlers.getPrograms(); 
+		await projectHandlers.getProjects(); 
 	});
 
 	$: console.log('user', $userData);

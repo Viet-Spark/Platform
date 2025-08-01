@@ -19,7 +19,8 @@
 		{ href: '/admin/partners', label: 'Partners' },
 		{ href: '/admin/newsletter', label: 'Newsletter' },
 		{ href: '/admin/faqs', label: 'FAQs' },
-		{ href: '/admin/users', label: 'Users' }
+		{ href: '/admin/users', label: 'Users' },
+		{ href: '/admin/programs', label: 'Programs' }
 	];
 </script>
 

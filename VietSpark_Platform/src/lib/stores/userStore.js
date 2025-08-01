@@ -141,3 +141,30 @@ export async function getUserData(uid) {
         userLoading.set(false);
     }
 }
+
+// Get user data
+export async function getUser(uid) {
+    userLoading.set(true);
+    userError.set(null);
+
+    try {
+        const userRef = doc(db, 'users', uid);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+            const userData = userDoc.data(); 
+            return {
+                name: userData.name, 
+                displayName: userData.displayName, 
+                email: userData.email, 
+                profileImage: userData.profileImage
+            };
+        } 
+        return {}; 
+    } catch (error) {
+        userError.set(error.message);
+        throw error;
+    } finally {
+        userLoading.set(false);
+    }
+}
