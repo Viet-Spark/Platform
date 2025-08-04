@@ -9,7 +9,10 @@
 	import { subscribers, newsletterLoading, fetchSubscribers } from '$lib/stores/newsletterStore';
 	import { faqs, faqsLoading} from '$lib/stores/faqStore';
 	import { usersList, userLoading, userError, updateUser } from '$lib/stores/userStore';
-
+	import { teams, teamHandlers } from '$lib/stores/teamStore';
+	import { programs, programLoading, programHandlers } from '$lib/stores/programStore';
+	import { testimonialLoading, testimonials, testimonialHandlers } from '$lib/stores/testimonialStore';
+	import { projectError, projectHandlers } from '$lib/stores/projectStore';
 	let isDataReady = false;
 
 	// Debug logs
@@ -38,7 +41,16 @@
 	}
 
 	onMount(async () => {
-		await Promise.all([eventHandlers.getEvents(), blogHandlers.getBlogs(), fetchPartners(), fetchSubscribers()]);
+		await Promise.all([
+			eventHandlers.getEvents(), 
+			blogHandlers.getBlogs(), 
+			fetchPartners(), 
+			fetchSubscribers(), 
+			teamHandlers.getTeams(), 
+			programHandlers.getPrograms(), 
+			testimonialHandlers.getTestimonials(),
+			projectHandlers.getProjects()
+		]);
 	});
 </script>
 
@@ -125,6 +137,19 @@
 					<p class="text-3xl font-bold">{$usersList.length}</p>
 					<a href="/admin/users" class="text-primary mt-4 inline-block hover:underline"
 						>Manage Users →</a
+					>
+				{/if}
+			</div>
+
+			<!-- Programs Card -->
+			<div class="rounded-lg bg-white p-6 shadow-md">
+				<h2 class="mb-4 text-xl font-semibold">Programs</h2>
+				{#if $userLoading}
+					<p>Loading...</p>
+				{:else}
+					<p class="text-3xl font-bold">{$programs.length}</p>
+					<a href="/admin/programs" class="text-primary mt-4 inline-block hover:underline"
+						>Manage Programs →</a
 					>
 				{/if}
 			</div>

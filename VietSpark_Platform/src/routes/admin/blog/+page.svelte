@@ -39,7 +39,7 @@
 		</div>
 	{:else}
 		<div class="mb-8 flex items-center justify-between">
-			<h1 class="text-3xl font-bold">Manage Blog Posts</h1>
+			<h1 class="text-3xl font-bold">Posts</h1>
 			<a
 				href="/admin/blog/new"
 				class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white"

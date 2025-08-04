@@ -6,7 +6,8 @@
 	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
 	import MediaUploader from '$lib/components/MediaUploader.svelte';
 	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
-	
+	import { validateFile, validateImageFile, validateVideoFile} from '$lib/utils/validator.js';
+
 	let eventData = {
 		eventCategoryId: '',
 		title: '',
@@ -210,37 +211,6 @@
 
 	function removeTag(index) {
 		eventData.tags = eventData.tags.filter((_, i) => i !== index);
-	}
-
-	function validateFile(file, { allowedTypes, maxSizeMB }) {
-		if (!file) return 'No file provided';
-		
-		if (!allowedTypes.includes(file.type)) {
-			return `Invalid file type. Allowed types: ${allowedTypes.join(', ')}`;
-		}
-
-		const maxSizeBytes = maxSizeMB * 1024 * 1024;
-		if (file.size > maxSizeBytes) {
-			return `File size must be less than ${maxSizeMB}MB`;
-		}
-
-		return null;
-	}
-
-	function validateImageFile(file) {
-		const validationError = validateFile(file, {
-			allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
-			maxSizeMB: 2
-		});
-		return validationError;
-	}
-
-	function validateVideoFile(file) {
-		const validationError = validateFile(file, {
-			allowedTypes: ['video/mp4', 'video/webm'],
-			maxSizeMB: 150
-		});
-		return validationError;
 	}
 
 	function handleCoverUpload(event) {

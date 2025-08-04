@@ -14,6 +14,8 @@
 	import { eventHandlers } from '$lib/stores/eventStore2';
 	import { eventCategories, fetchEventCategories } from '$lib/stores/eventCategoryStore';
 	import { blogs, blogHandlers } from '$lib/stores/blogStore';
+	import { programs, programHandlers} from '$lib/stores/programStore';
+	import { projects, projectHandlers} from '$lib/stores/projectStore';
 
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
@@ -43,6 +45,8 @@
 		await eventHandlers.getEvents();
 		await fetchEventCategories();
 		await blogHandlers.getBlogs();
+		await programHandlers.getPrograms(); 
+		await projectHandlers.getProjects(); 
 	});
 
 	$: console.log('user', $userData);
@@ -74,7 +78,7 @@
 				<a href="/" class="nav-link">Home</a>
 				<a href="/about" class="nav-link">About Us</a>
 				<a href="/events" class="nav-link">Events</a>
-				<a href="/blog" class="nav-link">Blog</a>
+				<!-- <a href="/blog" class="nav-link">Blog</a> -->
 				<a href="/work-with-us" class="nav-link">Work With Us</a>
 				<a href="/contact" class="nav-link">Contact</a>
 				<a href="/donate" class="nav-link">Donate</a>
@@ -120,7 +124,7 @@
 				<a href="/" class="mobile-nav-link">Home</a>
 				<a href="/about" class="mobile-nav-link">About Us</a>
 				<a href="/events" class="mobile-nav-link">Events</a>
-				<a href="/blog" class="mobile-nav-link">Blog</a>
+				<!-- <a href="/blog" class="mobile-nav-link">Blog</a> -->
 				<a href="/work-with-us" class="mobile-nav-link">Work With Us</a>
 				<a href="/contact" class="mobile-nav-link">Contact</a>
 				<a href="/donate" class="mobile-nav-link">Donate</a>

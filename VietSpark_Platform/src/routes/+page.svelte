@@ -173,23 +173,24 @@
 			</div>
 
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-				<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 					{#each $upcomingEvents as event}
-						<div class="flex h-48 items-center justify-center bg-blue-200">
-							<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
-						</div>
-						<div class="p-6">
-							<div class="text-primary mb-2 text-sm font-semibold">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</div>
-							<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
-							<p class="mb-4 text-gray-600">
-								{event.shortDescription}
-							</p>
-							<a href="/events/{event.id}" class="text-primary font-medium hover:underline"
-								>Learn more →</a
-							>
+						<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
+							<div class="flex h-48 items-center justify-center bg-blue-200">
+								<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
+							</div>
+							<div class="p-6">
+								<div class="text-primary mb-2 text-sm font-semibold">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</div>
+								<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
+								<p class="mb-4 text-gray-600">
+									{event.shortDescription}
+								</p>
+								<a href="/events/{event.id}" class="text-primary font-medium hover:underline"
+									>Learn more →</a
+								>
+							</div>
 						</div>
 					{/each}
-				</div>
+				
 
 				<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
 					<div class="flex h-48 items-center justify-center bg-blue-200">

@@ -149,29 +149,30 @@
 		{#if filteredUpcomingEvents.length > 0}
 			<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 				{#each filteredUpcomingEvents as event}
-					<div class="overflow-hidden rounded-lg bg-white shadow-md">
+					<div class="flex flex-col overflow-hidden rounded-lg bg-white shadow-md h-full mb-4">
 						<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
-						<div class="p-6">
-							<div class="mb-2 flex items-start justify-between">
-								<span
-									class="text-primary inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold"
-								>
+						<div class="flex flex-col p-6 flex-grow">
+							<div class="mb-2 flex items-start justify-between md:flex-row flex-col gap-4 md:gap-2">
+								<span class="text-primary inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold">
 									{getEventCategory(event.eventCategoryId)}
 								</span>
-								<span class="text-gray-600">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</span>
+								<span class="text-gray-600">
+									{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}
+								</span>
 							</div>
-							<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
-							<p class="mb-4 text-gray-600">{event.shortDescription}</p>
-							<div class="mb-4">
-								<div class="mb-2 flex items-center text-gray-600">
-									<i class="fas fa-map-marker-alt w-5"></i>
-									<span>{event.location.displayText}</span>
-								</div>
-								<!-- <div class="flex items-center text-gray-600">
-									<i class="fas fa-clock w-5"></i>
-									<span>{event.time}</span>
-								</div> -->
+					  
+						<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
+						<p class="mb-4 text-gray-600">{event.shortDescription}</p>
+					  
+						<div class="mb-4">
+							<div class="mb-2 flex items-center text-gray-600">
+								<i class="fas fa-map-marker-alt w-5"></i>
+								<span>{event.location.displayText}</span>
 							</div>
+						</div>
+					  
+						<!-- Spacer pushes button to bottom -->
+						<div class="mt-auto">
 							<a
 								href={`/events/${event.id}`}
 								class="btn bg-primary hover:bg-primary-dark w-full text-center text-white"
@@ -180,6 +181,7 @@
 							</a>
 						</div>
 					</div>
+				</div>  
 				{/each}
 			</div>
 		{:else}

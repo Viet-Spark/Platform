@@ -10,6 +10,12 @@
 		goto('/');
 	}
 
+	let isMobileMenuOpen = false;
+
+	function toggleMobileMenu() {
+		isMobileMenuOpen = !isMobileMenuOpen;
+	}
+
 	const navItems = [
 		{ href: '/admin', label: 'Dashboard' },
 		{ href: '/admin/home', label: 'Home' },
@@ -19,7 +25,8 @@
 		{ href: '/admin/partners', label: 'Partners' },
 		{ href: '/admin/newsletter', label: 'Newsletter' },
 		{ href: '/admin/faqs', label: 'FAQs' },
-		{ href: '/admin/users', label: 'Users' }
+		{ href: '/admin/users', label: 'Users' },
+		{ href: '/admin/programs', label: 'Programs' }
 	];
 </script>
 
@@ -31,7 +38,7 @@
 				<div class="flex items-center">
 					<a href="/admin" class="text-primary text-xl font-bold">Admin Panel</a>
 				</div>
-				<div class="flex items-center space-x-4">
+				<div class="hidden md:flex items-center space-x-4">
 					{#each navItems as item}
 						<a
 							href={item.href}
@@ -42,6 +49,29 @@
 						</a>
 					{/each}
 					<a href="/" class="hover:text-primary text-gray-600">← Back to Site</a>
+				</div>
+				<button
+					class="text-gray-600 focus:outline-none md:hidden"
+					aria-label="Toggle menu"
+					on:click={toggleMobileMenu}
+				>
+					<i class="fas fa-bars text-xl"></i>
+				</button>
+			</div>
+
+			<!-- Mobile Menu -->
+			<div class="md:hidden" class:hidden={!isMobileMenuOpen}>
+				<div class="flex flex-col space-y-1 px-2 pb-3 pt-2">
+					{#each navItems as item}
+						<a
+							href={item.href}
+							class="hover:text-primary text-gray-600"
+							class:text-primary={$page.url.pathname === item.href}
+						>
+							{item.label}
+						</a>
+					{/each}
+					<a href="/" class="hover:text-primary text-gray-600">Back to Site</a>
 				</div>
 			</div>
 		</div>
