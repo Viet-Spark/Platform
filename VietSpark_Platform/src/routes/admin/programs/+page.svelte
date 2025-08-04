@@ -72,7 +72,7 @@
 </script>
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-	<div class="mb-6 flex items-center justify-between">
+	<div class="mb-6 flex items-center justify-between flex-col md:flex-row gap-2">
 		<h1 class="text-3xl font-bold">Programs</h1>
 		<a
 			href="/admin/programs/new"

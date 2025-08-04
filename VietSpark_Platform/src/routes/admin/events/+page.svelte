@@ -99,7 +99,7 @@
 					class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white disabled:opacity-50"
 					disabled={isAddingCategory || !newCategory.trim()}
 				>
-					{isAddingCategory ? 'Adding...' : 'Add Category'}
+					{isAddingCategory ? 'Adding...' : 'Add'}
 				</button>
 			</div>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -111,7 +111,7 @@
 							class="text-red-600 hover:text-red-800 disabled:opacity-50"
 							disabled={isRemovingCategory}
 						>
-							{isRemovingCategory ? 'Removing...' : 'Remove'}
+							{isRemovingCategory ? 'Removing...' : 'x'}
 						</button>
 					</div>
 				{/each}

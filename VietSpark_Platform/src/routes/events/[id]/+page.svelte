@@ -145,10 +145,10 @@
 {:else}
     <section class="bg-primary py-16 text-white">
         <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between md:flex-row flex-col">
                 <div>
                     <h1 class="mb-4 text-4xl font-bold">{$event.title}</h1>
-                    <div class="flex items-center space-x-4 text-lg">
+                    <div class="flex items-center space-x-4 text-lg md:flex-row flex-col">
                         <div class="flex items-center">
                             <i class="fas fa-calendar-day mr-2"></i>
                             <span>{formatDate($event.eventDate?.start)} - {formatDate($event.eventDate?.end)}</span>
