@@ -59,6 +59,7 @@
 				</button>
 			</div>
 
+			<!-- Mobile Menu -->
 			<div class="md:hidden" class:hidden={!isMobileMenuOpen}>
 				<div class="flex flex-col space-y-1 px-2 pb-3 pt-2">
 					{#each navItems as item}
