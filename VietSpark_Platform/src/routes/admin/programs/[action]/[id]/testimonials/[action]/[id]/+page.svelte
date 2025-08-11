@@ -34,6 +34,7 @@
     }
 
     async function handleSubmit(event) {
+        loading = true; 
         testimonial = event.detail; 
         try {
             // Upload video
@@ -71,17 +72,18 @@
             console.error('Error saving Testimonial:', error);
         } finally {
             goto(`/admin/programs/edit/${$curProgram.id}/testimonials`); 
+            loading = false; 
         }
     }
 </script>
 
-<section class="min-h-[50vh] bg-gray-50 py-12">
-    {#if $testimonialLoading}
+<section class="min-h-[50vh]">
+    {#if $testimonialLoading || loading}
         <div class="flex h-screen items-center justify-center">
-            <p class="text-xl">Loading...</p>
+            <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -97,16 +99,14 @@
 
                 <!-- Testimonial -->
                 <div class="space-y-6">
-                    <div class="rounded-md border p-6 mb-4">
-                        <TestimonialForm
-                            testimonial={testimonial}
-                            isEditing={true}
-                            on:submit={(e) => handleSubmit(e)}
-                            loading={loading}
-                            error={error}
-                            handleCancel={() => goto(`/admin/programs/edit/${$curProgram.id}/testimonials`)} disabled={loading}
-                        />
-                    </div>
+                    <TestimonialForm
+                        testimonial={testimonial}
+                        isEditing={true}
+                        on:submit={(e) => handleSubmit(e)}
+                        loading={loading}
+                        error={error}
+                        handleCancel={() => goto(`/admin/programs/edit/${$curProgram.id}/testimonials`)} disabled={loading}
+                    />
                 </div>
             </div>
         </div>

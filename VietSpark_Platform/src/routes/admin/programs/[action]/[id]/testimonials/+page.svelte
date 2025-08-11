@@ -50,6 +50,8 @@
                     return { ...t, ...author };
                 })
             );
+        } else {
+            programTestimonials = []; 
         }
         loading = false; 
     }
@@ -57,9 +59,9 @@
 </script>
 
 <section class="container mx-auto">
-    {#if $programLoading || $testimonialLoading}
+    {#if $programLoading || $testimonialLoading || loading}
         <div class="flex h-screen items-center justify-center">
-            <p class="text-xl">Loading...</p>
+            <span>Loading...</span>
         </div>
 
     {:else}

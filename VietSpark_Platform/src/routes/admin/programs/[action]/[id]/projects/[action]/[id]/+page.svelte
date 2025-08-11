@@ -29,6 +29,7 @@
     }
 
     async function handleSubmit(event) {
+        loading = true; 
         project = event.detail; 
         try {
             // Upload images
@@ -54,16 +55,17 @@
             console.error('Error saving project:', error);
         } 
         goto(`/admin/programs/edit/${$curProgram.id}/projects`); 
+        loading = false; 
     }
 </script>
 
-<section class="min-h-[50vh] bg-gray-50 py-12">
-    {#if $projectLoading}
+<section class="min-h-[50vh]">
+    {#if $projectLoading || loading}
         <div class="flex h-screen items-center justify-center">
-            <p class="text-xl">Loading...</p>
+            <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -79,17 +81,15 @@
 
                 <!-- Project -->
                 <div class="space-y-6">
-                    <div class="rounded-md border p-6 mb-4">
-                        <ProjectForm
-                            project={project}
-                            isEditing={true}
-                            on:submit={(e) => handleSubmit(e)}
-                            loading={loading}
-                            error={error}
-                            teams={programTeams}
-                            handleCancel={() =>  goto(`/admin/programs/edit/${$curProgram.id}/projects`)} disabled={loading}
-                        />
-                    </div>
+                    <ProjectForm
+                        project={project}
+                        isEditing={true}
+                        on:submit={(e) => handleSubmit(e)}
+                        loading={loading}
+                        error={error}
+                        teams={programTeams}
+                        handleCancel={() =>  goto(`/admin/programs/edit/${$curProgram.id}/projects`)} disabled={loading}
+                    />
                 </div>
             </div>
         </div>

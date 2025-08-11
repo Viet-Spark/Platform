@@ -51,15 +51,17 @@
                     return { ...t, manager: {...managerData}};
                 })
             ); 
+        } else {
+            programTeams = []; 
         }
         loading = false; 
     }
 </script>
 
 <section class="container mx-auto">
-    {#if $programLoading || $teamLoading}
+    {#if $programLoading || $teamLoading || loading}
         <div class="flex h-screen items-center justify-center">
-            <p class="text-xl">Loading...</p>
+            <span>Loading...</span>
         </div>
 
     {:else}

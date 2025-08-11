@@ -105,10 +105,10 @@
     }
 </script>
 
-<section class="min-h-[50vh] bg-gray-50 py-12">
-{#if $programLoading}
+<section class="min-h-[50vh]">
+{#if $programLoading || loading}
     <div class="flex h-screen items-center justify-center">
-        <p class="text-xl">Loading...</p>
+        <span>Loading...</span>
     </div>
 {:else}
     <div class="container mx-auto px-4">

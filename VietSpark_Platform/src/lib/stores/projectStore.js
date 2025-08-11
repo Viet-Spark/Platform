@@ -14,7 +14,7 @@ export const projectError = writable(null);
 
 export const projectHandlers = {
     // Function to fetch all projects
-    getProjects: async (orderByColumn = "name") => {
+    getProjects: async (orderByColumn = "title") => {
         projectLoading.set(true);
         try {
             const projectRef = collection(db, 'projects');

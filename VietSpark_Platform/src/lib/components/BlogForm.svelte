@@ -94,16 +94,17 @@
 
     function handleSubmit(e) {
         e.preventDefault();
+        loading = true; 
         dispatch('submit', { ...formData });
     }
 </script>
 
-<h1 class="flex flex-col items-center justify-center bg-primary text-white p-4 mb-8">
+<h1 class="flex flex-col items-center justify-center bg-primary text-white p-4">
     {isEditing ? 'Edit Blog' : 'Create New Blog'}
 </h1>
 <section class="min-h-[50vh] bg-gray-50 py-12">
     <div class="container mx-auto px-4">
-        <div class="rounded-lg bg-white p-6 shadow-md">
+        <div class="rounded-lg">
             <form on:submit={handleSubmit} class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <!-- Title -->
