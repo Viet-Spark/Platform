@@ -1,7 +1,7 @@
 <script>
 	import '../app.css';
 	import { authUser } from '$lib/stores/authStore';
-	import { userData } from '$lib/stores/userStore';
+	import { userData, getUserData } from '$lib/stores/userStore';
 	import {profileData} from '$lib/stores/profileStore';
 	import { addSubscriber, newsletterError, newsletterLoading } from '$lib/stores/newsletterStore';
 	import { aboutHandlers } from '$lib/stores/aboutStore';
@@ -16,6 +16,7 @@
 	import { blogs, blogHandlers } from '$lib/stores/blogStore';
 	import { programs, programHandlers} from '$lib/stores/programStore';
 	import { projects, projectHandlers} from '$lib/stores/projectStore';
+	import { applications, applicationHandlers } from '$lib/stores/applicationStore';
 
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
@@ -47,6 +48,7 @@
 		await blogHandlers.getBlogs();
 		await programHandlers.getPrograms(); 
 		await projectHandlers.getProjects(); 
+		await applicationHandlers.getApplications(); 
 	});
 
 	$: console.log('user', $userData);
@@ -91,9 +93,9 @@
 					{/if}
 					<a href="/profile" class="text-primary text-sm hover:underline">
 						<div class="text-primary relative flex flex-col cursor-pointer items-center justify-center h-8 w-8 rounded-full bg-blue-200 text-lg font-bold">
-							{#if $profileData.profileImage || $authUser.profileImage || $userData?.profileImage}
+							{#if $userData?.profileImage}
 								<img
-									src={$profileData.profileImage || $authUser.profileImage || $userData?.profileImage}
+									src={$userData?.profileImage}
 									alt="Profile"
 									class="inset-0 h-8 w-8 rounded-full"
 								/>

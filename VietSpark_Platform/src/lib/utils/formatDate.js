@@ -97,3 +97,14 @@ export function getTimezoneAbbreviation(date = new Date()) {
     }
     return 'UTC'; // fallback if no match
 }
+
+export function formatDateFromStr(input) {
+	// Append U.S. timezone offset (-08:00 for Pacific)
+	const usDateStr = input + "T00:00:00-08:00";
+	const date = new Date(usDateStr);
+	return date.toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric'
+	});
+}
