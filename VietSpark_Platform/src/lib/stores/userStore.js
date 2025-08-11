@@ -18,8 +18,8 @@ export async function getUsers() {
         const snapshot = await getDocs(usersRef);
         const users = snapshot.docs.map(doc => (
             {
+                ...doc.data(), 
                 uid: doc.id,
-                ...doc.data()
             }
         ));
         usersList.set(users);

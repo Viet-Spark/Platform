@@ -7,7 +7,7 @@
     import { testimonialHandlers, testimonialLoading, testimonials } from '$lib/stores/testimonialStore';
     import TestimonialForm from '$lib/components/TestimonialForm.svelte';
     import { curProgram, programLoading, programHandlers } from '$lib/stores/programStore';
-
+    
     // Redirect if not admin
     $: if ($authUser && !$userData?.isAdmin) {
         goto('/');
@@ -16,6 +16,7 @@
     let error = '';
 
     async function handleSubmit(event) {
+        loading = true; 
         let testimonial = event.detail; 
         let testimonialId = ""; 
         try {
@@ -66,19 +67,18 @@
                 console.log('Program saved successfully');
             }
             goto(`/admin/programs/edit/${$curProgram.id}/testimonials`); 
-        }
-
-        
+            loading = false; 
+        } 
     }
 </script>
 
-<section class="min-h-[50vh] bg-gray-50 py-12">
-    {#if $programLoading || $testimonialLoading}
+<section class="min-h-[50vh]">
+    {#if $programLoading || $testimonialLoading || loading}
         <div class="flex h-screen items-center justify-center">
-            <p class="text-xl">Loading...</p>
+            <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -94,15 +94,13 @@
 
                 <!-- Testimonial -->
                 <div class="space-y-6">
-                    <div class="rounded-md border p-6 mb-4">
-                        <TestimonialForm
-                            isEditing={false}
-                            on:submit={(e) => handleSubmit(e)}
-                            loading={loading}
-                            error={error}
-                            handleCancel={() => goto(`/admin/programs/edit/${$curProgram.id}/testimonials`)} disabled={loading}
-                        />
-                    </div>
+                    <TestimonialForm
+                        isEditing={false}
+                        on:submit={(e) => handleSubmit(e)}
+                        loading={loading}
+                        error={error}
+                        handleCancel={() => goto(`/admin/programs/edit/${$curProgram.id}/testimonials`)} disabled={loading}
+                    />
                 </div>
             </div>
         </div>

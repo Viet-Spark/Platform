@@ -63,13 +63,13 @@
             // Upload cover image
             let coverImageUrl = formData.coverUrl;
 			if (formData.coverTempFile) {
-				coverImageUrl = await programHandlers.uploadCoverImage(formData.coverTempFile, program.id);
+				coverImageUrl = await programHandlers.uploadCoverImage(formData.coverTempFile, $curProgram.id);
 			}
 
             // Upload gallery images
 			let imagesUrls = formData.imageUrls.filter(url => !url.startsWith('data:') && !url.startsWith('blob:')); // Keep existing URLs
 			if (formData.imageTempFiles?.length > 0) {
-				const newUrls = await programHandlers.uploadImages(formData.imageTempFiles, program.id);
+				const newUrls = await programHandlers.uploadImages(formData.imageTempFiles, $curProgram.id);
 				imagesUrls = [...imagesUrls, ...newUrls];
 			}
             console.log('Preparing data to submit...');
@@ -84,7 +84,7 @@
 
             console.log("Detail:", dataToSubmit);
 
-            await programHandlers.updateProgram(program.id, dataToSubmit)
+            await programHandlers.updateProgram($curProgram.id, dataToSubmit)
             console.log('Program saved successfully');
             goto(`/admin/programs/`);
         } catch (e) {
@@ -96,14 +96,17 @@
     }
 </script>
 
-<section class="min-h-[50vh] bg-gray-50 py-12">
-{#if $programLoading}
+<section class="min-h-[50vh]">
+{#if $programLoading || loading}
     <div class="flex h-screen items-center justify-center">
         <p class="text-xl">Loading...</p>
     </div>
 {:else}
     <div class="container mx-auto px-4">
         <div class="rounded-lg bg-white p-6 shadow-md">
+            <h1 class="flex flex-col items-center justify-center bg-primary text-white p-4 mb-8">
+                Edit Program Details
+            </h1>
             <form on:submit={handleSubmit} class="space-y-6">
 
                 <!-- Error Display -->

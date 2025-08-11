@@ -27,7 +27,10 @@
         coverUrl: '',
         coverTempFile: null,
         imageUrls: [],
-        imageTempFiles: []
+        imageTempFiles: [], 
+        mentorApplicantIds: [], 
+        menteeApplicantIds: [], 
+        managerApplicantIds: [], 
     }; 
     let loading = false;
     let error = '';

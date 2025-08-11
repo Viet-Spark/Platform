@@ -16,6 +16,7 @@
     let error = '';
 
     async function handleSubmit(event) {
+        loading = true; 
         let team = event.detail;
         let teamId = ""; 
         try {
@@ -55,17 +56,18 @@
                 console.log('Program saved successfully');
             }
             goto(`/admin/programs/edit/${$curProgram.id}/teams`); 
+            loading = false; 
         }   
     }
 </script>
 
-<section class="min-h-[50vh] bg-gray-50 py-12">
-    {#if $programLoading || $teamLoading}
+<section class="min-h-[50vh]">
+    {#if $programLoading || $teamLoading || loading}
         <div class="flex h-screen items-center justify-center">
-            <p class="text-xl">Loading...</p>
+            <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -81,15 +83,13 @@
 
                 <!-- Team -->
                 <div class="space-y-6">
-                    <div class="rounded-md border p-6 mb-4">
-                        <TeamForm
-                            isEditing={false}
-                            on:submit={(e) => handleSubmit(e)}
-                            loading={loading}
-                            error={error}
-                            handleCancel={() => goto(`/admin/programs/edit/${$curProgram.id}/teams`)} disabled={loading}
-                        />
-                    </div>
+                    <TeamForm
+                        isEditing={false}
+                        on:submit={(e) => handleSubmit(e)}
+                        loading={loading}
+                        error={error}
+                        handleCancel={() => goto(`/admin/programs/edit/${$curProgram.id}/teams`)} disabled={loading}
+                    />
                 </div>
             </div>
         </div>

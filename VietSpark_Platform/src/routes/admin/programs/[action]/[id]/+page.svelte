@@ -67,6 +67,33 @@
                         >Manage Workshops →</a
                     >
             </div>
+
+            <!-- Mentor Applicants Card -->
+            <div class="rounded-lg bg-white p-6 shadow-md">
+                <h2 class="mb-4 text-xl font-semibold">Mentor Applicants</h2>
+                    <p class="text-3xl font-bold">{$curProgram.mentorApplicantIds?.length}</p>
+                    <a href="/admin/programs/edit/{programId}/mentors" class="text-primary mt-4 inline-block hover:underline"
+                        >Manage Mentor Applicants →</a
+                    >
+            </div>
+
+            <!-- Mentee Applicants Card -->
+            <div class="rounded-lg bg-white p-6 shadow-md">
+                <h2 class="mb-4 text-xl font-semibold">Mentee Applicants</h2>
+                    <p class="text-3xl font-bold">{$curProgram.menteeApplicantIds?.length}</p>
+                    <a href="/admin/programs/edit/{programId}/mentees" class="text-primary mt-4 inline-block hover:underline"
+                        >Manage Mentee Applicants →</a
+                    >
+            </div>
+
+            <!-- Manager Applicants Card -->
+            <div class="rounded-lg bg-white p-6 shadow-md">
+                <h2 class="mb-4 text-xl font-semibold">Manager Applicants</h2>
+                    <p class="text-3xl font-bold">{$curProgram.managerApplicantIds?.length}</p>
+                    <a href="/admin/programs/edit/{programId}/managers" class="text-primary mt-4 inline-block hover:underline"
+                        >Manage Manager Applicants →</a
+                    >
+            </div>
         </div>
 
         <!-- Quick Actions -->

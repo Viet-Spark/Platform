@@ -1,22 +1,15 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import { authUser, logout, authLoading } from '$lib/stores/authStore';
-	import {
-		userData,
-		userLoading,
-		userError,
-		getUserData,
-		updateUserData
-	} from '$lib/stores/userStore';
-	import {
-		profileData,
-		profileLoading,
-		profileError,
-		getUserProfile,
-		uploadProfileImage,
-		updateUserProfile
-	} from '$lib/stores/profileStore';
+	import { userData, userLoading, userError, getUserData, updateUserData } from '$lib/stores/userStore';
+	import { profileData, profileLoading, profileError, getUserProfile, uploadProfileImage, updateUserProfile } from '$lib/stores/profileStore';
 	import { goto } from '$app/navigation';
+	import ApplicationForm from '$lib/components/ApplicationForm.svelte';
+	import { programs, programHandlers, programLoading, programError } from '$lib/stores/programStore';
+	import { writable } from 'svelte/store';
+	import { formatDateFromStr } from '$lib/utils/formatDate';
+	import { applicationHandlers, applicationLoading, applications } from '$lib/stores/applicationStore';
+	import { formatDetailDate } from '$lib/utils/formatDate'; 
 
 	let fileInput;
 	let uploadError = null;
@@ -24,10 +17,47 @@
 	let localImagePreview = null;
 	let loadingError = null;
 	let loadingTimeout;
+	let userApplications = []; 
 
 	// Tabs for the profile page
-	const tabs = ['Overview', 'Events', 'Mentorship', 'Settings'];
+	const tabs = ['Overview', 'Events', 'Mentorship','Applications', 'Settings'];
 	let activeTab = 'Overview';
+	let filteredUpcomingPrograms = []; 
+
+	$: if ($programs) {
+        filteredUpcomingPrograms = $programs
+		.filter((program) => {
+			const now = new Date();
+			const programDate = new Date(program.startDate);
+			return programDate >= now;
+		});
+		
+    }
+
+	$: if ($userData && $authUser) {
+		let applicationIds = [...($userData.applicationIds || [])]; 
+		if (applicationIds.length > 0) {
+			userApplications = $applications.filter((a) => applicationIds.includes(a.id)); 
+			filteredUpcomingPrograms = 	filteredUpcomingPrograms.map((program) => {
+				const matchingApplication = userApplications.find( app => app.programId === program.id);
+
+				return {
+					...program,
+					applicationId: matchingApplication ? matchingApplication.id : null
+				};
+			}); 
+		}
+	}
+
+	function applyAs(role, programId) {
+		goto(`/apply/new/${role}/${programId}`);
+	}
+
+	async function withdrawApplication(application) {
+		if (confirm("Are you sure that you would like to withdraw this application?")) {
+			await applicationHandlers.updateApplication(application.id, {...application, status: 'Withdrawn'}); 
+		}
+	}
 
 	function setActiveTab(tab) {
 		activeTab = tab;
@@ -415,29 +445,119 @@
 			{:else if activeTab === 'Mentorship'}
 				<div class="rounded-lg bg-white p-6 shadow-md">
 					<h2 class="mb-6 text-lg font-bold">Mentorship Program</h2>
+					{#if filteredUpcomingPrograms.length > 0}
+						<div class="grid grid-cols-1 gap-6">
+							{#each filteredUpcomingPrograms as program}
+								<div class="overflow-hidden rounded-lg bg-white shadow">
+									<img src={program.coverUrl} alt={program.title} class="h-60 w-full object-cover" />
+									<div class="py-8 text-center">
+										<div class="mb-4 text-5xl text-gray-400">
+											<i class="fas fa-users"></i>
+										</div>
+										<h3 class="mb-2 text-xl font-bold">Join {program.title} Program</h3>
+										<div class="flex items-center justify-center font-bold mb-2">
+											<i class="fas fa-calendar-day mr-2"></i>
+											<span>{formatDateFromStr(program.startDate)} - {formatDateFromStr(program.endDate)}</span>
+										</div>
+										{#if program.applicationId}
+											<div>
+												<p class="mx-auto mb-6 max-w-2xl text-gray-600">
+													You have successfully applied to join this program!
+												</p>
+												<button 
+													on:click={() => activeTab = 'Applications'} 
+													class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
+												>
+														View Your Application
+												</button>
+											</div>
+										{:else}
+											<div>
+												<p class="mx-auto mb-6 max-w-2xl text-gray-600">
+													Connect with experienced professionals or give back by mentoring others in our
+													community. Our mentorship program matches mentors with mentees
+													based on career goals and interests.
+												</p>
+												<div class="flex flex-wrap justify-center gap-4">
+													<button 
+														on:click={() => applyAs('mentee', program.id)} 
+														class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
+													>
+															Apply as Mentee
+													</button>
+													<button 
+														on:click={() => applyAs('mentor', program.id)} 
+														class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
+													>
+															Apply as Mentor
+													</button>
+													<button 
+														on:click={() => applyAs('manager', program.id)} 
+														class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
+													>
+															Apply as Manager
+													</button>
+												</div>
+											</div>
+										{/if}
 
-					<div class="py-8 text-center">
-						<div class="mb-4 text-5xl text-gray-400">
-							<i class="fas fa-users"></i>
+
+									</div>
+								</div>
+							{/each}
 						</div>
-						<h3 class="mb-2 text-xl font-bold">Join Our Mentorship Program</h3>
-						<p class="mx-auto mb-6 max-w-2xl text-gray-600">
-							Connect with experienced professionals or give back by mentoring others in our
-							community. Our mentorship program runs twice a year and matches mentors with mentees
-							based on career goals and interests.
-						</p>
-						<div class="flex flex-wrap justify-center gap-4">
-							<a href="/mentorship/mentor" class="btn bg-primary hover:bg-primary-dark text-white">
-								Apply as a Mentor
-							</a>
-							<a
-								href="/mentorship/mentee"
-								class="btn border-primary text-primary border-2 bg-transparent hover:bg-gray-100"
-							>
-								Apply as a Mentee
-							</a>
+					{:else}
+						<div class="py-8 text-center">
+							<div class="mb-4 text-5xl text-gray-400">
+								<i class="fas fa-users"></i>
+							</div>
+							<h3 class="mb-2 text-xl font-bold">No Upcoming Programs</h3>
+							<p class="mx-auto mb-6 max-w-2xl text-gray-600">
+								There are no upcoming mentorship programs at the moment. Please check back later.
+							</p>
 						</div>
-					</div>
+					{/if}
+				</div>
+			{:else if activeTab === "Applications"}
+				<div class="rounded-lg bg-white p-6 shadow-md">
+					<h2 class="mb-6 text-lg font-bold">My Applications</h2>
+					{#if userApplications && userApplications.length > 0}
+						<div class="space-y-4">
+							{#each userApplications as application}
+								<div class="flex flex-col md:flex-row items-center rounded-lg border p-4 hover:bg-gray-50">
+									<div
+										class="text-primary mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100"
+									>
+										<i class="fas fa-file"></i>
+									</div>
+									<div class="flex-1 p-2">
+										<h4 class="font-medium">{application.title}</h4>
+										<p class="text-sm {(application.status === "Approved") ? "text-green-500" : (application.status === "Pending" ? "text-grey-700" : "text-red-500")}">
+											Status: {application.status}
+										</p>
+										<p class="text-sm">Applied on: {formatDetailDate(application.createdAt)}</p>
+									</div>
+									<div class="flex gap-2">
+										{#if application.status === "Pending"}
+											<a href={`/apply/edit/${application.id}`} class="text-primary hover:underline">Edit</a>
+										{/if}
+										{#if application.status !== "Withdrawn"}
+											<button on:click={() => withdrawApplication(application)} class="text-red-500 hover:underline">Withdraw</button>
+										{/if}
+									</div>
+								</div>
+							{/each}
+						</div>
+					{:else}
+						<div class="py-8 text-center">
+							<div class="mb-4 text-5xl text-gray-400">
+								<i class="fas fa-file"></i>
+							</div>
+							<h3 class="mb-2 text-xl font-bold">No Applications Yet</h3>
+							<p class="mb-4 text-gray-600">You haven't applied for any programs yet.</p>
+							<button on:click={() => activeTab="Mentorship"} class="btn bg-primary hover:bg-primary-dark text-white">Browse Programs</button>
+						</div>
+					{/if}
 				</div>
 			{:else if activeTab === 'Settings'}
 				<div class="rounded-lg bg-white p-6 shadow-md">
