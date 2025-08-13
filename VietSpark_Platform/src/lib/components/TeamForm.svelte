@@ -5,16 +5,16 @@
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { validateFile, validateImageFile, validateVideoFile} from '$lib/utils/validator.js';
+    import { applications, applicationLoading } from '$lib/stores/applicationStore';
 
     export let team = {
         id: '',
         name: '',
-        users: [], // array of user IDs
+        users: [], // array of userData {id: userId, role: userRole}
         manager: '',
         description: '',
         logoUrl: '',
         logoFileTemp: null,
-        roles: {}, // userId -> role
         visibility: 'Internal',
         tags: [],
         links: {},
@@ -26,18 +26,33 @@
     export let error = '';
     export let isEditing = false;
     export let handleCancel = () => {}; 
+    export let availableApplicants = []; 
 
     const dispatch = createEventDispatcher();
     let formData = { ...team };
     let tagInput = '';
-
-    let availableRoles = ['Mentor', 'Mentee', 'Observer'];
     let visibilityOptions = ['Public', 'Internal', 'Hidden'];
     let statusOptions = ['Active', 'Completed', 'Inactive'];
-
+    let managerApplicants = []; 
+    let memberApplicants = []; 
     onMount(() => {
         getUsers();
     });
+
+    $: if ($usersList) {
+        availableApplicants = availableApplicants.map((u) => {
+            const userData = $usersList.find((user) => user.uid === u.userId); 
+            return {
+                role: u.role, 
+                name: userData.name || '', 
+                uid: userData.uid, 
+                displayName: userData.displayName || '', 
+                email: userData.email
+            }   
+        })
+        managerApplicants = availableApplicants.filter((app) => app.role === 'manager'); 
+        memberApplicants = availableApplicants.filter((app) => app.role !== "manager"); 
+    }
 
     // Tag management
     function addTag() {
@@ -59,27 +74,13 @@
         if (!formData.users) {
             formData.users = []; 
         }
-        formData.users = [...formData.users, ""];
-        if (!formData.roles) {
-            formData.roles = {}; 
-        }
+        formData.users = [...formData.users, ''];
     }
     function removeUser(idx) {
-        const userId = formData.users[idx];
         formData.users = formData.users.filter((_, i) => i !== idx);
-        // Remove role if exists
-        if (formData.roles[userId]) {
-            delete formData.roles[userId];
-        }
     }
-    function handleUserChange(idx, userId) {
-        formData.users[idx] = userId;
-        if (!formData.roles[userId]) {
-            formData.roles[userId] = '';
-        }
-    }
-    function handleRoleChange(userId, role) {
-        formData.roles[userId] = role;
+    function handleUserChange(idx, userData) {
+        formData.users[idx] = userData; 
     }
 
     // Logo upload
@@ -107,7 +108,6 @@
     }
 
     function handleSubmit(e) {
-        delete formData.roles[""]; 
         loading = true; 
         e.preventDefault();
         dispatch('submit', { ...formData });
@@ -131,14 +131,16 @@
                     <!-- Manager -->
                     <div>
                         <label for="manager" class="block font-semibold mb-1">Manager (Mentor/Lead)</label>
-                        <select id="manager" bind:value={formData.manager} class="w-full border rounded px-3 py-2">
-                        <option value="">Select manager</option>
-                        {#if $usersList}
-                            {#each $usersList as user}
-                            <option value={user.uid}>{user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}</option>
-                            {/each}
+                        {#if managerApplicants.length > 0}
+                            <select id="manager" bind:value={formData.manager} class="w-full border rounded px-3 py-2">
+                                <option value="">Select manager</option>
+                                {#each managerApplicants as user}
+                                    <option value={user.uid}>{user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}</option>
+                                {/each}
+                            </select>
+                        {:else}
+                            <div>There aren't any approved manager applications yet!</div>
                         {/if}
-                        </select>
                     </div>
 
                     <!-- Logo Upload -->
@@ -174,26 +176,26 @@
                     <div class="">
                         <label for="teamMembers" class="block font-semibold mb-1">Team Members</label>
                         <div id="teamMembers" class="space-y-2">
-                            {#each formData.users as userId, idx}
-                                <div class="md:flex items-center gap-2">
-                                    <select bind:value={formData.users[idx]} on:change={(e) => handleUserChange(idx, e.target.value)} class="border rounded px-2 py-1 md:flex-2">
-                                    <option value="">Select user</option>
-                                    {#if $usersList}
-                                        {#each $usersList as user}
-                                        <option value={user.uid}>{user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}</option>
-                                        {/each}
-                                    {/if}
-                                    </select>
-                                    
-                                    <select bind:value={formData.roles[userId]} on:change={(e) => handleRoleChange(userId, e.target.value)} class="border rounded px-2 py-1 md:flex-1">
-                                    <option value="">Select role</option>
-                                    {#each availableRoles as role}
-                                        <option value={role}>{role}</option>
-                                    {/each}
-                                    </select>
-                                    <button type="button" class="text-red-500 ml-2" on:click={() => removeUser(idx)}>&times;</button>
-                                </div>
-                            {/each}
+                            {#if memberApplicants.length > 0}
+                                {#each formData.users as user, idx}
+                                    <div class="md:flex items-center gap-2">
+                                        <select on:change={(e) => handleUserChange(idx, memberApplicants[e.target.selectedIndex - 1])}
+                                            class="border rounded px-2 py-1 md:flex-2"
+                                        >
+                                            <option value="" disabled selected>Select user</option>
+                                            {#each memberApplicants as member}
+                                                <option selected={formData.users[idx]?.uid === member.uid}>
+                                                    {member.name || member.displayName} {(member.name || member.displayName) ? "-" : ""} {member.email} - {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
+                                                </option>
+                                            {/each}
+                                        
+                                        </select>
+                                        <button type="button" class="text-red-500 ml-2" on:click={() => removeUser(idx)}>&times;</button>
+                                    </div>
+                                {/each}
+                            {:else}
+                                <div>There aren't any mentee or mentor applications yet!</div>  
+                            {/if}
                             <button type="button" class="bg-primary text-white px-3 py-1 rounded" on:click={addUser}>+ Add Member</button>
                         </div>
                     </div>

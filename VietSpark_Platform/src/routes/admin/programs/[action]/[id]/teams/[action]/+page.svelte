@@ -7,6 +7,7 @@
     import { programHandlers, programLoading, curProgram } from '$lib/stores/programStore';
     import { teamHandlers, teamLoading, teams } from '$lib/stores/teamStore';
     import TeamForm from '$lib/components/TeamForm.svelte';
+    import { applications, applicationLoading } from '$lib/stores/applicationStore';
 
     // Redirect if not admin
     $: if ($authUser && !$userData?.isAdmin) {
@@ -14,6 +15,11 @@
     }
     let loading = false;
     let error = '';
+    let availableApplicants = []; 
+
+    $: if ($applications) {
+        availableApplicants = $applications.filter((app) => app.programId === $curProgram.id && app.status === "Approved"); 
+    }
 
     async function handleSubmit(event) {
         loading = true; 
@@ -62,7 +68,7 @@
 </script>
 
 <section class="min-h-[50vh]">
-    {#if $programLoading || $teamLoading || loading}
+    {#if $programLoading || $teamLoading || loading || $applicationLoading}
         <div class="flex h-screen items-center justify-center">
             <span>Loading...</span>
         </div>
@@ -85,6 +91,7 @@
                 <div class="space-y-6">
                     <TeamForm
                         isEditing={false}
+                        availableApplicants={availableApplicants}
                         on:submit={(e) => handleSubmit(e)}
                         loading={loading}
                         error={error}
