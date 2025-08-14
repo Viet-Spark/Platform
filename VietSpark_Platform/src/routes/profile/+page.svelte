@@ -10,6 +10,7 @@
 	import { formatDateFromStr } from '$lib/utils/formatDate';
 	import { applicationHandlers, applicationLoading, applications } from '$lib/stores/applicationStore';
 	import { formatDetailDate } from '$lib/utils/formatDate'; 
+	import { subscribers, subscriberHandlers } from '$lib/stores/subscriberStore';
 
 	let fileInput;
 	let uploadError = null;
@@ -577,6 +578,20 @@
 										interests: $profileData.interests, 
 										subscriptions: $profileData.subscriptions
 									});
+									const subscriberData = $subscribers.find((subscriber) => subscriber.email === $profileData.email); 
+									if ($profileData.subscriptions.newsletters) {
+										// If their email is not on the subscribe list yet, then add user to the subscriber list
+										if (!subscriberData) {
+											await subscriberHandlers.addSubscriber($profileData.email);
+										} else if (!subscriberData.active) {
+											await subscriberHandlers.resubscribe(subscriberData.id, subscriberData); 
+										}
+									} else { 
+										// Unsubscribe
+										if (subscriberData) {
+											await subscriberHandlers.unsubscribe(subscriberData.id, subscriberData); 
+										}
+									}
 								} catch (error) {
 									console.error('Error updating profile:', error);
 								}
