@@ -23,7 +23,9 @@ export const aboutStore = writable({
     coreValues: [],
     whatWeDo: {},
     boardOfDirectors: [],
+    boardOfManagement: [],
     advisoryBoard: [],
+    coreTeam: [], 
     volunteers: [],
 });
 
@@ -126,6 +128,53 @@ export const aboutHandlers = {
             aboutLoading.set(false);
         }
     },
+    // Upload board of management image to Firebase Storage
+    uploadBoardOfManagementImage: async (managerId, file) => {
+        aboutLoading.set(true);
+        aboutError.set(null);
+
+        try {
+            // Create a storage reference
+            const storageRef = ref(storage, `board-of-management-images/${managerId}`);
+
+            // Upload the file
+            const snapshot = await uploadBytes(storageRef, file);
+
+            // Get the download URL
+            const downloadURL = await getDownloadURL(snapshot.ref);
+
+            // Get current about data
+            const aboutRef = doc(db, 'aboutUs', 'main');
+            const aboutSnap = await getDoc(aboutRef);
+            const currentAbout = aboutSnap.data();
+
+            // Find and update the specific manager by ID
+            const updatedBoardOfManagement = currentAbout.boardOfManagement.map(manager => 
+                manager.id === managerId 
+                    ? { ...manager, profileImage: downloadURL }
+                    : manager
+            );
+
+            // Update the about data with the updated board of management
+            await updateDoc(aboutRef, { boardOfManagement: updatedBoardOfManagement });
+
+            // Update the store
+            aboutStore.update(currentData => ({
+                ...currentData,
+                boardOfManagement: updatedBoardOfManagement, 
+                lastUpdated: new Date().toISOString()
+            }));
+
+            return downloadURL;
+        } catch (error) {
+            aboutError.set(error.message);
+            console.error('Error uploading image:', error);
+            throw error;
+        } finally {
+            aboutLoading.set(false);
+        }
+    },
+
 
     // Upload advisory board image to Firebase Storage
     uploadAdvisoryBoardImage: async (advisorId, file) => {
@@ -167,6 +216,52 @@ export const aboutHandlers = {
         } catch (error) {
             aboutError.set(error.message);
             console.error('Error uploading advisory board image:', error);
+            throw error;
+        } finally {
+            aboutLoading.set(false);
+        }
+    },
+
+     // Upload core team image to Firebase Storage
+     uploadCoreTeamImage: async (memberId, file) => {
+        aboutLoading.set(true);
+        aboutError.set(null);
+
+        try {
+            // Create a storage reference
+            const storageRef = ref(storage, `core-team-images/${memberId}`);
+
+            // Upload the file
+            const snapshot = await uploadBytes(storageRef, file);
+
+            // Get the download URL
+            const downloadURL = await getDownloadURL(snapshot.ref);
+
+            // Get current about data
+            const aboutRef = doc(db, 'aboutUs', 'main');
+            const aboutSnap = await getDoc(aboutRef);
+            const currentAbout = aboutSnap.data();
+
+            // Find and update the specific member by ID
+            const updatedCoreTeam = currentAbout.coreTeam.map(member => 
+                member.id === memberId 
+                    ? { ...member, profileImage: downloadURL }
+                    : member
+            );
+
+            // Update the about data with the updated core team
+            await updateDoc(aboutRef, { coreTeam: updatedCoreTeam });
+
+            // Update the store
+            aboutStore.update(currentData => ({
+                ...currentData,
+                coreTeam: updatedCoreTeam
+            }));
+
+            return downloadURL;
+        } catch (error) {
+            aboutError.set(error.message);
+            console.error('Error uploading core team image:', error);
             throw error;
         } finally {
             aboutLoading.set(false);
