@@ -23,8 +23,8 @@
 		{ href: '/admin/events', label: 'Events' },
 		{ href: '/admin/blog', label: 'Blog' },
 		{ href: '/admin/partners', label: 'Partners' },
-		{ href: '/admin/newsletters', label: 'Newsletters' },
-		{ href: '/admin/subscribers', label: 'Subscribers' },
+		// { href: '/admin/newsletters', label: 'Newsletters' },
+		// { href: '/admin/subscribers', label: 'Subscribers' },
 		{ href: '/admin/faqs', label: 'FAQs' },
 		{ href: '/admin/users', label: 'Users' },
 		{ href: '/admin/programs', label: 'Programs' }

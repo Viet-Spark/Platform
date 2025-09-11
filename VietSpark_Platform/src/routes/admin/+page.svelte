@@ -119,7 +119,7 @@
 			</div>
 
 			<!-- Newsletter Card -->
-			<div class="rounded-lg bg-white p-6 shadow-md">
+			<!-- <div class="rounded-lg bg-white p-6 shadow-md">
 				<h2 class="mb-4 text-xl font-semibold">Newsletters</h2>
 				{#if $newsletterLoading}
 					<p>Loading...</p>
@@ -129,10 +129,10 @@
 						>Manage Newsletters →</a
 					>
 				{/if}
-			</div>
+			</div> -->
 
 			<!-- Subcriber Card -->
-			<div class="rounded-lg bg-white p-6 shadow-md">
+			<!-- <div class="rounded-lg bg-white p-6 shadow-md">
 				<h2 class="mb-4 text-xl font-semibold">Subscribers</h2>
 				{#if $subscriberLoading}
 					<p>Loading...</p>
@@ -142,7 +142,7 @@
 						>Manage Subscribers →</a
 					>
 				{/if}
-			</div>
+			</div> -->
 
 			<!-- Users Card -->
 			<div class="rounded-lg bg-white p-6 shadow-md">
