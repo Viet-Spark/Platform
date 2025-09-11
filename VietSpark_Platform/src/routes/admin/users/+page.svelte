@@ -3,7 +3,6 @@
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
     import { usersList, userLoading, userError, updateUser } from '$lib/stores/userStore';
-    import {writable} from 'svelte/store';
 	import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
     
     let isDataReady = false;

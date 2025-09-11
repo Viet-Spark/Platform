@@ -11,19 +11,26 @@
         history: {},
         volunteers: {},
         directors: {},
-        advisors: {}
+        advisors: {}, 
+        managers: {}, 
+        coreTeam: {}
     }
 	let isUploading = {
         history: {},
         volunteers: {},
         directors: {},
-        advisors: {}
+        advisors: {}, 
+        managers: {}, 
+        coreTeam: {}
+
     };
 	let localImagePreviews = {
         history: {},
         volunteers: {},
         directors: {},
-        advisors: {}   
+        advisors: {}, 
+        managers: {}, 
+        coreTeam: {}
     };
     let uploadError = null;
 	let loadingError = null;
@@ -143,6 +150,38 @@
             } finally {
                 isUploading[object] = false;
             }
+        } else if (object === 'managers') {
+            try {
+                await aboutHandlers.updateAbout({
+                    boardOfManagement: $aboutStore.boardOfManagement,
+                    lastUpdated: new Date().toISOString()
+                });
+                await aboutHandlers.uploadBoardOfManagementImage($aboutStore.boardOfManagement[index].id, file);
+            } catch (error) {
+                console.error('Upload Board Of Management Image Error:', error); 
+                uploadError = {
+                    object: object, 
+                    message: `Upload Board Of Management Image Failed: ${error.message}`
+                };
+            } finally {
+                isUploading[object][index] = false;
+            } 
+        }  else if (object === 'coreTeam') {
+            try {
+                await aboutHandlers.updateAbout({
+                    coreTeam: $aboutStore.coreTeam,
+                    lastUpdated: new Date().toISOString()
+                });
+                await aboutHandlers.uploadCoreTeamImage($aboutStore.coreTeam[index].id, file);
+            } catch (error) {
+                console.error('Upload Core Team Image Error:', error); 
+                uploadError = {
+                    object: object, 
+                    message: `Upload Core Team Image Failed: ${error.message}`
+                };
+            } finally {
+                isUploading[object][index] = false;
+            } 
         }
     }
 
@@ -230,6 +269,8 @@
                                     volunteers: $aboutStore.volunteers,
                                     boardOfDirectors: $aboutStore.boardOfDirectors,
                                     advisoryBoard: $aboutStore.advisoryBoard,
+                                    coreTeam: $aboutStore.coreTeam,
+                                    boardOfManagement: $aboutStore.boardOfManagement,
                                     lastUpdated: new Date().toISOString()
                                 });
                                 alert('About Us updated successfully!');
@@ -613,9 +654,123 @@
                                 Add Board of Director
                             </button>
 						</div>
+                        
+                        <div>
+							<label for="boardOfManagement" class="mb-2 block font-bold text-gray-700">Board of Management</label>
+							{#each $aboutStore.boardOfManagement as manager, index}
+                                <div class="mb-4 flex gap-4 items-center rounded-lg bg-blue-100 p-4 shadow-md">
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={manager.name}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Title"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={manager.title}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="LinkedIn"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={manager.linkedIn}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Quote"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={manager.quote}
+                                    />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        style="display: none;"
+                                        bind:this={fileInputs["managers"][index]}
+                                        on:change={(e) => handleFileChange(e, "managers", index)}
+                                    />
+                                    <div
+                                        class="text-primary relative flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-blue-200 text-4xl font-bold"
+                                        on:click={() => handleAvatarClick("managers", index)}
+                                        on:keydown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space') {
+                                                e.preventDefault();
+                                                handleAvatarClick("managers", index);
+                                            }
+                                        }}
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="Upload profile picture"
+                                    >
+                                        {#if isUploading["managers"][index]}
+                                            <div
+                                                class="absolute inset-0 flex items-center justify-center bg-blue-200 bg-opacity-80"
+                                            >
+                                                <div
+                                                    class="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent"
+                                                ></div>
+                                            </div>
+                                        {:else if localImagePreviews["managers"][index]}
+                                            <img
+                                                src={localImagePreviews["managers"][index]}
+                                                alt="Profile Preview"
+                                                class="absolute inset-0 h-full w-full object-cover"
+                                            />
+                                        {:else if $aboutStore.boardOfManagement[index].profileImage}
+                                            <img
+                                                src={$aboutStore.boardOfManagement[index].profileImage}
+                                                alt="Profile"
+                                                class="absolute inset-0 h-full w-full object-cover"
+                                            />
+                                        {:else}
+                                            <img
+                                            src={defaultProfile}
+                                            alt="Default Profile"
+                                            class="absolute inset-0 h-full w-full object-cover"
+                                        />
+                                        {/if}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="ml-2 text-red-500"
+                                        on:click={() => {
+                                            const newBoardOfManagement = [...$aboutStore.boardOfManagement];
+                                            newBoardOfManagement.splice(index, 1);
+                                            aboutStore.update((data) => ({
+                                                ...data,
+                                                boardOfManagement: newBoardOfManagement
+                                            }));
+                                        }}
+                                        aria-label="Remove a board of management"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            {/each}
+                            {#if uploadError && uploadError.object === 'managers'}
+                                <div class="mb-4 rounded-md bg-red-50 p-4 text-red-700">
+                                    {uploadError.message}
+                                </div>
+                            {/if}
+                            <button
+                                type="button"
+                                class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
+                                on:click={() => $aboutStore.boardOfManagement = [...$aboutStore.boardOfManagement, { 
+                                    id: generateUniqueId(),
+                                    name: '', 
+                                    title: '', 
+                                    linkedIn: '', 
+                                    quote: '', 
+                                    profileImage: '' 
+                                }]}
+                            >
+                                Add Board of Management
+                            </button>
+						</div>
 
                         <div>
-							<label for="advisoryBoard" class="mb-2 block font-bold text-gray-700">Advisory Board</label>
+							<label for="advisoryBoard" class="mb-2 block font-bold text-gray-700">Board of Advisors</label>
 							{#each $aboutStore.advisoryBoard as advisor, index}
                                 <div class="mb-4 flex gap-4 items-center rounded-lg bg-blue-100 p-4 shadow-md">
                                     <input
@@ -725,6 +880,120 @@
                                 }]}
                             >
                                 Add Advisory Board Member
+                            </button>
+						</div>
+
+                        <div>
+							<label for="coreTeam" class="mb-2 block font-bold text-gray-700">Core Team</label>
+							{#each $aboutStore.coreTeam as member, index}
+                                <div class="mb-4 flex gap-4 items-center rounded-lg bg-blue-100 p-4 shadow-md">
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={member.name}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Title"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={member.title}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="LinkedIn"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={member.linkedIn}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Quote"
+                                        class="w-1/5 rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                        bind:value={member.quote}
+                                    />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        style="display: none;"
+                                        bind:this={fileInputs["coreTeam"][index]}
+                                        on:change={(e) => handleFileChange(e, "coreTeam", index)}
+                                    />
+                                    <div
+                                        class="text-primary relative flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-blue-200 text-4xl font-bold"
+                                        on:click={() => handleAvatarClick("coreTeam", index)}
+                                        on:keydown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space') {
+                                                e.preventDefault();
+                                                handleAvatarClick("coreTeam", index);
+                                            }
+                                        }}
+                                        role="button"
+                                        tabindex="0"
+                                        aria-label="Upload profile picture"
+                                    >
+                                        {#if isUploading["coreTeam"][index]}
+                                            <div
+                                                class="absolute inset-0 flex items-center justify-center bg-blue-200 bg-opacity-80"
+                                            >
+                                                <div
+                                                    class="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent"
+                                                ></div>
+                                            </div>
+                                        {:else if localImagePreviews["coreTeam"][index]}
+                                            <img
+                                                src={localImagePreviews["coreTeam"][index]}
+                                                alt="Profile Preview"
+                                                class="absolute inset-0 h-full w-full object-cover"
+                                            />
+                                        {:else if $aboutStore.coreTeam[index].profileImage}
+                                            <img
+                                                src={$aboutStore.coreTeam[index].profileImage}
+                                                alt="Profile"
+                                                class="absolute inset-0 h-full w-full object-cover"
+                                            />
+                                        {:else}
+                                            <img
+                                            src={defaultProfile}
+                                            alt="Default Profile"
+                                            class="absolute inset-0 h-full w-full object-cover"
+                                        />
+                                        {/if}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="ml-2 text-red-500"
+                                        on:click={() => {
+                                            const newCoreTeam = [...$aboutStore.coreTeam];
+                                            newCoreTeam.splice(index, 1);
+                                            aboutStore.update((data) => ({
+                                                ...data,
+                                                coreTeam: newCoreTeam
+                                            }));
+                                        }}
+                                        aria-label="Remove a core team member"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            {/each}
+                            {#if uploadError && uploadError.object === 'coreTeam'}
+                                <div class="mb-4 rounded-md bg-red-50 p-4 text-red-700">
+                                    {uploadError.message}
+                                </div>
+                            {/if}
+                            <button
+                                type="button"
+                                class="hover:text-primary hover:border-primary rounded-full border border-dashed border-gray-300 px-3 py-1 text-gray-500"
+                                on:click={() => $aboutStore.coreTeam = [...$aboutStore.coreTeam, { 
+                                    id: generateUniqueId(),
+                                    name: '', 
+                                    title: '', 
+                                    linkedIn: '', 
+                                    quote: '', 
+                                    profileImage: '' 
+                                }]}
+                            >
+                                Add Core Team Member
                             </button>
 						</div>
 

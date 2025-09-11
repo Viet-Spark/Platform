@@ -6,13 +6,15 @@
 	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
 	import { blogs, blogHandlers, blogLoading, blogError } from '$lib/stores/blogStore';
 	import { partners, partnersLoading, fetchPartners } from '$lib/stores/partnerStore';
-	import { subscribers, newsletterLoading, fetchSubscribers } from '$lib/stores/newsletterStore';
+	import { subscribers, subscriberLoading, subscriberHandlers } from '$lib/stores/subscriberStore';
 	import { faqs, faqsLoading} from '$lib/stores/faqStore';
 	import { usersList, userLoading, userError, updateUser } from '$lib/stores/userStore';
 	import { teams, teamHandlers } from '$lib/stores/teamStore';
 	import { programs, programLoading, programHandlers } from '$lib/stores/programStore';
 	import { testimonialLoading, testimonials, testimonialHandlers } from '$lib/stores/testimonialStore';
 	import { projectError, projectHandlers } from '$lib/stores/projectStore';
+	import { newsletterError, newsletterHandlers, newsletters, newsletterLoading } from '$lib/stores/newsletterStore';
+
 	let isDataReady = false;
 
 	// Debug logs
@@ -45,7 +47,8 @@
 			eventHandlers.getEvents(), 
 			blogHandlers.getBlogs(), 
 			fetchPartners(), 
-			fetchSubscribers(), 
+			newsletterHandlers.getNewsletters(),
+			subscriberHandlers.fetchSubscribers(), 
 			teamHandlers.getTeams(), 
 			programHandlers.getPrograms(), 
 			testimonialHandlers.getTestimonials(),
@@ -116,17 +119,30 @@
 			</div>
 
 			<!-- Newsletter Card -->
-			<div class="rounded-lg bg-white p-6 shadow-md">
-				<h2 class="mb-4 text-xl font-semibold">Newsletter</h2>
+			<!-- <div class="rounded-lg bg-white p-6 shadow-md">
+				<h2 class="mb-4 text-xl font-semibold">Newsletters</h2>
 				{#if $newsletterLoading}
 					<p>Loading...</p>
 				{:else}
+					<p class="text-3xl font-bold">{$newsletters.length}</p>
+					<a href="/admin/newsletters" class="text-primary mt-4 inline-block hover:underline"
+						>Manage Newsletters →</a
+					>
+				{/if}
+			</div> -->
+
+			<!-- Subcriber Card -->
+			<!-- <div class="rounded-lg bg-white p-6 shadow-md">
+				<h2 class="mb-4 text-xl font-semibold">Subscribers</h2>
+				{#if $subscriberLoading}
+					<p>Loading...</p>
+				{:else}
 					<p class="text-3xl font-bold">{$subscribers.length}</p>
-					<a href="/admin/newsletter" class="text-primary mt-4 inline-block hover:underline"
+					<a href="/admin/subscribers" class="text-primary mt-4 inline-block hover:underline"
 						>Manage Subscribers →</a
 					>
 				{/if}
-			</div>
+			</div> -->
 
 			<!-- Users Card -->
 			<div class="rounded-lg bg-white p-6 shadow-md">
@@ -178,7 +194,7 @@
 					Add New Partner
 				</a>
 				<a
-					href="/admin/newsletter"
+					href="/admin/subscribers"
 					class="bg-primary hover:bg-primary-dark flex items-center justify-center rounded-lg p-4 text-white"
 				>
 					View Subscribers

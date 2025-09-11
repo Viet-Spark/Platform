@@ -21,8 +21,8 @@ export const blogHandlers = {
             const q = query(blogRef, orderBy(orderByColumn, 'desc'));
             const querySnapshot = await getDocs(q);
             const postsList = querySnapshot.docs.map(doc => ({
+                ...doc.data(), 
                 id: doc.id,
-                ...doc.data()
             }));
             blogs.set(postsList);
             console.log("Blogs found in Firestore: ", postsList);

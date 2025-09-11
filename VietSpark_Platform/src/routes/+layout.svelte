@@ -3,7 +3,7 @@
 	import { authUser } from '$lib/stores/authStore';
 	import { userData, getUserData } from '$lib/stores/userStore';
 	import {profileData} from '$lib/stores/profileStore';
-	import { addSubscriber, newsletterError, newsletterLoading } from '$lib/stores/newsletterStore';
+	import { subscriberHandlers, subscriberError, subscriberLoading, subscribers } from '$lib/stores/subscriberStore';
 	import { aboutHandlers } from '$lib/stores/aboutStore';
 	import { onMount } from 'svelte';
 	import { homeHandlers } from '$lib/stores/homeStore';
@@ -28,8 +28,10 @@
 
 	async function handleNewsletterSubmit() {
 		newsletterMessage = '';
-		try {
-			await addSubscriber(newsletterEmail);
+		try { 
+			if (!$subscribers.find((subscriber) => subscriber.email === newsletterEmail)) {
+				await subscriberHandlers.addSubscriber(newsletterEmail);
+			}
 			newsletterMessage = 'Thank you for subscribing!';
 			newsletterEmail = '';
 		} catch (error) {
@@ -202,16 +204,16 @@
 						/>
 						<button
 							type="submit"
-							disabled={$newsletterLoading}
+							disabled={$subscriberLoading}
 							class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 focus:outline-none disabled:opacity-50"
 						>
-							{$newsletterLoading ? 'Subscribing...' : 'Subscribe'}
+							{$subscriberLoading ? 'Subscribing...' : 'Subscribe'}
 						</button>
 						{#if newsletterMessage}
 							<p
 								class="text-sm"
-								class:text-red-500={$newsletterError}
-								class:text-green-500={!$newsletterError}
+								class:text-red-500={$subscriberError}
+								class:text-green-500={!$subscriberError}
 							>
 								{newsletterMessage}
 							</p>
