@@ -150,39 +150,42 @@
 	</section>
 
 	<!-- Board of Directors Section -->
-	<section class="bg-gray-50 py-16">
-		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Board of Directors</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-			</div>
+	{#if $aboutStore.boardOfDirectors.length > 0}
+		<section class="bg-gray-50 py-16">
+			<div class="container mx-auto px-4">
+				<div class="mb-12 text-center">
+					<h2 class="mb-4 text-3xl font-bold">Board of Directors</h2>
+					<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
+				</div>
 
-			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
-				{#each $aboutStore.boardOfDirectors as member}
-					<div class="rounded-lg bg-white p-6 text-center shadow-md">
-						<img
-							src={member.profileImage}
-							alt={member.name}
-							class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
-						/>
-						<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
-						<p class="mb-3 text-gray-600">{member.title}</p>
-						<a
-							href={member.linkedIn}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="text-primary hover:text-primary-dark"
-							aria-label={`${member.name}'s LinkedIn profile`}
-						>
-							<i class="fab fa-linkedin text-xl"></i>
-						</a>
-					</div>
-				{/each}
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					{#each $aboutStore.boardOfDirectors as member}
+						<div class="rounded-lg bg-white p-6 text-center shadow-md">
+							<img
+								src={member.profileImage}
+								alt={member.name}
+								class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+							/>
+							<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
+							<p class="mb-3 text-gray-600">{member.title}</p>
+							<a
+								href={member.linkedIn}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary hover:text-primary-dark"
+								aria-label={`${member.name}'s LinkedIn profile`}
+							>
+								<i class="fab fa-linkedin text-xl"></i>
+							</a>
+						</div>
+					{/each}
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	{/if}
 
-		<!-- Board of Management Section -->
+	<!-- Board of Management Section -->
+	{#if $aboutStore.boardOfManagement.length > 0}
 		<section class="bg-gray-50 py-16">
 			<div class="container mx-auto px-4">
 				<div class="mb-12 text-center">
@@ -190,7 +193,7 @@
 					<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 				</div>
 	
-				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 					{#each $aboutStore.boardOfManagement as member}
 						<div class="rounded-lg bg-white p-6 text-center shadow-md">
 							<img
@@ -214,51 +217,20 @@
 				</div>
 			</div>
 		</section>
+	{/if}
 
 	<!-- Board of Advisors Section -->
-	<section class="bg-white py-16">
-		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Board of Advisors</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-			</div>
-
-			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 item-center">
-				{#each $aboutStore.advisoryBoard as member}
-					<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
-						<img
-							src={member.profileImage}
-							alt={member.name}
-							class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
-						/>
-						<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
-						<p class="mb-3 text-gray-600">{member.title}</p>
-						<a
-							href={member.linkedIn}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="text-primary hover:text-primary-dark"
-							aria-label={`${member.name}'s LinkedIn profile`}
-						>
-							<i class="fab fa-linkedin text-xl"></i>
-						</a>
-					</div>
-				{/each}
-			</div>
-		</div>
-	</section>
-
-		<!-- Core Team Section -->
-		<section class="bg-white py-16">
+	{#if $aboutStore.advisoryBoard.length > 0}
+		<section class="bg-gray-50 py-16">
 			<div class="container mx-auto px-4">
 				<div class="mb-12 text-center">
-					<h2 class="mb-4 text-3xl font-bold">Core Team</h2>
+					<h2 class="mb-4 text-3xl font-bold">Board of Advisors</h2>
 					<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
 				</div>
-	
-				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 item-center">
-					{#each $aboutStore.coreTeam as member}
-						<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
+
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 item-center">
+					{#each $aboutStore.advisoryBoard as member}
+						<div class="rounded-lg bg-white p-6 text-center shadow-sm">
 							<img
 								src={member.profileImage}
 								alt={member.name}
@@ -280,39 +252,78 @@
 				</div>
 			</div>
 		</section>
+	{/if}
+
+
+	<!-- Core Team Section -->
+	{#if $aboutStore.coreTeam.length > 0}
+		<section class="bg-gray-50 py-16">
+			<div class="container mx-auto px-4">
+				<div class="mb-12 text-center">
+					<h2 class="mb-4 text-3xl font-bold">Core Team</h2>
+					<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
+				</div>
+	
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 item-center">
+					{#each $aboutStore.coreTeam as member}
+						<div class="rounded-lg bg-white p-6 text-center shadow-sm">
+							<img
+								src={member.profileImage}
+								alt={member.name}
+								class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+							/>
+							<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
+							<p class="mb-3 text-gray-600">{member.title}</p>
+							<a
+								href={member.linkedIn}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary hover:text-primary-dark"
+								aria-label={`${member.name}'s LinkedIn profile`}
+							>
+								<i class="fab fa-linkedin text-xl"></i>
+							</a>
+						</div>
+					{/each}
+				</div>
+			</div>
+		</section>
+	{/if}
 
 	<!-- Volunteers Section -->
-	<section class="bg-white py-16">
-		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Volunteers</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-			</div>
+	{#if $aboutStore.volunteers.length > 0}
+		<section class="bg-gray-50 py-16">
+			<div class="container mx-auto px-4">
+				<div class="mb-12 text-center">
+					<h2 class="mb-4 text-3xl font-bold">Volunteers</h2>
+					<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
+				</div>
 
-			<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
-				{#each $aboutStore.volunteers as member}
-					<div class="rounded-lg bg-gray-50 p-6 text-center shadow-sm">
-						<img
-							src={member.profileImage || placeHolderAvatar}
-							alt={member.name}
-							class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
-						/>
-						<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
-						<p class="mb-3 text-gray-600">{member.title}</p>
-						<a
-							href={member.linkedIn}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="text-primary hover:text-primary-dark"
-							aria-label={`${member.name}'s LinkedIn profile`}
-						>
-							<!-- <i class="fab fa-linkedin text-xl"></i> -->
-						</a>
-					</div>
-				{/each}
+				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-6">
+					{#each $aboutStore.volunteers as member}
+						<div class="rounded-lg bg-white p-6 text-center shadow-sm">
+							<img
+								src={member.profileImage || placeHolderAvatar}
+								alt={member.name}
+								class="mx-auto mb-4 h-32 w-32 rounded-full object-cover"
+							/>
+							<h3 class="mb-1 text-xl font-bold">{member.name}</h3>
+							<p class="mb-3 text-gray-600">{member.title}</p>
+							<a
+								href={member.linkedIn}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-primary hover:text-primary-dark"
+								aria-label={`${member.name}'s LinkedIn profile`}
+							>
+								<!-- <i class="fab fa-linkedin text-xl"></i> -->
+							</a>
+						</div>
+					{/each}
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	{/if}
 
 	<!-- CTA Section -->
 	<section class="bg-primary py-16 text-white">
