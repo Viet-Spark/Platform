@@ -5,7 +5,7 @@
 	import { userData } from '$lib/stores/userStore';
 	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
 	import { blogs, blogHandlers, blogLoading, blogError } from '$lib/stores/blogStore';
-	import { partners, partnersLoading, fetchPartners } from '$lib/stores/partnerStore';
+	import { partners, partnersLoading, partnerHandlers } from '$lib/stores/partnerStore';
 	import { subscribers, subscriberLoading, subscriberHandlers } from '$lib/stores/subscriberStore';
 	import { faqs, faqsLoading} from '$lib/stores/faqStore';
 	import { usersList, userLoading, userError, updateUser } from '$lib/stores/userStore';
@@ -46,7 +46,7 @@
 		await Promise.all([
 			eventHandlers.getEvents(), 
 			blogHandlers.getBlogs(), 
-			fetchPartners(), 
+			partnerHandlers.fetchPartners(), 
 			newsletterHandlers.getNewsletters(),
 			subscriberHandlers.fetchSubscribers(), 
 			teamHandlers.getTeams(), 

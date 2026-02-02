@@ -3,14 +3,14 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import { createPartner, partners, uploadPartnerImage } from '$lib/stores/partnerStore';
+	import { partnerHandlers, partners } from '$lib/stores/partnerStore';
     import { writable } from 'svelte/store';
     import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
 
 	let isDataReady = false;
 	let partnerData = writable({
 		name: '',
-		logo: '',
+		image: '',
 		website: ''
 	});
 
@@ -64,14 +64,14 @@
 		isUploading = true;
 
         try {
-            let partnerId = await createPartner({
+            let partnerId = await partnerHandlers.createPartner({
                 name: $partnerData.name,
-                logo: '',
+                image: '',
                 website: $partnerData.website
             });
             if (file) {
                 // Upload to Firebase Storage
-			    await uploadPartnerImage(partnerId, file);
+			    await partnerHandlers.uploadPartnerImage(partnerId, file);
             }
             goto('/admin/partners');
 		} catch (error) {
@@ -124,7 +124,7 @@
                             />
                         </div>
                         <div>
-                            <label for="logo" class="block text-sm font-bold text-gray-700">Logo</label>
+                            <label for="image" class="block text-sm font-bold text-gray-700">Image</label>
                             <input
                                 type="file"
                                 accept="image/*"

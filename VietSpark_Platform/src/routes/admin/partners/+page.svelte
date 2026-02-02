@@ -3,12 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import {
-		partners,
-		partnersLoading,
-		fetchPartners,
-		deletePartner
-	} from '$lib/stores/partnerStore';
+	import { partners, partnersLoading, partnerHandlers } from '$lib/stores/partnerStore';
 
 	let isDataReady = false;
 
@@ -21,12 +16,12 @@
 	}
 
 	onMount(async () => {
-		await fetchPartners();
+		await partnerHandlers.fetchPartners();
 	});
 
 	async function handleDelete(id) {
 		if (confirm('Are you sure you want to delete this partner?')) {
-			await deletePartner(id);
+			await partnerHandlers.deletePartner(id);
 		}
 	}
 </script>

@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import { createFAQ, faqs} from '$lib/stores/faqStore';
+	import { faqHandlers, faqs} from '$lib/stores/faqStore';
     import { writable } from 'svelte/store';
     import { faqCategories, faqCategoriesLoading, faqCategoriesError} from '$lib/stores/faqCategoryStore';
 
@@ -30,7 +30,7 @@
 		isUploading = true;
 
         try {
-            await createFAQ({
+            await faqHandlers.createFAQ({
                 question: $faqData.question,
                 answer: $faqData.answer,
                 categoryId: $faqData.categoryId

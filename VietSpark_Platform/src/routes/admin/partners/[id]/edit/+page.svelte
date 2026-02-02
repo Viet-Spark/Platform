@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import { partners, updatePartner, fetchPartners, uploadPartnerImage } from '$lib/stores/partnerStore';
+	import { partners, partnerHandlers } from '$lib/stores/partnerStore';
     import { writable } from 'svelte/store';
     import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
 
@@ -33,7 +33,7 @@
 
 	onMount(async () => {
 		if (partnerId) {
-			await fetchPartners();
+			await partnerHandlers.fetchPartners();
 			const partner = $partners.find((p) => p.id === partnerId);
 			if (partner) {
 				partnerData.set({
@@ -140,7 +140,7 @@
                             />
                         </div>
                         <div>
-                            <label for="logo" class="block text-sm font-bold text-gray-700">Logo</label>
+                            <label for="image" class="block text-sm font-bold text-gray-700">Logo</label>
                             <input
                                 type="file"
                                 accept="image/*"
