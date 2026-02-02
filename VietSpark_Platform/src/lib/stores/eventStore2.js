@@ -32,8 +32,8 @@ export const eventHandlers = {
             const q = query(eventsRef, orderBy('eventDate.start', 'desc'));
             const querySnapshot = await getDocs(q);
             const eventsList = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
+                ...doc.data(),
+                id: doc.id
             }));
             console.log('Events fetched:', eventsList);
             eventStore.set({ isLoading: false, events: eventsList });

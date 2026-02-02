@@ -17,8 +17,8 @@ export const fetchEventCategories = async () => {
         const q = query(categoriesRef, orderBy('name'));
         const querySnapshot = await getDocs(q);
         const categories = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
+            ...doc.data(),
+            id: doc.id
         }));
         console.log('Event Categories fetched:', categories);
         eventCategories.set(categories);

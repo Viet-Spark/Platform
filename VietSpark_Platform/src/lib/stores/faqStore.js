@@ -19,8 +19,8 @@ export const fetchFAQs = async () => {
         const faqsRef = collection(db, 'faqs');
         const querySnapshot = await getDocs(faqsRef);
         const faqsList = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
+            ...doc.data(),
+            id: doc.id
         }));
         faqs.set(faqsList);
         console.log("FAQs found in Firestore: ", faqsList);

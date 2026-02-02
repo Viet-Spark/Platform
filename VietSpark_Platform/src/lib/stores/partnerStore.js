@@ -23,8 +23,8 @@ export const fetchPartners = async () => {
         const q = query(partnersRef, orderBy('name', 'asc'));
         const querySnapshot = await getDocs(q);
         const partnersList = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
+            ...doc.data(), 
+            id: doc.id
         }));
         partners.set(partnersList);
         console.log("Partners found in Firestore: ", partnersList);
