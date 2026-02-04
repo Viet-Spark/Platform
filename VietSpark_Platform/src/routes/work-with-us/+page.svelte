@@ -336,9 +336,9 @@
 				></div>
 
 				<!-- Timeline Items -->
-				<div class="timeline-items">
+				<div class="timeline-items relative ">
 					<!-- Item 1 -->
-					<div class="relative mb-16 flex flex-col md:flex-row md:even:flex-row-reverse">
+					<div class="relative mb-16 flex flex-col pl-8 md:flex-row md:even:flex-row-reverse md:pl-0">
 						<div class="timeline-dot"></div>
 						<div class="mb-8 md:mb-0 md:w-1/2 md:px-8">
 							<h3 class="mb-3 text-xl font-bold">1. Apply Online</h3>
@@ -351,7 +351,7 @@
 					</div>
 
 					<!-- Item 2 -->
-					<div class="relative mb-16 flex flex-col md:flex-row md:even:flex-row-reverse">
+					<div class="relative mb-16 flex flex-col pl-8 md:pl-0 md:flex-row md:even:flex-row-reverse">
 						<div class="timeline-dot"></div>
 						<div class="mb-8 hidden md:mb-0 md:block md:w-1/2 md:px-8"></div>
 						<div class="md:w-1/2 md:px-8">
@@ -364,7 +364,7 @@
 					</div>
 
 					<!-- Item 3 -->
-					<div class="relative mb-16 flex flex-col md:flex-row md:even:flex-row-reverse">
+					<div class="relative mb-16 flex flex-col pl-8 md:pl-0 md:flex-row md:even:flex-row-reverse">
 						<div class="timeline-dot"></div>
 						<div class="mb-8 md:mb-0 md:w-1/2 md:px-8">
 							<h3 class="mb-3 text-xl font-bold">3. Team Introduction</h3>
@@ -377,7 +377,7 @@
 					</div>
 
 					<!-- Item 4 -->
-					<div class="relative flex flex-col md:flex-row md:even:flex-row-reverse">
+					<div class="relative flex flex-col pl-8 md:pl-0 md:flex-row md:even:flex-row-reverse">
 						<div class="timeline-dot"></div>
 						<div class="mb-8 hidden md:mb-0 md:block md:w-1/2 md:px-8"></div>
 						<div class="md:w-1/2 md:px-8">
