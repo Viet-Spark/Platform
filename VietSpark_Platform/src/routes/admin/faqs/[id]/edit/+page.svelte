@@ -4,7 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
-	import { faqs, updateFAQ } from '$lib/stores/faqStore';
+	import { faqs, faqHandlers } from '$lib/stores/faqStore';
     import { writable } from 'svelte/store';
     import { faqCategories, faqCategoriesLoading, faqCategoriesError} from '$lib/stores/faqCategoryStore';
 
@@ -49,7 +49,7 @@
 		isUploading = true;
 
         try {
-            await updateFAQ(faqId, {
+            await faqHandlers.updateFAQ(faqId, {
                 question: $faqData.question,
                 answer: $faqData.answer,
                 categoryId: $faqData.categoryId

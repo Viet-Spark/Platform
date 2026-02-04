@@ -335,7 +335,7 @@
 			</p>
 			<div class="flex flex-wrap justify-center gap-4">
 				<a href="/work-with-us" class="btn text-primary bg-white hover:bg-gray-100"
-					>Volunteer With Us</a
+					>Work With Us</a
 				>
 				<a
 					href="/donate"

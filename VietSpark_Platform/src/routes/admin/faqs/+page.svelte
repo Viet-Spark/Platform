@@ -4,8 +4,8 @@
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
 	import { slide } from 'svelte/transition';
-	import { faqs, faqsLoading, fetchFAQs, deleteFAQ, renameCategory, deleteCategory, faqsError } from '$lib/stores/faqStore';
-	import { faqCategories, faqCategoriesLoading, faqCategoriesError, removeFaqCategory, updateFaqCategory, addFaqCategory } from '$lib/stores/faqCategoryStore';
+	import { faqs, faqsLoading, faqHandlers, faqsError } from '$lib/stores/faqStore';
+	import { faqCategories, faqCategoriesLoading, faqCategoryHandlers, faqCategoriesError} from '$lib/stores/faqCategoryStore';
 	import { writable } from 'svelte/store';
 
 	let isDataReady = false;
@@ -26,7 +26,7 @@
 
 	async function handleDelete(id) {
 		if (confirm('Are you sure you want to delete this FAQ?')) {
-			await deleteFAQ(id);
+			await faqHandlers.deleteFAQ(id);
 		}
 	}
 
@@ -53,7 +53,7 @@
 
 	async function handleRenameCategory(id, newCategory) {
 		try {
-			await updateFaqCategory(id, newCategory);
+			await faqCategoryHandlers.updateFaqCategory(id, newCategory);
 		} catch (error) {
 			console.error('Error renaming category:', error);
 		}
@@ -61,7 +61,7 @@
 	
 	async function handleDeleteCategory(id) {
 		try {	
-			await removeFaqCategory(id);
+			await faqCategoryHandlers.removeFaqCategory(id);
 			activeCategoryId = $faqCategories[0].id;
 		} catch (error) {
 			console.error('Error deleting category:', error);
@@ -71,7 +71,7 @@
 	async function handleAddCategory() {
 		const newCategory = prompt('Enter new category name:');
 		if (newCategory) {
-			activeCategoryId = await addFaqCategory(newCategory);
+			activeCategoryId = await faqCategoryHandlers.addFaqCategory(newCategory);
 		}
 	}
 </script>

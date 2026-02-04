@@ -7,17 +7,17 @@
 	import { aboutHandlers } from '$lib/stores/aboutStore';
 	import { onMount } from 'svelte';
 	import { homeHandlers } from '$lib/stores/homeStore';
-	import { fetchPartners } from '$lib/stores/partnerStore';
-	import { fetchFAQs } from '$lib/stores/faqStore';
+	import { partnerHandlers } from '$lib/stores/partnerStore';
+	import { faqHandlers } from '$lib/stores/faqStore';
 	import { getUsers } from '$lib/stores/userStore';
-	import { fetchFaqCategories } from '$lib/stores/faqCategoryStore';
+	import { faqCategories, faqCategoryHandlers } from '$lib/stores/faqCategoryStore';
 	import { eventHandlers } from '$lib/stores/eventStore2';
-	import { eventCategories, fetchEventCategories } from '$lib/stores/eventCategoryStore';
+	import { eventCategories, eventCategoryHandlers } from '$lib/stores/eventCategoryStore';
 	import { blogs, blogHandlers } from '$lib/stores/blogStore';
 	import { programs, programHandlers} from '$lib/stores/programStore';
 	import { projects, projectHandlers} from '$lib/stores/projectStore';
 	import { applications, applicationHandlers } from '$lib/stores/applicationStore';
-
+	
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
 	let newsletterMessage = '';
@@ -26,11 +26,26 @@
 		isMobileMenuOpen = !isMobileMenuOpen;
 	}
 
+	// async function sendEmail( name, email, templateId) {
+	// 	let status = 'Sending...';
+
+	// 	const res = await fetch('/api/sendEmail', {
+	// 		method: 'POST',
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 		body: JSON.stringify({ to: email, name, templateId, subject: 'Welcome!' })
+	// 	});
+
+	// 	const data = await res.json();
+	// 	status = data.success ? '✅ Email sent!' : `❌ Error: ${data.error}`;
+	// 	console.log(status); 
+	// }
+
 	async function handleNewsletterSubmit() {
 		newsletterMessage = '';
 		try { 
 			if (!$subscribers.find((subscriber) => subscriber.email === newsletterEmail)) {
 				await subscriberHandlers.addSubscriber(newsletterEmail);
+				// await sendEmail('VietSpark Member', newsletterEmail, '3vz9dle7ej14kj50'); 
 			}
 			newsletterMessage = 'Thank you for subscribing!';
 			newsletterEmail = '';
@@ -41,16 +56,17 @@
 	onMount(async () => {
 		await aboutHandlers.getAboutUs();
 		await homeHandlers.getHome();
-		await fetchPartners();
-		await fetchFAQs();
+		await partnerHandlers.fetchPartners();
+		await faqHandlers.fetchFAQs();
 		await getUsers();
-		await fetchFaqCategories();
+		await faqCategoryHandlers.fetchFaqCategories();
 		await eventHandlers.getEvents();
-		await fetchEventCategories();
+		await eventCategoryHandlers.fetchEventCategories();
 		await blogHandlers.getBlogs();
 		await programHandlers.getPrograms(); 
 		await projectHandlers.getProjects(); 
 		await applicationHandlers.getApplications(); 
+		await subscriberHandlers.fetchSubscribers(); 
 	});
 
 	$: console.log('user', $userData);
@@ -200,7 +216,7 @@
 							bind:value={newsletterEmail}
 							placeholder="Your email"
 							required
-							class="w-full rounded-md px-3 py-2 focus:outline-none"
+							class="w-full rounded-md px-3 py-2 text-primary-700 focus:outline-none"
 						/>
 						<button
 							type="submit"

@@ -4,12 +4,7 @@
 	import { authUser } from '$lib/stores/authStore';
 	import { userData } from '$lib/stores/userStore';
 	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
-	import {
-		eventCategories,
-		addEventCategory,
-		removeEventCategory,
-		fetchEventCategories
-	} from '$lib/stores/eventCategoryStore';
+	import { eventCategories, eventCategoryHandlers } from '$lib/stores/eventCategoryStore';
 	import { writable } from 'svelte/store';
 
 	let isDataReady = false;
@@ -53,7 +48,7 @@
 		if (newCategory.trim() && !isAddingCategory) {
 			try {
 				isAddingCategory = true;
-				await addEventCategory(newCategory.trim());
+				await eventCategoryHandlers.addEventCategory(newCategory.trim());
 				newCategory = '';
 			} catch (error) {
 				console.error('Error adding category:', error);
@@ -71,7 +66,7 @@
 		) {
 			try {
 				isRemovingCategory = true;
-				await removeEventCategory(id);
+				await eventCategoryHandlers.removeEventCategory(id);
 			} catch (error) {
 				console.error('Error removing category:', error);
 				alert('Failed to remove category. Please try again.');
