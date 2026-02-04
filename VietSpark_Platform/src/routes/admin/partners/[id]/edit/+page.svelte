@@ -56,7 +56,7 @@
         try {
             if (file) {
                 // Upload to Firebase Storage
-			    await uploadPartnerImage($partnerData.id, file);
+			    await partnerHandlers.uploadPartnerImage($partnerData.id, file);
             }
             goto('/admin/partners');
 		} catch (error) {

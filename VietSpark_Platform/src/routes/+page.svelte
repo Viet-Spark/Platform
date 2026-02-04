@@ -78,10 +78,10 @@
 						</a>
 					{:else}
 						<a
-							href="/events"
+							href="/work-with-us"
 							class="btn hover:text-primary border-2 border-white bg-transparent text-white transition-all hover:bg-white"
 						>
-							Explore Events
+							Work With Us
 						</a>
 					{/if}
 				</div>
