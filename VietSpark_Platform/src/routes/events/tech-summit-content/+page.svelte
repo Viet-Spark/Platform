@@ -286,9 +286,9 @@
 			{#if $pastEvents.length > 0}
 				<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 					{#each $pastEvents as event}
-						<div class="overflow-hidden rounded-lg bg-white shadow-md">
+						<div class="overflow-hidden rounded-lg bg-white shadow-md flex flex-col min-h-[200px]">
 							<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
-							<div class="p-6">
+							<div class="p-6 flex flex-col flex-1">
 								<div class="mb-2 flex items-start justify-between">
 									<span
 										class="text-primary inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold"
@@ -311,7 +311,7 @@
 								</div>
 								<a
 									href={`/events/${event.id}`}
-									class="btn bg-primary hover:bg-primary-dark w-full text-center text-white"
+									class="btn bg-primary hover:bg-primary-dark w-full text-center text-white mt-auto"
 								>
 									View Details
 								</a>

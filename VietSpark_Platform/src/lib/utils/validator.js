@@ -16,7 +16,7 @@ export function validateFile(file, { allowedTypes, maxSizeMB }) {
 export function validateImageFile(file) {
     const validationError = validateFile(file, {
         allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
-        maxSizeMB: 5
+        maxSizeMB: 30
     });
     return validationError;
 }

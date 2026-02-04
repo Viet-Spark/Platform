@@ -476,7 +476,7 @@
                         {/if}
                     </div>
 
-                    {#if $event.socialMediaLinks}
+                    {#if $event.socialMediaLinks.facebook || $event.socialMediaLinks.x || $event.socialMediaLinks.linkedIn || $event.socialMediaLinks.email}
                         <div class="rounded-lg bg-gray-50 p-6 shadow-sm">
                             <h3 class="mb-4 text-xl font-bold">Share This Event</h3>
                             <div class="flex space-x-4">

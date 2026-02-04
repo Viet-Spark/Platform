@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { eventCategories, eventCategoriesLoading, addEventCategory, removeEventCategory, updateEventCategory } from '$lib/stores/eventCategoryStore';
+	import { eventCategories, eventCategoriesLoading, eventCategoryHandlers } from '$lib/stores/eventCategoryStore';
 	import MarkdownEditor from '$lib/components/MarkdownEditor.svelte';
 	import MediaUploader from '$lib/components/MediaUploader.svelte';
 	import { eventStore, eventHandlers } from '$lib/stores/eventStore2';
