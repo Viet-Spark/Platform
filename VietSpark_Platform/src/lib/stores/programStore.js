@@ -18,7 +18,15 @@ export const curProgram = writable({
     year: new Date().getFullYear(),
     startDate: '',
     endDate: '',
+    applicationDeadline: '',
     presentationDate: '',
+    applicationFee: '',
+    applicationLink: '',
+    socialMediaLinks: {
+        facebook: '',
+        x: '',
+        linkedIn: ''
+    },
     teamIds: [],
     workshops: [],
     testimonialIds: [],
@@ -60,6 +68,7 @@ export const programHandlers = {
             if (programDoc.exists()) {
                 let programData =  {
                     ...programDoc.data(),
+                    imageTempFiles: [],
                     id: programDoc.id
                 }
                 curProgram.set(programData);

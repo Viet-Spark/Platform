@@ -136,6 +136,16 @@
                         </div>
 
                         <div>
+                            <label for="applicationDeadline" class="block text-sm font-medium text-gray-700">Application Deadline</label>
+                            <input
+                                type="date"
+                                id="applicationDeadline"
+                                bind:value={formData.applicationDeadline}
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                            />
+                        </div>
+
+                        <div>
                             <label for="startDate" class="block text-sm font-bold text-gray-700">Start Date</label>
                             <input
                                 type="date"
@@ -166,6 +176,42 @@
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                             />
                         </div>
+
+                        <div>
+                            <label for="applicationFee" class="block text-sm font-medium text-gray-700">Application Fee</label>
+                            <input
+                                type="text"
+                                id="applicationFee"
+                                bind:value={formData.applicationFee}
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="applicationLink" class="block text-sm font-medium text-gray-700">Application Link</label>
+                            <input
+                                type="text"
+                                id="applicationLink"
+                                bind:value={formData.applicationLink}
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                            />
+                        </div>
+
+                        {#each Object.entries(formData.socialMediaLinks) as [platform, value]}
+                            <div>
+                                <label
+                                    for="social_{platform}"
+                                    class="block text-sm font-medium text-gray-700"
+                                    >{platform.charAt(0).toUpperCase() + platform.slice(1)}</label
+                                >
+                                <input
+                                    type="url"
+                                    id="social_{platform}"
+                                    bind:value={formData.socialMediaLinks[platform]}
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                                />
+                            </div>
+                        {/each}
                     </div>
 
                     <div>

@@ -45,8 +45,27 @@ export function formatDateForDateInput(timestamp) {
 };
 
 export function formatDate(timestamp) {
-    if (!timestamp || !timestamp.seconds) return '';
-    return new Date(timestamp.seconds * 1000).toLocaleDateString();
+    if (!timestamp) return '';
+    
+    let date;
+    if (timestamp.seconds) {
+        // Firestore Timestamp format
+        date = new Date(timestamp.seconds * 1000);
+    } else if (typeof timestamp === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(timestamp)) {
+        // Date string format (YYYY-MM-DD) - add timezone to avoid UTC issues
+        date = new Date(timestamp + 'T00:00:00');
+    } else {
+        // Try to parse as regular date
+        date = new Date(timestamp);
+    }
+    
+    if (isNaN(date.getTime())) return ''; // Invalid date
+    
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
 export function formatDetailDate(timestamp) {

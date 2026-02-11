@@ -99,6 +99,7 @@
 				<a href="/about" class="nav-link">About Us</a>
 				<a href="/events" class="nav-link">Events</a>
 				<!-- <a href="/blog" class="nav-link">Blog</a> -->
+				<a href="/programs" class="nav-link">Programs</a>
 				<a href="/work-with-us" class="nav-link">Work With Us</a>
 				<a href="/contact" class="nav-link">Contact</a>
 				<a href="/donate" class="nav-link">Donate</a>
