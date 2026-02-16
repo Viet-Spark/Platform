@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
-	import { userData } from '$lib/stores/userStore';
+	import { userData, userLoading } from '$lib/stores/userStore';
 	import { programs, programHandlers, programLoading, programError } from '$lib/stores/programStore';
     import { writable } from 'svelte/store';
 	import { projectHandlers } from '$lib/stores/projectStore';
@@ -15,7 +15,7 @@
 	let filterStatus = 'all'; // all, upcoming, past, current
     let filteredPrograms = writable([]);
 
-	$: if ($authUser && $userData) {
+	$: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
 		isDataReady = true;
 	}
 
@@ -33,7 +33,9 @@
 				return programStartDate >= now;
 			} else if (filterStatus === 'past') {
 				return programEndDate < now;
-			} 
+			} else if (filterStatus === 'current') {
+				return programEndDate > now; 
+			}
 			return true;
 		})
 		.sort((a, b) => new Date(b.startDate) - new Date(a.startDate)));

@@ -7,13 +7,16 @@
 	import { marked } from 'marked';
 	import DOMPurify from 'dompurify';
 	import { formatDateFromStr } from '$lib/utils/formatDate';
+	import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
 
 	let error = null;
+	let loading = true; 
 	const program = writable(null);
 	let currentSlide = 0;
 	let tabList = [];
 	let programImages = writable([]);
 	let length = 0;
+	let programTestimonials = writable([]);
 
 	$: programId = $page.params.id;
 
@@ -21,29 +24,25 @@
 		program.set($programs.find((p) => p.id === programId));
 	}
 
-	$: programTestimonials = $program?.testimonialIds?.length
-		? ($testimonials || []).filter((t) => $program.testimonialIds.includes(t.id))
-		: [];
+	$: if ($testimonials && $program) {
+		programTestimonials.set($testimonials.filter((t) => $program.testimonialIds.includes(t.id) && t.moderationStatus === "Approved"));
+	}
 
-	onMount(async () => {
+	$: if ($program) {
+		loading = true; 
 		if ($program.coverUrl) {
             programImages.set([$program.coverUrl]); 
         }
         if ($program.imageUrls) {
             programImages.set([...$programImages, ...$program.imageUrls]);
         }
-        length = $programImages.length;
-        console.log(programImages);
-	});
-
-
-
-	$: if ($program) {
 		tabList = [
 			{ key: 'description', label: 'Description', show: true },
-			{ key: 'testimonials', label: 'Testimonials', show: programTestimonials.length > 0 },
+			{ key: 'testimonials', label: 'Testimonials', show: $programTestimonials.length > 0 },
 			{ key: 'gallery', label: 'Gallery', show: $programImages.length > 0 }
 		];
+        length = $programImages.length;
+		loading = false; 
 	}
 
 	function parseMarkdown(content) {
@@ -80,7 +79,7 @@
 	{/if}
 </svelte:head>
 
-{#if $programLoading}
+{#if $programLoading || loading}
 	<div class="flex min-h-screen items-center justify-center">
 		<div class="text-center">
 			<div class="border-primary inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-t-2"></div>
@@ -331,54 +330,34 @@
 
 				{#if activeTab === 'testimonials'}
 					<section>
-						<div class="space-y-8">
-							{#each programTestimonials as testimonial (testimonial.id)}
-								<div class="rounded-lg bg-gray-50 p-6 shadow-sm">
-									<div class="mb-2 flex items-center space-x-4">
-										<div>
-											<h3 class="text-lg font-semibold">{testimonial.name || testimonial.authorTitle || 'VietSpark Member'}</h3>
-											{#if testimonial.authorTitle && testimonial.name}
-												<span class="font-medium">{testimonial.authorTitle}</span>
-											{/if}
-											{#if testimonial.authorOrganization}
-												<span class="text-gray-600"> · {testimonial.authorOrganization}</span>
-											{/if}
+						<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 item-center">
+							{#each $programTestimonials as testimonial (testimonial.id)}
+								<a
+									href={`/testimonials/${testimonial.id}`}
+									class="group block rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+								>
+									<div class="flex flex-col gap-4">
+										<p class="text-sm italic text-gray-700 line-clamp-3">
+											{@html parseMarkdown(testimonial.highlight)}
+										</p>
+										<div class="flex items-center gap-2">
+											<img
+												src={testimonial.authorCoverImage || defaultProfile}
+												alt={testimonial.authorName}
+												class="h-14 w-14 rounded-full object-cover ring-2 ring-gray-100"
+											/>
+											<div>
+												<p class="text-sm font-bold text-gray-900">{testimonial.authorName}</p>
+												<p class="text-xs text-gray-500">
+													{testimonial.authorTitle} · {testimonial.authorOrganization}
+												</p>
+											</div>
 										</div>
+										
+									
+										
 									</div>
-									{#if testimonial.imageUrls && testimonial.imageUrls.length > 0}
-										<div class="mb-2 flex space-x-2">
-											{#each testimonial.imageUrls as img (img)}
-												<button
-													type="button"
-													class="focus:outline-none"
-													on:click={() => { modalImageUrl = img; showImageModal = true; }}
-												>
-													<img src={img} alt="Testimonial" class="h-16 w-16 rounded object-cover transition-transform hover:scale-105" />
-												</button>
-											{/each}
-										</div>
-									{/if}
-									{#if testimonial.videoUrl}
-										<div class="mb-2">
-											<video src={testimonial.videoUrl} controls class="w-full rounded">
-												<track kind="captions" />
-											</video>
-										</div>
-									{/if}
-									{#if testimonial.highlight}
-										<p class="text-primary font-medium">{testimonial.highlight}</p>
-									{/if}
-									{#if testimonial.quote}
-										<div class="prose mt-2 max-w-none">
-											{@html parseMarkdown(testimonial.quote)}
-										</div>
-									{/if}
-									{#if testimonial.outcomeSummary}
-										<div class="prose mt-2 max-w-none text-gray-700">
-											{@html parseMarkdown(testimonial.outcomeSummary)}
-										</div>
-									{/if}
-								</div>
+								</a>
 							{/each}
 						</div>
 					</section>

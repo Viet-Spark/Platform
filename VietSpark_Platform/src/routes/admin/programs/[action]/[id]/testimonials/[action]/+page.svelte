@@ -21,8 +21,13 @@
         let testimonialId = ""; 
         try {
             testimonialId = await testimonialHandlers.createTestimonial({
-                authorId: testimonial.authorId
+                authorName: testimonial.authorName
             })
+            // Upload cover image
+            let coverImageUrl = testimonial.authorCoverImage;
+			if (testimonial.coverTempFile) {
+				coverImageUrl = await testimonialHandlers.uploadCoverImage(testimonial.coverTempFile, testimonialId);
+			}
             // Upload video
             let testimonialVideoUrl = testimonial.videoUrl; 
             if (testimonial.videoTempFile) {
@@ -36,18 +41,18 @@
                 testimonialImageUrls = [...testimonialImageUrls, ...newUrls];
             }
             console.log('Preparing testimonial data to submit...');
+            console.log($userData); 
             const dataToSubmit = {
                 ...testimonial, 
+                authorCoverImage: coverImageUrl,
                 imageUrls: testimonialImageUrls, 
-                videoUrl: testimonialVideoUrl
+                videoUrl: testimonialVideoUrl, 
+                submitterId: $userData.id
             }
             // Remove all temporary fields and blob URLs
+            delete dataToSubmit.coverTempFile;
             delete dataToSubmit.videoTempFile; 
             delete dataToSubmit.imageTempFiles;
-            delete dataToSubmit.name; 
-            delete dataToSubmit.displayName; 
-            delete dataToSubmit.email; 
-            delete dataToSubmit.profileImage; 
 
             console.log("Testimonial Data to submit:", dataToSubmit);
 
