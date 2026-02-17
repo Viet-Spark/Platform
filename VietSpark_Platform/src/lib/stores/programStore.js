@@ -30,6 +30,7 @@ export const curProgram = writable({
     teamIds: [],
     workshops: [],
     testimonialIds: [],
+    workshopIds: [],
     projectIds: [],
     coverUrl: '',
     coverTempFile: null,
@@ -145,15 +146,5 @@ export const programHandlers = {
         await uploadBytes(fileRef, file);
         return await getDownloadURL(fileRef);
     },
-
-    uploadWorkshopImages: async (files, programId, workshopId ) => {
-        const uploadPromises = files.map(async (file) => {
-            const fileRef = ref(storage, `programs/${programId}/workshops/${workshopId}/${Date.now()}_${file.name}`);
-            await uploadBytes(fileRef, file);
-            return await getDownloadURL(fileRef);
-        });
-    
-        return await Promise.all(uploadPromises);
-    }
 }
 

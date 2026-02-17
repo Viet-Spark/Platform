@@ -60,12 +60,14 @@
 	import { testimonials, testimonialHandlers, testimonialLoading, testimonialError} from '$lib/stores/testimonialStore';
 	import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
 	import { marked } from 'marked';
+	import { writable } from 'svelte/store';
 	import DOMPurify from 'dompurify';
 
-	onMount(async () => {
-		// Fetch testimonials from Firestore on page load
-		await testimonialHandlers.getTestimonials();
-	});
+	let approvedTestimonial = writable([]); 
+
+	$: if ($testimonials) {
+		approvedTestimonial.set($testimonials.filter(t => t.moderationStatus === 'Approved' && t.visibility === "Public")); 
+	}
 
 	function parseMarkdown(content) {
 		if (!content) return '';
@@ -121,7 +123,7 @@
 				</div>
 			{:else}
 				<div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-					{#each $testimonials as testimonial (testimonial.id)}
+					{#each $approvedTestimonial as testimonial (testimonial.id)}
 						<a
 							href={`/testimonials/${testimonial.id}`}
 							class="group flex h-full flex-col rounded-xl bg-white p-6 shadow-md transition hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"

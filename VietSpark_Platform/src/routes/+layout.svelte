@@ -18,6 +18,7 @@
 	import { projects, projectHandlers} from '$lib/stores/projectStore';
 	import { applications, applicationHandlers } from '$lib/stores/applicationStore';
 	import { testimonialHandlers } from '$lib/stores/testimonialStore';
+	import { workshopHandlers } from '$lib/stores/workshopStore';
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
 	let newsletterMessage = '';
@@ -68,6 +69,7 @@
 		await projectHandlers.getProjects(); 
 		await applicationHandlers.getApplications(); 
 		await subscriberHandlers.fetchSubscribers(); 
+		await workshopHandlers.getWorkshops(); 
 	});
 
 	$: console.log('user', $userData);

@@ -11,9 +11,13 @@
         id: '',
         title: '',
         description: '',
-        date: '',
+        registrationLink: '',
+        startTime: '',
+        endTime: '',
         duration: 0,
         location: '',
+        coverUrl: '', 
+        coverTempFile: null,
         imageUrls: [],
         tempFiles: [],
         schedule: [],
@@ -26,6 +30,27 @@
     export let teams = []; 
     const dispatch = createEventDispatcher();
     let formData = { ...workshop };
+
+    // Sync formData when workshop prop changes (important when workshops is a writable store)
+    $: if (workshop) {
+        formData = { ...workshop };
+    }
+
+    // Handle cover image upload
+    function handleCoverImageUpload(event) {
+        const [file] = event.detail.files;
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            error = validationError;
+            return;
+        }
+        formData.coverTempFile = file;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            formData.coverUrl = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
 
 
     function handleImagesUpload(event) {
@@ -48,6 +73,7 @@
     function addScheduleEntry() {
         formData.schedule = [...formData.schedule, {
             presenterId: '',
+            presenterName: '',
             time: 0, 
             description: ''
         }]
@@ -105,14 +131,73 @@
                         />
                     </div>
 
-                    <!-- Date -->
+                    <!-- Start Date & Time -->
                     <div>
-                        <label for="date" class="block text-sm font-bold text-gray-700">Date</label>
+                        <label for="startTime" class="block text-sm font-bold text-gray-700">Start Date & Time</label>
                         <input
-                            id="date"
+                            id="startTime"
                             type="datetime-local"
                             required
-                            bind:value={formData.date}
+                            bind:value={formData.startTime}
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        />
+                    </div>
+
+                    <!-- End Date & Time -->
+                    <div>
+                        <label for="endTime" class="block text-sm font-bold text-gray-700">End Date & Time</label>
+                        <input
+                            id="endTime"
+                            type="datetime-local"
+                            required
+                            bind:value={formData.endTime}
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        />
+                    </div>
+
+                    <!-- Cover Image -->
+                    <div class="w-64">
+                        <label for="authorCoverImage" class="block font-semibold mb-1 ">Cover Image</label>
+                        {#if formData.coverUrl}
+                            <div class="mt-2 relative">
+                                <img
+                                    src={formData.coverUrl}
+                                    alt="Cover"
+                                    class="h-64 w-64 object-cover rounded-lg"
+                                />
+                                <button
+                                    type="button"
+                                    aria-label="Remove Image Cover"
+                                    class="absolute top-2 right-2 rounded-full p-1 bg-white text-red-500 hover:text-red-800 shadow-sm"
+                                    on:click={() => {
+                                        formData.coverUrl = '';
+                                        formData.coverTempFile = null;
+                                    }}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        {:else}
+                            <div class="mt-2">
+                                <MediaUploader
+                                    type="cover"
+                                    on:upload={handleCoverImageUpload}
+                                    id="coverImage"
+                                />
+                            </div>
+                        {/if}
+                    </div>
+
+                    <!-- Registration Link -->
+                    <div>
+                        <label for="registrationLink" class="block text-sm font-bold text-gray-700">Registration Link</label>
+                        <input
+                            id="registrationLink"
+                            type="text"
+                            required
+                            bind:value={formData.registrationLink}
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                         />
                     </div>
@@ -178,9 +263,10 @@
                             <thead>
                                 <tr class="bg-gray-100">
                                     <th class="w-[2%] px-2 py-1">#</th>
-                                    <th class="w-[40%] px-2 py-1">Presenter</th>
+                                    <th class="w-[25%] px-2 py-1">Presenter Name</th>
+                                    <th class="w-[21%] px-2 py-1">Presenter Account</th>
                                     <th class="w-[10%] px-2 py-1">Time (min)</th>
-                                    <th class="w-[46%] px-2 py-1">Description</th>
+                                    <th class="w-[40%] px-2 py-1">Description</th>
                                     <th class="w-[2%] px-2 py-1"></th>
                                 </tr>
                             </thead>
@@ -189,7 +275,15 @@
                                     {#each formData.schedule as entry, schedIdx}
                                         <tr>
                                             <td class="w-[2%] px-2 py-1">{schedIdx+1}</td>
-                                            <td class="w-[40%] px-2 py-1">
+                                            <td class="w-[25%] px-2 py-1">
+                                                <input
+                                                    type="text"
+                                                    class="rounded border-gray-300 w-full"
+                                                    bind:value={entry.presenterName}
+                                                    placeholder="Presenter Name"
+                                                />
+                                            </td>
+                                            <td class="w-[21%] px-2 py-1">
                                                 <select
                                                     class="rounded border-gray-300 w-full"
                                                     bind:value={entry.presenterId}
@@ -214,7 +308,7 @@
                                                     bind:value={entry.time}
                                                 />
                                             </td>
-                                            <td class="w-[46%] px-2 py-1">
+                                            <td class="w-[40%] px-2 py-1">
                                                 <input
                                                     type="text"
                                                     class="rounded border-gray-300 w-full"

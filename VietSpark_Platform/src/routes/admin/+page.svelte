@@ -14,6 +14,7 @@
 	import { testimonialLoading, testimonials, testimonialHandlers } from '$lib/stores/testimonialStore';
 	import { projectError, projectHandlers } from '$lib/stores/projectStore';
 	import { newsletterError, newsletterHandlers, newsletters, newsletterLoading } from '$lib/stores/newsletterStore';
+	import { workshopHandlers, workshops } from '$lib/stores/workshopStore';
 
 	let isDataReady = false;
 
@@ -24,7 +25,7 @@
 	$: console.log('Data Ready?', isDataReady);
 
 	// Wait for data to be ready before checking admin status
-	$: if ($authUser && $userData) {
+	$: if ($authUser && $userData && !$userLoading) {
 		console.log('Checking admin status:', {
 			hasAuthUser: !!$authUser,
 			userDataIsAdmin: $userData?.isAdmin,
@@ -52,7 +53,8 @@
 			teamHandlers.getTeams(), 
 			programHandlers.getPrograms(), 
 			testimonialHandlers.getTestimonials(),
-			projectHandlers.getProjects()
+			projectHandlers.getProjects(),
+			workshopHandlers.getWorkshops()
 		]);
 	});
 </script>

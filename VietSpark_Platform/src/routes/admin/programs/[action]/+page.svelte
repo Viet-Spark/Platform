@@ -1,6 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userData } from '$lib/stores/userStore';
+    import { userData, userLoading } from '$lib/stores/userStore';
     import { authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
@@ -10,7 +10,7 @@
     import { validateFile, validateImageFile, validateVideoFile} from '$lib/utils/validator.js';
 
     // Redirect if not admin
-    $: if ($authUser && !$userData?.isAdmin) {
+    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
         goto('/');
     }
 
@@ -29,7 +29,7 @@
             linkedIn: ''
         },
         teamIds: [],
-        workshops: [],
+        workshopIds: [],
         testimonialIds: [],
         projectIds: [],
         coverUrl: '',
