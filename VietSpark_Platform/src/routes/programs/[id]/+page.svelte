@@ -31,7 +31,19 @@
 	}
 
 	$: if ($workshops && $program) {
-		programWorkshops.set($workshops.filter((w) => $program.workshopIds.includes(w.id)));
+		let filteredWorkshops = $workshops.filter((w) => $program.workshopIds.includes(w.id)); 
+		// Sort by startTime (most recent first)
+		filteredWorkshops.sort((a, b) => {
+			const getTimestamp = (workshop) => {
+				if (!workshop.startTime) return 0;
+				// Handle Firestore Timestamp
+				if (workshop.startTime.seconds) {
+					return workshop.startTime.seconds * 1000;
+				}
+			}
+			return getTimestamp(b) - getTimestamp(a); // Descending order (most recent first)
+		});
+		programWorkshops.set(filteredWorkshops);
 	}
 
 	$: if ($program) {
@@ -357,19 +369,19 @@
 									href={`/testimonials/${testimonial.id}`}
 									class="group block rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
 								>
-									<div class="flex flex-col gap-4">
-										<p class="text-sm italic text-gray-700 line-clamp-3">
-											{@html parseMarkdown(testimonial.highlight)}
-										</p>
-										<div class="flex items-center gap-2">
+									<div class="flex flex-col gap-4 h-full">
+										<div class="text-lg italic font-bold text-gray-700 line-clamp-3">
+											{testimonial.highlight}
+										</div>
+										<div class="flex items-center gap-2 md:gap-5 text-center mt-auto">
 											<img
 												src={testimonial.authorCoverImage || defaultProfile}
 												alt={testimonial.authorName}
-												class="h-14 w-14 rounded-full object-cover ring-2 ring-gray-100"
+												class="h-24 w-24 rounded-full object-cover ring-2 ring-gray-100"
 											/>
-											<div>
-												<p class="text-sm font-bold text-gray-900">{testimonial.authorName}</p>
-												<p class="text-xs text-gray-500">
+											<div class="flex flex-col ">
+												<p class="text-lg font-bold text-gray-900">{testimonial.authorName}</p>
+												<p class="text-base text-gray-500">
 													{testimonial.authorTitle} · {testimonial.authorOrganization}
 												</p>
 											</div>
@@ -387,7 +399,7 @@
 				{#if activeTab === 'workshops'}
 					{#if $programWorkshops.length > 0}
 						<section>
-							<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+							<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 h-full">
 								{#each $programWorkshops as workshop (workshop.id)}
 									<div class="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
 										{#if workshop.coverUrl}
@@ -429,7 +441,7 @@
 													{@html parseMarkdown(workshop.description)}
 												</p>
 											{/if}
-											<div class="mt-4 flex flex-col gap-2">
+											<div class="mt-4 flex flex-col gap-2 mt-auto">
 												<button
 													type="button"
 													class="btn w-full border border-primary text-primary hover:bg-primary/5"
@@ -474,7 +486,7 @@
 								<img
 									src={url}
 									alt={`${$program.title} image ${i + 1}`}
-									class="h-48 w-full rounded-lg object-cover shadow-md transition hover:opacity-90"
+									class="w-full rounded-lg object-cover shadow-md transition hover:opacity-90"
 								/>
 							</button>
 						{/each}

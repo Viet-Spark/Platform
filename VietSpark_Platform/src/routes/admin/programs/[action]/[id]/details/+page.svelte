@@ -234,7 +234,7 @@
                                 <img
                                     src={formData.coverUrl}
                                     alt="Cover"
-                                    class="w-full h-64 object-cover rounded-lg"
+                                    class="w-full object-cover rounded-lg"
                                 />
                                 <button
                                     type="button"

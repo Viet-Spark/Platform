@@ -12,6 +12,7 @@
         authorName: '',
         authorCoverImage: '', 
         coverTempFile: null,
+        year: new Date().getFullYear(),
         quote: '',
         highlight: '',
         videoUrl: '',
@@ -167,6 +168,12 @@
                     <div>
                         <label for="highlight" class="block font-semibold mb-1">Highlight</label>
                         <textarea type="text" id="highlight" bind:value={formData.highlight} placeholder="Highlight" row="3" class="w-full border rounded px-3 py-2" ></textarea>
+                    </div>
+
+                    <!-- BIT Attended Year -->
+                    <div>
+                        <label for="year" class="block font-semibold mb-1">Break Into Tech Attended Year</label>
+                        <textarea type="number" placeholder="YYYY" min="1900" max="2100" id="year" bind:value={formData.year} class="w-full border rounded px-3 py-2" row="1" ></textarea>
                     </div>
 
                 </div>

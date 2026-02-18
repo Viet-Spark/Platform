@@ -196,7 +196,6 @@
                         <input
                             id="registrationLink"
                             type="text"
-                            required
                             bind:value={formData.registrationLink}
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
                         />

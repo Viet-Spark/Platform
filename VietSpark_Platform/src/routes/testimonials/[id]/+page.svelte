@@ -111,6 +111,21 @@ let modalImageUrl = '';
 			<div class="grid grid-cols-1 gap-10 lg:grid-cols-3">
 				<!-- Main testimonial content -->
 				<div class="lg:col-span-2 space-y-6">
+					{#if testimonial.videoUrl}
+						<div>
+							<h2 class="mb-3 text-lg font-semibold text-gray-900">Video Story</h2>
+							<div class="overflow-hidden rounded-xl bg-black shadow-sm">
+								<video
+									src={testimonial.videoUrl}
+									controls
+									class="h-full w-full"
+								>
+									<track kind="captions" />
+								</video>
+							</div>
+						</div>
+					{/if}
+
 					{#if testimonial.quote}
 						<div class="prose prose-lg max-w-none rounded-xl bg-white p-6 shadow-sm prose-a:text-blue-600 prose-a:hover:text-blue-800">
 							{@html parseMarkdown(testimonial.quote)}
@@ -138,25 +153,10 @@ let modalImageUrl = '';
 										<img
 											src={url}
 											alt={`Image from ${testimonial.authorName || 'testimonial'}`}
-											class="h-64 w-full cursor-pointer object-cover transition hover:scale-105"
+											class="w-full cursor-pointer object-cover transition hover:scale-105"
 										/>
 									</button>
 								{/each}
-							</div>
-						</div>
-					{/if}
-
-					{#if testimonial.videoUrl}
-						<div>
-							<h2 class="mb-3 text-lg font-semibold text-gray-900">Video Story</h2>
-							<div class="overflow-hidden rounded-xl bg-black shadow-sm">
-								<video
-									src={testimonial.videoUrl}
-									controls
-									class="h-full w-full"
-								>
-									<track kind="captions" />
-								</video>
 							</div>
 						</div>
 					{/if}
