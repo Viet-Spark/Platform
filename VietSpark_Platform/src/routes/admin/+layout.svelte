@@ -16,6 +16,10 @@
 		isMobileMenuOpen = !isMobileMenuOpen;
 	}
 
+	function closeMobileMenu() {
+		isMobileMenuOpen = false;
+	}
+
 	const navItems = [
 		{ href: '/admin', label: 'Dashboard' },
 		{ href: '/admin/home', label: 'Home' },
@@ -68,6 +72,7 @@
 							href={item.href}
 							class="hover:text-primary text-gray-600"
 							class:text-primary={$page.url.pathname === item.href}
+							on:click={closeMobileMenu}
 						>
 							{item.label}
 						</a>

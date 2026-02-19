@@ -27,6 +27,10 @@
 		isMobileMenuOpen = !isMobileMenuOpen;
 	}
 
+	function closeMobileMenu() {
+		isMobileMenuOpen = false;
+	}
+
 	// async function sendEmail( name, email, templateId) {
 	// 	let status = 'Sending...';
 
@@ -146,15 +150,15 @@
 		<!-- Mobile menu (hidden by default) -->
 		<div class="lg:hidden" class:hidden={!isMobileMenuOpen}>
 			<div class="space-y-1 px-2 pb-3 pt-2">
-				<a href="/" class="mobile-nav-link">Home</a>
-				<a href="/about" class="mobile-nav-link">About Us</a>
-				<a href="/events" class="mobile-nav-link">Events</a>
-				<!-- <a href="/blog" class="mobile-nav-link">Blog</a> -->
-				<a href="/programs" class="mobile-nav-link">Programs</a>
-				<a href="/testimonials" class="mobile-nav-link">Testimonials</a>
-				<a href="/work-with-us" class="mobile-nav-link">Work With Us</a>
-				<a href="/contact" class="mobile-nav-link">Contact</a>
-				<a href="/donate" class="mobile-nav-link">Donate</a>
+				<a href="/" class="mobile-nav-link" on:click={closeMobileMenu}>Home</a>
+				<a href="/about" class="mobile-nav-link" on:click={closeMobileMenu}>About Us</a>
+				<a href="/events" class="mobile-nav-link" on:click={closeMobileMenu}>Events</a>
+				<!-- <a href="/blog" class="mobile-nav-link" on:click={closeMobileMenu}>Blog</a> -->
+				<a href="/programs" class="mobile-nav-link" on:click={closeMobileMenu}>Programs</a>
+				<a href="/testimonials" class="mobile-nav-link" on:click={closeMobileMenu}>Testimonials</a>
+				<a href="/work-with-us" class="mobile-nav-link" on:click={closeMobileMenu}>Work With Us</a>
+				<a href="/contact" class="mobile-nav-link" on:click={closeMobileMenu}>Contact</a>
+				<a href="/donate" class="mobile-nav-link" on:click={closeMobileMenu}>Donate</a>
 			</div>
 		</div>
 	</header>
