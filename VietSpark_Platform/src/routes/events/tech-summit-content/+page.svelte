@@ -288,8 +288,8 @@
 					{#each $pastEvents as event}
 						<div class="overflow-hidden rounded-lg bg-white shadow-md flex flex-col min-h-[200px]">
 							<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
-							<div class="p-6 flex flex-col flex-1">
-								<div class="mb-2 flex items-start justify-between">
+							<div class="p-6 flex flex-col flex-1 gap-2">
+								<div class="flex items-start justify-between">
 									<span
 										class="text-primary inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold"
 									>
@@ -297,18 +297,18 @@
 									</span>
 									<span class="text-gray-600">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</span>
 								</div>
-								<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
-								<p class="mb-4 text-gray-600">{event.shortDescription}</p>
-								<div class="mb-4">
-									<div class="mb-2 flex items-center text-gray-600">
+								<h3 class="text-xl font-bold">{event.title}</h3>
+								<div class="">
+									<div class="flex items-center text-gray-600">
 										<i class="fas fa-map-marker-alt w-5"></i>
 										<span>{event.location.displayText}</span>
 									</div>
-									<!-- <div class="flex items-center text-gray-600">
+									<div class="flex items-center text-gray-600">
 										<i class="fas fa-clock w-5"></i>
-										<span>{event.time}</span>
-									</div> -->
+										<span>{formatTime(event.eventDate.start)} - {formatTime(event.eventDate.end)}</span>
+									</div>
 								</div>
+								<p class="text-gray-600">{event.shortDescription}</p>
 								<a
 									href={`/events/${event.id}`}
 									class="btn bg-primary hover:bg-primary-dark w-full text-center text-white mt-auto"

@@ -144,11 +144,11 @@
     </div>
 {:else}
     <section class="bg-primary py-16 text-white">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between md:flex-row flex-col">
-                <div>
+        <div class="container mx-auto px-4 text-center">
+            <div class="flex items-center gap-2 justify-between md:flex-row flex-col">
+                <div class="flex-6">
                     <h1 class="mb-4 text-4xl font-bold">{$event.title}</h1>
-                    <div class="flex items-center space-x-4 text-lg md:flex-row flex-col">
+                    <div class="flex items-center justify-center space-x-4 text-lg md:flex-row flex-col">
                         <div class="flex items-center">
                             <i class="fas fa-calendar-day mr-2"></i>
                             <span>{formatDate($event.eventDate?.start)} - {formatDate($event.eventDate?.end)}</span>
@@ -167,7 +167,7 @@
                 </div>
                 <a
                     href="/events"
-                    class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
+                    class="btn flex-1 hover:text-primary border-2 border-white bg-transparent hover:bg-white"
                 >
                     Back to Events
                 </a>

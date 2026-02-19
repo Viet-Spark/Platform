@@ -9,6 +9,7 @@
 	import { formatDateFromStr, formatDetailDate } from '$lib/utils/formatDate';
 	import { workshops, workshopLoading } from '$lib/stores/workshopStore';
 	import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
+	import { goto } from '$app/navigation';
 
 	let error = null;
 	let loading = true; 
@@ -87,19 +88,6 @@
 	let showImageModal = false;
 	let modalImageUrl = '';
 
-	// Workshop details modal
-	let showWorkshopModal = false;
-	let selectedWorkshop = null;
-
-	function openWorkshopDetails(workshop) {
-		selectedWorkshop = workshop;
-		showWorkshopModal = true;
-	}
-
-	function closeWorkshopDetails() {
-		showWorkshopModal = false;
-		selectedWorkshop = null;
-	}
 
 </script>
 
@@ -137,8 +125,8 @@
 {:else}
 	<section class="bg-primary py-16 text-white">
 		<div class="container mx-auto px-4">
-			<div class="flex items-center justify-between md:flex-row flex-col gap-4">
-				<div class="text-center">
+			<div class="flex items-center text-center justify-between md:flex-row flex-col gap-4">
+				<div class="flex-6">
 					<h1 class="mb-4 text-4xl font-bold">{$program.title}</h1>
 					{#if $program.startDate || $program.endDate}
 						<div class="flex items-center justify-center space-x-4 text-lg">
@@ -154,7 +142,7 @@
 					{/if}
 				</div>
 
-				<a href="/programs" class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white">
+				<a href="/programs" class="btn flex-1 hover:text-primary border-2 border-white bg-transparent hover:bg-white">
 					Back to Programs
 				</a>
 			</div>
@@ -273,7 +261,7 @@
                                 </li>
                             {/if}
 						</ul>
-						{#if $program.applicationLink}
+						{#if $program.applicationLink && $program.applicationDeadline && new Date($program.applicationDeadline) > new Date()}
                             <div class="mt-6">
                                 <a href={$program.applicationLink}
                                     aria-label="Apply for {$program.title}"
@@ -386,9 +374,6 @@
 												</p>
 											</div>
 										</div>
-										
-									
-										
 									</div>
 								</a>
 							{/each}
@@ -436,29 +421,23 @@
 													{workshop.location}
 												</p>
 											{/if}
-											{#if workshop.description}
-												<p class="text-sm text-gray-700 line-clamp-3">
-													{@html parseMarkdown(workshop.description)}
-												</p>
-											{/if}
-											<div class="mt-4 flex flex-col gap-2 mt-auto">
+											<div class="flex flex-row gap-2 mt-auto text-center text-lg">
 												<button
 													type="button"
-													class="btn w-full border border-primary text-primary hover:bg-primary/5"
-													on:click={() => openWorkshopDetails(workshop)}
+													class="flex-1 p-2 border border-primary text-primary hover:bg-primary/5 rounded-lg"
+													on:click={() => goto(`/workshops/${workshop.id}`)}
 												>
 													View details
 												</button>
-												{#if workshop.registrationLink}
+												{#if workshop.registrationLink && workshop.registrationDeadline && new Date(workshop.registrationDeadline.seconds * 1000) > new Date()}
 													<a
 														href={workshop.registrationLink}
 														target="_blank"
 														rel="noopener noreferrer"
 														aria-label={`Register for ${workshop.title}`}
+														class="flex-1 p-2 bg-primary text-white hover:bg-primary-dark rounded-lg"
 													>
-														<button class="btn bg-primary w-full text-white hover:bg-primary-dark">
-															Register
-														</button>
+													Register
 													</a>
 												{/if}
 											</div>
@@ -486,7 +465,7 @@
 								<img
 									src={url}
 									alt={`${$program.title} image ${i + 1}`}
-									class="w-full rounded-lg object-cover shadow-md transition hover:opacity-90"
+									class="w-full aspect-square rounded-lg object-cover shadow-md transition hover:opacity-90"
 								/>
 							</button>
 						{/each}
@@ -521,162 +500,6 @@
 					alt="Enlarged view"
 					class="max-h-[90vh] max-w-full rounded-lg object-contain shadow-xl"
 				/>
-			</div>
-		</div>
-	{/if}
-
-	{#if showWorkshopModal && selectedWorkshop}
-		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-		<div
-			class="fixed inset-0 z-20 flex items-center justify-center bg-black/70 p-4"
-			role="dialog"
-			aria-modal="true"
-			aria-label="Workshop details"
-			tabindex="-1"
-			on:click={closeWorkshopDetails}
-			on:keydown={(e) => e.key === 'Escape' && closeWorkshopDetails()}
-		>
-			<div
-				class="max-h-[90vh] w-full max-w-7xl overflow-y-auto rounded-lg bg-white p-6 shadow-xl"
-				role="presentation"
-				on:click|stopPropagation
-				on:keydown|stopPropagation
-			>
-				<div class="flex items-start justify-between gap-4">
-					<div>
-						<div class="text-3xl font-bold text-gray-900">
-							{selectedWorkshop.title}
-						</div>
-						{#if selectedWorkshop.startTime}
-							<p class="mt-2 flex items-center text-sm text-gray-600">
-								<i class="fas fa-calendar-alt mr-2 text-primary"></i>
-								{formatDetailDate(selectedWorkshop.startTime)}
-							</p>
-						{/if}
-						{#if selectedWorkshop.location}
-							<p class="mt-1 flex items-center text-sm text-gray-600">
-								<i class="fas fa-map-marker-alt mr-2 text-primary"></i>
-								{selectedWorkshop.location}
-							</p>
-						{/if}
-						{#if selectedWorkshop.duration}
-							<p class="mt-1 flex items-center text-sm text-gray-600">
-								<i class="fas fa-clock mr-2 text-primary"></i>
-								Duration: {selectedWorkshop.duration} min
-							</p>
-						{/if}
-					</div>
-					<button
-						type="button"
-						class="text-2xl text-gray-500 hover:text-gray-800"
-						aria-label="Close workshop details"
-						on:click={closeWorkshopDetails}
-					>
-						×
-					</button>
-				</div>
-
-				{#if selectedWorkshop.coverUrl}
-					<div class="mt-4">
-						<button
-							type="button"
-							class="w-full focus:outline-none"
-							aria-label={`View cover image for ${selectedWorkshop.title}`}
-							on:click={() => {
-								modalImageUrl = selectedWorkshop.coverUrl;
-								showImageModal = true;
-							}}
-						>
-							<img
-								src={selectedWorkshop.coverUrl}
-								alt={selectedWorkshop.title}
-								class="h-128 w-full rounded-lg object-cover"
-								loading="lazy"
-							/>
-						</button>
-					</div>
-				{/if}
-
-				{#if selectedWorkshop.description}
-					<div class="prose prose-lg mt-6 max-w-none prose-a:text-blue-600 prose-a:hover:text-blue-800">
-						{@html parseMarkdown(selectedWorkshop.description)}
-					</div>
-				{/if}
-
-				{#if selectedWorkshop.schedule && selectedWorkshop.schedule.length > 0}
-					<div class="mt-8">
-						<h3 class="mb-3 text-lg font-semibold text-gray-900">Schedule</h3>
-						<div class="overflow-x-auto">
-							<table class="min-w-full divide-y divide-gray-200 text-sm">
-								<thead class="bg-gray-50">
-									<tr>
-										<th class="px-3 py-2 text-left font-medium text-gray-700">#</th>
-										<th class="px-3 py-2 text-left font-medium text-gray-700">Presenter</th>
-										<th class="px-3 py-2 text-left font-medium text-gray-700">Time (min)</th>
-										<th class="px-3 py-2 text-left font-medium text-gray-700">Description</th>
-									</tr>
-								</thead>
-								<tbody class="divide-y divide-gray-100 bg-white">
-									{#each selectedWorkshop.schedule as entry, idx}
-										<tr>
-											<td class="px-3 py-2 text-gray-600">{idx + 1}</td>
-											<td class="px-3 py-2 text-gray-800">
-												{entry.presenterName || 'TBA'}
-											</td>
-											<td class="px-3 py-2 text-gray-800">
-												{entry.time || 0}
-											</td>
-											<td class="px-3 py-2 text-gray-700">
-												{entry.description}
-											</td>
-										</tr>
-									{/each}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				{/if}
-
-				{#if selectedWorkshop.imageUrls && selectedWorkshop.imageUrls.length > 0}
-					<div class="mt-8">
-						<h3 class="mb-3 text-lg font-semibold text-gray-900">Gallery</h3>
-						<div class="grid grid-cols-2 gap-3 md:grid-cols-3">
-							{#each selectedWorkshop.imageUrls as url, i}
-								<button
-									type="button"
-									class="focus:outline-none"
-									aria-label={`View image ${i + 1} for ${selectedWorkshop.title}`}
-									on:click={() => {
-										modalImageUrl = url;
-										showImageModal = true;
-									}}
-								>
-									<img
-										src={url}
-										alt={`${selectedWorkshop.title} image ${i + 1}`}
-										class="h-32 w-full rounded-lg object-cover"
-										loading="lazy"
-									/>
-								</button>
-							{/each}
-						</div>
-					</div>
-				{/if}
-
-				{#if selectedWorkshop.registrationLink}
-					<div class="mt-8 flex justify-end">
-						<a
-							href={selectedWorkshop.registrationLink}
-							target="_blank"
-							rel="noopener noreferrer"
-							aria-label={`Register for ${selectedWorkshop.title}`}
-						>
-							<button class="btn bg-primary text-white hover:bg-primary-dark">
-								Register for this workshop
-							</button>
-						</a>
-					</div>
-				{/if}
 			</div>
 		</div>
 	{/if}

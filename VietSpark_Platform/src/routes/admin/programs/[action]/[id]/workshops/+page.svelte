@@ -38,10 +38,10 @@
             // Load the current program to get associated workshop IDs
             await programHandlers.getProgram(programId);
             const ids = $curProgram.workshopIds || [];
-            let filteredPrograms = $workshops.filter((workshop) => ids.includes(workshop.id)); 
+            let filteredWorkshops = $workshops.filter((workshop) => ids.includes(workshop.id)); 
             
             // Sort by startTime (most recent first)
-            filteredPrograms.sort((a, b) => {
+            filteredWorkshops.sort((a, b) => {
                 const getTimestamp = (workshop) => {
                     if (!workshop.startTime) return 0;
                     // Handle Firestore Timestamp
@@ -52,9 +52,10 @@
                 return getTimestamp(b) - getTimestamp(a); // Descending order (most recent first)
             });
             
-            programWorkshops.set(filteredPrograms.map((workshop) => {
+            programWorkshops.set(filteredWorkshops.map((workshop) => {
                 workshop.startTime = formatDateForDateTimeInput(workshop.startTime);
                 workshop.endTime = formatDateForDateTimeInput(workshop.endTime);
+                workshop.registrationDeadline = formatDateForDateTimeInput(workshop.registrationDeadline);
                 return workshop;
             }));
             

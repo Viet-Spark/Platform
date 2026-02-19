@@ -45,6 +45,7 @@
 
             workshop.startTime = new Date(workshop.startTime); 
             workshop.endTime = new Date(workshop.endTime); 
+            workshop.registrationDeadline = new Date(workshop.registrationDeadline); 
 
             console.log('Preparing workshop data to submit...');
 

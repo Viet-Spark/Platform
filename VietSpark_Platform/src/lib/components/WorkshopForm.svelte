@@ -18,6 +18,7 @@
         location: '',
         coverUrl: '', 
         coverTempFile: null,
+        registrationDeadline: '',
         imageUrls: [],
         tempFiles: [],
         schedule: [],
@@ -155,6 +156,28 @@
                         />
                     </div>
 
+                    <!-- Registration Link -->
+                    <div>
+                        <label for="registrationLink" class="block text-sm font-bold text-gray-700">Registration Link</label>
+                        <input
+                            id="registrationLink"
+                            type="text"
+                            bind:value={formData.registrationLink}
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        />
+                    </div>
+
+                    <!-- Registration Deadline -->
+                    <div>
+                        <label for="registrationDeadline" class="block text-sm font-bold text-gray-700">Registration Deadline</label>
+                        <input
+                            id="registrationDeadline"
+                            type="datetime-local"
+                            bind:value={formData.registrationDeadline}
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        />
+                    </div>
+
                     <!-- Cover Image -->
                     <div class="w-64">
                         <label for="authorCoverImage" class="block font-semibold mb-1 ">Cover Image</label>
@@ -188,17 +211,6 @@
                                 />
                             </div>
                         {/if}
-                    </div>
-
-                    <!-- Registration Link -->
-                    <div>
-                        <label for="registrationLink" class="block text-sm font-bold text-gray-700">Registration Link</label>
-                        <input
-                            id="registrationLink"
-                            type="text"
-                            bind:value={formData.registrationLink}
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
-                        />
                     </div>
 
                     <!-- Description -->

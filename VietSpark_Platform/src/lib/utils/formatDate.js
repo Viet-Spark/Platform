@@ -95,14 +95,14 @@ export function formatTime(timestamp) {
     if (!timestamp || !timestamp.seconds) return '';
 
     const date = new Date(timestamp.seconds * 1000);
-
+    let timezone = getTimezoneAbbreviation(date); 
     const formatAMPM = date => {
         let hours = date.getHours();
         let minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'PM' : 'AM';
         hours = hours % 12 || 12; // Convert to 12-hour format
         minutes = String(minutes).padStart(2, '0');
-        return `${hours}:${minutes} ${ampm}`;
+        return `${hours}:${minutes} ${ampm} ${timezone}`;
     };
 
     return formatAMPM(date);

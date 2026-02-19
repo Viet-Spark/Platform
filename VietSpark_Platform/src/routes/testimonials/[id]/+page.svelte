@@ -6,13 +6,13 @@
     import DOMPurify from 'dompurify';
     import defaultProfile from '$lib/images/About/placeHolderAvatar.jpg';
 
-let testimonial = null;
-let loading = true;
-let error = null;
+	let testimonial = null;
+	let loading = true;
+	let error = null;
 
-// Lightbox modal state for images
-let showImageModal = false;
-let modalImageUrl = '';
+	// Lightbox modal state for images
+	let showImageModal = false;
+	let modalImageUrl = '';
 
 	$: testimonialId = $page.params.id;
 

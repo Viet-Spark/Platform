@@ -14,7 +14,7 @@ export const workshopError = writable(null);
 
 export const workshopHandlers = {
     // Function to fetch all workshops
-    getWorkshops: async (orderByColumn = "createdAt") => {
+    getWorkshops: async (orderByColumn = "startTime") => {
         workshopLoading.set(true);
         try {
             const workshopRef = collection(db, 'workshops');
