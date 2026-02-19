@@ -9,7 +9,10 @@
 
     export let testimonial = {
         id: '',
-        authorId: '',
+        authorName: '',
+        authorCoverImage: '', 
+        coverTempFile: null,
+        year: new Date().getFullYear(),
         quote: '',
         highlight: '',
         videoUrl: '',
@@ -22,8 +25,7 @@
         authorOrganization: '',
         authorLocation: '',
         source: 'Survey',
-        outcomeSummary: '',
-        displayFormat: 'Text',
+        submitterId: '',
         tags: [],
         editorNotes: ''
     };
@@ -39,16 +41,10 @@
     let availableSources = ['Form', 'Survey', 'Interview', 'Email'];
     let visibilityOptions = ['Public', 'Internal', 'Private'];
     let statusOptions = ['Approved', 'Pending', 'Rejected'];
-    let formatOptions = ['Text', 'Video', 'Carousel'];
-    let authorId = ''; 
 
     onMount(() => {
         getUsers();
     });
-
-    $: if (testimonial) {
-        authorId = testimonial.authorId || ''; 
-    }
 
     // Tag management
     function addTag() {
@@ -63,6 +59,22 @@
     }
     function removeTag(idx) {
         formData.tags = formData.tags.filter((_, i) => i !== idx);
+    }
+
+    // Handle cover image upload
+    function handleCoverImageUpload(event) {
+        const [file] = event.detail.files;
+        const validationError = validateImageFile(file);
+        if (validationError) {
+            error = validationError;
+            return;
+        }
+        formData.coverTempFile = file;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            formData.authorCoverImage = reader.result;
+        };
+        reader.readAsDataURL(file);
     }
 
     // Images upload
@@ -100,15 +112,6 @@
 
 	}
 
-    async function updateAuthor(authorId) {
-        const userInfo = await getUser(authorId); 
-        formData = {
-            ...formData, 
-            ...userInfo, 
-            authorId: authorId
-        }
-    }
-
     function handleSubmit(e) {
         e.preventDefault();
         loading = true; 
@@ -125,7 +128,7 @@
             <form on:submit={handleSubmit} class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Author -->
-                    <div>
+                    <!-- <div>
                         <label for="authorId" class="block font-semibold mb-1">Author</label>
                         <select id="authorId" value={formData.authorId} on:change={(e) => updateAuthor(e.target.value)} required class="w-full border rounded px-3 py-2">
                         <option value="">Select author</option>
@@ -135,6 +138,12 @@
                             {/each}
                         {/if}
                         </select>
+                    </div> -->
+
+                    <!-- Author Name -->
+                    <div>
+                        <label for="authorName" class="block font-semibold mb-1">Author Name</label>
+                        <input type="text" id="authorName" bind:value={formData.authorName} placeholder="Author Name" class="w-full border rounded px-3 py-2" />
                     </div>
 
                     <!-- Author Title -->
@@ -155,12 +164,53 @@
                         <input type="text" id="authorLocation" bind:value={formData.authorLocation} placeholder="Author Location" class="w-full border rounded px-3 py-2" />
                     </div>
 
+                    <!-- Highlight -->
+                    <div>
+                        <label for="highlight" class="block font-semibold mb-1">Highlight</label>
+                        <textarea type="text" id="highlight" bind:value={formData.highlight} placeholder="Highlight" row="3" class="w-full border rounded px-3 py-2" ></textarea>
+                    </div>
+
+                    <!-- BIT Attended Year -->
+                    <div>
+                        <label for="year" class="block font-semibold mb-1">Break Into Tech Attended Year</label>
+                        <textarea type="number" placeholder="YYYY" min="1900" max="2100" id="year" bind:value={formData.year} class="w-full border rounded px-3 py-2" row="1" ></textarea>
+                    </div>
+
                 </div>
 
-                <!-- Highlight -->
-                <div>
-                    <label for="highlight" class="block font-semibold mb-1">Highlight</label>
-                    <textarea type="text" id="highlight" bind:value={formData.highlight} placeholder="Highlight" row="3" class="w-full border rounded px-3 py-2" ></textarea>
+                <!-- Author Cover Image -->
+                <div class="w-64">
+                    <label for="authorCoverImage" class="block font-semibold mb-1 ">Author Cover Image</label>
+                    {#if formData.authorCoverImage}
+                        <div class="mt-2 relative">
+                            <img
+                                src={formData.authorCoverImage}
+                                alt="Cover"
+                                class="h-64 w-64 object-cover rounded-lg"
+                            />
+                            <button
+                                type="button"
+                                aria-label="Remove Image Cover"
+                                class="absolute top-2 right-2 rounded-full p-1 bg-white text-red-500 hover:text-red-800 shadow-sm"
+                                on:click={() => {
+                                    formData.authorCoverImage = '';
+                                    formData.coverTempFile = null;
+                                }}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    {:else}
+                    <div class="mt-2">
+                        <MediaUploader
+                            type="cover"
+                            on:upload={handleCoverImageUpload}
+                            id="coverImage"
+                        />
+                    </div>
+                    {/if}
                 </div>
 
                 <!-- Quote -->
@@ -175,12 +225,6 @@
                             formData.quote = newValue;
                         }}
                     />
-                </div>
-
-                <!-- Outcome Summary -->
-                <div>
-                    <label for="outcomeSummary" class="block font-semibold mb-1">Outcome Summary</label>
-                    <textarea type="text" id="outcomeSummary" bind:value={formData.outcomeSummary} placeholder="Outcome Summary" row="3" class="w-full border rounded px-3 py-2"></textarea>
                 </div>
 
                 <!-- Images -->
@@ -269,7 +313,7 @@
                     </div>
                 </div>
 
-                <!-- Visibility, Status, Source, Display Format -->
+                <!-- Visibility, Status, Source -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label for="visibility" class="block font-semibold mb-1">Visibility</label>
@@ -292,14 +336,6 @@
                         <select id="source" bind:value={formData.source} class="w-full border rounded px-3 py-2">
                         {#each availableSources as s}
                             <option value={s}>{s}</option>
-                        {/each}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="format" class="block font-semibold mb-1">Display Format</label>
-                        <select id="format" bind:value={formData.displayFormat} class="w-full border rounded px-3 py-2">
-                        {#each formatOptions as f}
-                            <option value={f}>{f}</option>
                         {/each}
                         </select>
                     </div>

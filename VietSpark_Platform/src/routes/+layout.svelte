@@ -17,13 +17,18 @@
 	import { programs, programHandlers} from '$lib/stores/programStore';
 	import { projects, projectHandlers} from '$lib/stores/projectStore';
 	import { applications, applicationHandlers } from '$lib/stores/applicationStore';
-	
+	import { testimonialHandlers } from '$lib/stores/testimonialStore';
+	import { workshopHandlers } from '$lib/stores/workshopStore';
 	let isMobileMenuOpen = false;
 	let newsletterEmail = '';
 	let newsletterMessage = '';
 
 	function toggleMobileMenu() {
 		isMobileMenuOpen = !isMobileMenuOpen;
+	}
+
+	function closeMobileMenu() {
+		isMobileMenuOpen = false;
 	}
 
 	// async function sendEmail( name, email, templateId) {
@@ -59,6 +64,7 @@
 		await partnerHandlers.fetchPartners();
 		await faqHandlers.fetchFAQs();
 		await getUsers();
+		await testimonialHandlers.getTestimonials();
 		await faqCategoryHandlers.fetchFaqCategories();
 		await eventHandlers.getEvents();
 		await eventCategoryHandlers.fetchEventCategories();
@@ -67,6 +73,7 @@
 		await projectHandlers.getProjects(); 
 		await applicationHandlers.getApplications(); 
 		await subscriberHandlers.fetchSubscribers(); 
+		await workshopHandlers.getWorkshops(); 
 	});
 
 	$: console.log('user', $userData);
@@ -94,11 +101,13 @@
 				</a>
 			</div>
 
-			<div class="hidden space-x-6 md:flex">
+			<div class="hidden space-x-3 lg:flex">
 				<a href="/" class="nav-link">Home</a>
 				<a href="/about" class="nav-link">About Us</a>
 				<a href="/events" class="nav-link">Events</a>
 				<!-- <a href="/blog" class="nav-link">Blog</a> -->
+				<a href="/programs" class="nav-link">Programs</a>
+				<a href="/testimonials" class="nav-link">Testimonials</a>
 				<a href="/work-with-us" class="nav-link">Work With Us</a>
 				<a href="/contact" class="nav-link">Contact</a>
 				<a href="/donate" class="nav-link">Donate</a>
@@ -129,7 +138,7 @@
 				{/if}
 
 				<button
-					class="text-gray-600 focus:outline-none md:hidden"
+					class="text-gray-600 focus:outline-none lg:hidden"
 					aria-label="Toggle menu"
 					on:click={toggleMobileMenu}
 				>
@@ -139,15 +148,17 @@
 		</nav>
 
 		<!-- Mobile menu (hidden by default) -->
-		<div class="md:hidden" class:hidden={!isMobileMenuOpen}>
+		<div class="lg:hidden" class:hidden={!isMobileMenuOpen}>
 			<div class="space-y-1 px-2 pb-3 pt-2">
-				<a href="/" class="mobile-nav-link">Home</a>
-				<a href="/about" class="mobile-nav-link">About Us</a>
-				<a href="/events" class="mobile-nav-link">Events</a>
-				<!-- <a href="/blog" class="mobile-nav-link">Blog</a> -->
-				<a href="/work-with-us" class="mobile-nav-link">Work With Us</a>
-				<a href="/contact" class="mobile-nav-link">Contact</a>
-				<a href="/donate" class="mobile-nav-link">Donate</a>
+				<a href="/" class="mobile-nav-link" on:click={closeMobileMenu}>Home</a>
+				<a href="/about" class="mobile-nav-link" on:click={closeMobileMenu}>About Us</a>
+				<a href="/events" class="mobile-nav-link" on:click={closeMobileMenu}>Events</a>
+				<!-- <a href="/blog" class="mobile-nav-link" on:click={closeMobileMenu}>Blog</a> -->
+				<a href="/programs" class="mobile-nav-link" on:click={closeMobileMenu}>Programs</a>
+				<a href="/testimonials" class="mobile-nav-link" on:click={closeMobileMenu}>Testimonials</a>
+				<a href="/work-with-us" class="mobile-nav-link" on:click={closeMobileMenu}>Work With Us</a>
+				<a href="/contact" class="mobile-nav-link" on:click={closeMobileMenu}>Contact</a>
+				<a href="/donate" class="mobile-nav-link" on:click={closeMobileMenu}>Donate</a>
 			</div>
 		</div>
 	</header>

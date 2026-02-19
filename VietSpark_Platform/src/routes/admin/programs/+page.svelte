@@ -2,18 +2,20 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authUser } from '$lib/stores/authStore';
-	import { userData } from '$lib/stores/userStore';
+	import { userData, userLoading } from '$lib/stores/userStore';
 	import { programs, programHandlers, programLoading, programError } from '$lib/stores/programStore';
     import { writable } from 'svelte/store';
 	import { projectHandlers } from '$lib/stores/projectStore';
 	import { teamHandlers } from '$lib/stores/teamStore';
 	import { testimonialHandlers } from '$lib/stores/testimonialStore';
+	import { formatDateFromStr} from '$lib/utils/formatDate'; 
+
 
 	let isDataReady = false;
-	let filterStatus = 'all'; // all, upcoming, past
+	let filterStatus = 'all'; // all, upcoming, past, current
     let filteredPrograms = writable([]);
 
-	$: if ($authUser && $userData) {
+	$: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
 		isDataReady = true;
 	}
 
@@ -25,12 +27,14 @@
         filteredPrograms.set($programs
 		.filter((program) => {
 			const now = new Date();
-			const programDate = new Date(program.startDate);
-
+			const programStartDate = new Date(program.startDate);
+			const programEndDate = new Date(program.endDate);
 			if (filterStatus === 'upcoming') {
-				return programDate >= now;
+				return programStartDate >= now;
 			} else if (filterStatus === 'past') {
-				return programDate < now;
+				return programEndDate < now;
+			} else if (filterStatus === 'current') {
+				return programEndDate > now; 
 			}
 			return true;
 		})
@@ -59,14 +63,6 @@
 			} 
 			await programHandlers.deleteProgram(program.id);
 		}
-	};
-
-	function formatDate(date) {
-		return new Date(date).toLocaleString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-		})
 	};
 
 </script>
@@ -101,6 +97,14 @@
 				Upcoming
 			</button>
 			<button
+				class="rounded-md px-4 py-2 {filterStatus === 'current'
+					? 'bg-primary text-white'
+					: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+				on:click={() => (filterStatus = 'current')}
+			>
+				Current
+			</button>
+			<button
 				class="rounded-md px-4 py-2 {filterStatus === 'past'
 					? 'bg-primary text-white'
 					: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
@@ -129,7 +133,7 @@
 						<div class="flex items-center justify-between">
 							<span class="text-sm text-gray-500">
 								{#if program.startDate}
-									{formatDate(program.startDate)}
+									{formatDateFromStr(program.startDate)}
 								{:else}
 									Date not set
 								{/if}

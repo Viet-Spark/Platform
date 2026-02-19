@@ -1,6 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userData, getUser } from '$lib/stores/userStore';
+    import { userData, getUser, userLoading } from '$lib/stores/userStore';
     import { authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
@@ -9,7 +9,7 @@
     import { curProgram } from '$lib/stores/programStore';
 
     // Redirect if not admin
-    $: if ($authUser && !$userData?.isAdmin) {
+    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
         goto('/');
     }
 
@@ -25,18 +25,17 @@
     async function updateProgramTestimonial() {
         testimonial = $testimonials.find(testimonial => testimonial.id === testimonialId); 
         console.log("Testimonial", testimonial); 
-        // Get author information based on IDs
-        if (testimonial?.authorId) {
-            const author = await getUser(testimonial.authorId);
-            testimonial = {...testimonial, ...author}
-        }
-        
     }
 
     async function handleSubmit(event) {
         loading = true; 
         testimonial = event.detail; 
         try {
+            // Upload cover image
+            let coverImageUrl = testimonial.authorCoverImage;
+			if (testimonial.coverTempFile) {
+				coverImageUrl = await testimonialHandlers.uploadCoverImage(testimonial.coverTempFile, testimonialId);
+			}
             // Upload video
             let testimonialVideoUrl = testimonial.videoUrl; 
             if (testimonial.videoTempFile) {
@@ -52,16 +51,15 @@
             console.log('Preparing testimonial data to submit...');
             const dataToSubmit = {
                 ...testimonial, 
+                authorCoverImage: coverImageUrl,
                 imageUrls: testimonialImageUrls, 
-                videoUrl: testimonialVideoUrl
+                videoUrl: testimonialVideoUrl, 
+                submitterId: $userData.id
             }
             // Remove all temporary fields and blob URLs
+            delete dataToSubmit.coverTempFile;
             delete dataToSubmit.videoTempFile; 
             delete dataToSubmit.imageTempFiles;
-            delete dataToSubmit.name; 
-            delete dataToSubmit.displayName; 
-            delete dataToSubmit.email; 
-            delete dataToSubmit.profileImage; 
 
             console.log("Testimonial Data to submit:", dataToSubmit);
 

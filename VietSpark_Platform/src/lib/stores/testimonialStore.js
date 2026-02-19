@@ -101,10 +101,17 @@ export const testimonialHandlers = {
         }
     }, 
 
+    // Upload cover image
+    uploadCoverImage: async (file, testimonialId) => {
+        const fileRef = ref(storage, `/testimonials/${testimonialId}/cover_${Date.now()}_${file.name}`);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+    },
+
     // Upload testimonials images
-    uploadTestimonialsImages: async (files, programId, testimonialId) => {
+    uploadTestimonialsImages: async (files, testimonialId) => {
         const uploadPromises = files.map(async (file) => {
-            const fileRef = ref(storage, `programs/${programId}/testimonials/${testimonialId}/${Date.now()}_${file.name}`);
+            const fileRef = ref(storage, `/testimonials/${testimonialId}/${Date.now()}_${file.name}`);
             await uploadBytes(fileRef, file);
             return await getDownloadURL(fileRef);
         });
@@ -112,8 +119,8 @@ export const testimonialHandlers = {
     },
 
     // Upload testimonials video
-    uploadTestimonialsVideo: async (file, programId, testimonialId) => {
-        const fileRef = ref(storage, `programs/${programId}/testimonials/${testimonialId}/video_${Date.now()}_${file.name}`);
+    uploadTestimonialsVideo: async (file, testimonialId) => {
+        const fileRef = ref(storage, `/testimonials/${testimonialId}/video_${Date.now()}_${file.name}`);
         await uploadBytes(fileRef, file);
         return await getDownloadURL(fileRef);
     },

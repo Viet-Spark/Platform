@@ -1,12 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
 	import { authUser } from '$lib/stores/authStore';
-	import { userData } from '$lib/stores/userStore';
+	import { userData, userLoading} from '$lib/stores/userStore';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	// Redirect if not admin
-	$: if ($authUser && !$userData?.isAdmin) {
+	$: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
 		goto('/');
 	}
 
@@ -14,6 +14,10 @@
 
 	function toggleMobileMenu() {
 		isMobileMenuOpen = !isMobileMenuOpen;
+	}
+
+	function closeMobileMenu() {
+		isMobileMenuOpen = false;
 	}
 
 	const navItems = [
@@ -39,7 +43,7 @@
 				<div class="flex items-center">
 					<a href="/admin" class="text-primary text-xl font-bold">Admin Panel</a>
 				</div>
-				<div class="hidden md:flex items-center space-x-4">
+				<div class="hidden lg:flex items-center space-x-4">
 					{#each navItems as item}
 						<a
 							href={item.href}
@@ -52,7 +56,7 @@
 					<a href="/" class="hover:text-primary text-gray-600">← Back to Site</a>
 				</div>
 				<button
-					class="text-gray-600 focus:outline-none md:hidden"
+					class="text-gray-600 focus:outline-none lg:hidden"
 					aria-label="Toggle menu"
 					on:click={toggleMobileMenu}
 				>
@@ -61,13 +65,14 @@
 			</div>
 
 			<!-- Mobile Menu -->
-			<div class="md:hidden" class:hidden={!isMobileMenuOpen}>
+			<div class="lg:hidden" class:hidden={!isMobileMenuOpen}>
 				<div class="flex flex-col space-y-1 px-2 pb-3 pt-2">
 					{#each navItems as item}
 						<a
 							href={item.href}
 							class="hover:text-primary text-gray-600"
 							class:text-primary={$page.url.pathname === item.href}
+							on:click={closeMobileMenu}
 						>
 							{item.label}
 						</a>

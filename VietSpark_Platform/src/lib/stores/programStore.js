@@ -18,10 +18,19 @@ export const curProgram = writable({
     year: new Date().getFullYear(),
     startDate: '',
     endDate: '',
+    applicationDeadline: '',
     presentationDate: '',
+    applicationFee: '',
+    applicationLink: '',
+    socialMediaLinks: {
+        facebook: '',
+        x: '',
+        linkedIn: ''
+    },
     teamIds: [],
     workshops: [],
     testimonialIds: [],
+    workshopIds: [],
     projectIds: [],
     coverUrl: '',
     coverTempFile: null,
@@ -60,6 +69,7 @@ export const programHandlers = {
             if (programDoc.exists()) {
                 let programData =  {
                     ...programDoc.data(),
+                    imageTempFiles: [],
                     id: programDoc.id
                 }
                 curProgram.set(programData);
@@ -136,15 +146,5 @@ export const programHandlers = {
         await uploadBytes(fileRef, file);
         return await getDownloadURL(fileRef);
     },
-
-    uploadWorkshopImages: async (files, programId, workshopId ) => {
-        const uploadPromises = files.map(async (file) => {
-            const fileRef = ref(storage, `programs/${programId}/workshops/${workshopId}/${Date.now()}_${file.name}`);
-            await uploadBytes(fileRef, file);
-            return await getDownloadURL(fileRef);
-        });
-    
-        return await Promise.all(uploadPromises);
-    }
 }
 

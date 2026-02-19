@@ -79,6 +79,7 @@ export async function initializeUserData(uid, email) {
             const updatedData = {
                 ...existingData,
                 email, // Always update email to ensure it's current
+                id: uid,
                 updatedAt: new Date().toISOString()
             };
 

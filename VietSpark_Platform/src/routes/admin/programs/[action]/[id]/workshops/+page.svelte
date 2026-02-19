@@ -1,198 +1,166 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userData } from '$lib/stores/userStore';
+    import { userData, userLoading } from '$lib/stores/userStore';
     import { authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import { programHandlers, programLoading, curProgram } from '$lib/stores/programStore';
-    import { teams, teamLoading} from '$lib/stores/teamStore';
+    import { programHandlers, programLoading, curProgram, programs } from '$lib/stores/programStore';
     import { validateFile, validateImageFile, validateVideoFile} from '$lib/utils/validator.js';
+    import { workshopHandlers, workshops, workshopError, workshopLoading } from '$lib/stores/workshopStore';
     import WorkshopForm from '$lib/components/WorkshopForm.svelte';
-    import { formatDateForDateTimeInput } from '$lib/utils/formatDate.js';
+    import { formatDateForDateTimeInput, formatDetailDate} from '$lib/utils/formatDate.js';
+    import { writable } from 'svelte/store';
 
     // Redirect if not admin
-    $: if ($authUser && !$userData?.isAdmin) {
+    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
         goto('/');
     }
+    $: programId = $page.params.id;
 
-    $: if ($teams && $curProgram) {
-        programTeams = $teams.filter(team => $curProgram.teamIds.includes(team.id)); 
+    $: if ($programs && $workshops) {
+        loadWorkshops(); 
     }
 
-    let workshops = []; 
+    // Local editable list of workshops for this program
+    let programWorkshops = writable([]); 
     let loading = false;
     let error = '';
-    let programTeams = []; 
-    // Add a state to track which workshop is being edited (by index)
-    let editingWorkshopIndex = null;
-
-    async function handleWorkshopFormSubmit(event, workshopIndex) {
-        const updatedWorkshop = event.detail;
-        workshops = workshops.map((workshop, i) => i === workshopIndex ? updatedWorkshop : workshop);
-        editingWorkshopIndex = null;
-    }
 
     onMount(() => {
-        if ($curProgram.workshops.length > 0) {
-            workshops = $curProgram.workshops.map((workshop) => {
-                workshop.date = formatDateForDateTimeInput(workshop.date);
-                return workshop;
-            })
-        }
+        loadWorkshops(); 
     })
 
-    // Workshop management functions
-    function handleAddWorkshop() {
-        workshops = [
-            ...(workshops || []),
-            {
-                id: crypto.randomUUID(),
-                title: '',
-                description: '',
-                date: '',
-                duration: 0,
-                location: '',
-                imageUrls: [],
-                tempFiles: [],
-                schedule: [],
-            }
-        ];
-        editingWorkshopIndex = workshops.length - 1;
-    }
-
-    function handleEditWorkshop(idx) {
-        editingWorkshopIndex = idx;
-    }
-
-    function handleRemoveWorkshop(index) {
-        workshops = workshops.filter((_, i) => i !== index)
-    }
-
-    async function handleSubmit() {
+    async function loadWorkshops() {
+        if (!programId) return; 
         loading = true;
         error = '';
-
         try {
-            for (let workshop of workshops) {
-                // Upload gallery images
-                let imageUrls = workshop.imageUrls.filter(url => !url.startsWith('data:') && !url.startsWith('blob:')); // Keep existing URLs
-                if (workshop.tempFiles?.length > 0) {
-                    const newUrls = await programHandlers.uploadWorkshopImages(workshop.tempFiles, $curProgram.id, workshop.id);
-                    imageUrls = [...imageUrls, ...newUrls];
+            // Load the current program to get associated workshop IDs
+            await programHandlers.getProgram(programId);
+            const ids = $curProgram.workshopIds || [];
+            let filteredWorkshops = $workshops.filter((workshop) => ids.includes(workshop.id)); 
+            
+            // Sort by startTime (most recent first)
+            filteredWorkshops.sort((a, b) => {
+                const getTimestamp = (workshop) => {
+                    if (!workshop.startTime) return 0;
+                    // Handle Firestore Timestamp
+                    if (workshop.startTime.seconds) {
+                        return workshop.startTime.seconds * 1000;
+                    }
                 }
-                workshop.imageUrls = imageUrls; 
-                workshop.date = new Date(workshop.date); 
-                delete workshop.tempFiles; 
-            }
-
-            console.log('Preparing data to submit...');
-            const dataToSubmit = {
-                ...$curProgram, 
-                workshops: workshops, 
-            }
-
-            console.log("Detail:", dataToSubmit);
-
-            await programHandlers.updateProgram($curProgram.id, dataToSubmit)
-            console.log('Program saved successfully');
-            goto(`/admin/programs/edit/${$curProgram.id}`);
-        } catch (e) {
-            error = e.message || 'Failed to edit program';
-            console.error('Error saving program:', error);
-        } finally {
+                return getTimestamp(b) - getTimestamp(a); // Descending order (most recent first)
+            });
+            
+            programWorkshops.set(filteredWorkshops.map((workshop) => {
+                workshop.startTime = formatDateForDateTimeInput(workshop.startTime);
+                workshop.endTime = formatDateForDateTimeInput(workshop.endTime);
+                workshop.registrationDeadline = formatDateForDateTimeInput(workshop.registrationDeadline);
+                return workshop;
+            }));
+            
             loading = false;
+        } catch (err) {
+            console.error('Error loading workshops:', err);
+            error = err?.message ?? String(err);
         }
     }
+
+    async function handleDelete(id) {
+		if (confirm('Are you sure you want to delete this workshop?')) {
+			await workshopHandlers.deleteWorkshop(id); 
+		}
+        const workshopIds = ($curProgram.workshopIds || []).filter(i => i != id); 
+        let programData = {
+            ...$curProgram, 
+            workshopIds: workshopIds
+        }
+        await programHandlers.updateProgram(programId, programData); 
+        loading = true;
+	}
+
 </script>
 
-<section class="min-h-[50vh]">
-{#if $programLoading || loading}
-    <div class="flex h-screen items-center justify-center">
-        <span>Loading...</span>
-    </div>
-{:else}
-    <div class="container mx-auto px-4">
-        <div class="rounded-lg bg-white p-6 shadow-md">
-            <form on:submit={handleSubmit} class="space-y-6">
-
-                <!-- Error Display -->
-                {#if error}
-                    <div class="rounded-md bg-red-50 p-4">
-                        <div class="flex">
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-red-800">Error</h3>
-                                <div class="mt-2 text-sm text-red-700">{error}</div>
-                            </div>
-                        </div>
-                    </div>
-                {/if}
-
-                <!-- Workshops Details -->
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-lg font-bold">Workshops</h3>
-                        <button
-                            type="button"
-                            on:click={handleAddWorkshop}
-                            class="text-primary hover:text-primary-dark"
-                        >
-                            + Add Workshop
-                        </button>
-                    </div>
-                    {#if workshops.length > 0}
-                        {#each workshops as workshop, workshopIndex}
-                            <div class="rounded-md border p-6 mb-4">
-                                {#if editingWorkshopIndex === workshopIndex}
-                                    <WorkshopForm
-                                        workshop={workshop}
-                                        isEditing={true}
-                                        on:submit={(e) => handleWorkshopFormSubmit(e, workshopIndex)}
-                                        loading={loading}
-                                        error={error}
-                                        teams={programTeams}
-                                        handleCancel={() => editingWorkshopIndex = null}
-                                    />
-                                {:else}
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center">
-                                            <div>
-                                                <p class="font-bold">{workshop.title || 'Untitled Workshop'}</p>
-                                                <p class="text-sm text-gray-600">{workshop.description.slice(0, 200)}</p>
-                                            </div>
-                                        </div>
-                                        <div class="flex gap-2">
-                                            <button type="button" class="text-primary" on:click={() => handleEditWorkshop(workshopIndex)}>Edit</button>
-                                            <button type="button" class="text-red-600" on:click={() => handleRemoveWorkshop(workshopIndex)}>Remove</button>
-                                        </div>
-                                    </div>
-                                {/if}
-                            </div>
-                        {/each}
-                    {:else}
-                        <div>There are no workshops for this program yet! Select "+ Add Workshop" to create one!</div>
-                    {/if}
-                </div>
-
-                <!-- Form Actions -->
-                <div class="flex justify-end space-x-4 pt-6">
-                    <button
-                        type="button"
-                        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                        on:click={() => goto(`/admin/programs/edit/${$curProgram.id}`)} disabled={loading}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark text-sm font-medium"
-                        disabled={loading}
-                    >
-                        {loading ? 'Saving...' : 'Update Program'}
-                    </button>
-                </div>
-            </form>
+<section class="container mx-auto">
+    {#if $programLoading || $workshopLoading || loading}
+        <div class="flex h-screen items-center justify-center">
+            <span>Loading...</span>
         </div>
-    </div>
-{/if}
+    {:else if error !== ''}
+        <div class="flex h-screen items-center justify-center">
+            <span>{error}</span>
+        </div>
+    {:else}
+		<div class="flex flex-col items-center justify-center bg-primary text-white p-4 mb-8">
+			<h1 class="text-2xl font-bold">Workshops</h1>
+			<p>Manage {$curProgram.title} Workshops</p>
+		</div>
+
+		<div class="mb-8 flex items-center justify-end">
+			<a
+				href="/admin/programs/edit/{programId}/workshops/new"
+				class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white"
+			>
+				Add New Workshop
+			</a>
+		</div>
+		{#if $programWorkshops.length === 0}
+			<div class="rounded-lg bg-gray-100 p-8 text-center">
+				<p class="text-gray-600">No workshops found. Add your first workshop!</p>
+			</div>
+		{:else}
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cover Image</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {#each $programWorkshops as workshop}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {#if workshop.coverUrl}
+                                        <img src={workshop.coverUrl} alt={workshop.title} class="w-10 h-10 rounded-full object-cover">
+                                    {:else}
+                                        <div class="w-10 h-10 rounded-full object-cover bg-primary"></div>
+                                    {/if}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{workshop.title || "VietSpark Workshop"}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{formatDetailDate(workshop.startTime)}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{workshop.location}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex space-x-2 justify-start">
+                                        <a
+                                            href="/admin/programs/edit/{programId}/workshops/edit/{workshop.id}"
+                                            class="text-blue-600 hover:text-blue-800"
+                                        >
+                                            Edit
+                                        </a>
+                                        <button
+                                            on:click={() => handleDelete(workshop.id)}
+                                            class="text-red-600 hover:text-red-800"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+		{/if}
+	{/if}
 </section>
 

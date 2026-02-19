@@ -265,20 +265,20 @@
 	<div class="flex items-center gap-2 border-b bg-gray-50 px-3 py-2">
 		<div class="flex items-center gap-1">
 			<!-- Undo/Redo -->
-			<button class="toolbar-button" on:click={undoAction} title="Undo (Ctrl+Z)">
+			<button type="button" class="toolbar-button" on:click={undoAction} title="Undo (Ctrl+Z)">
 				<Undo2 size={16} />
 			</button>
-			<button class="toolbar-button" on:click={redoAction} title="Redo (Ctrl+Y)">
+			<button type="button" class="toolbar-button" on:click={redoAction} title="Redo (Ctrl+Y)">
 				<Redo2 size={16} />
 			</button>
 
 			<div class="mx-1 h-4 w-px bg-gray-300"></div>
 
 			<!-- Text formatting -->
-			<button class="toolbar-button" on:click={toggleBold} title="Bold (Ctrl+B)">
+			<button type="button" class="toolbar-button" on:click={toggleBold} title="Bold (Ctrl+B)">
 				<Bold size={16} />
 			</button>
-			<button class="toolbar-button" on:click={toggleItalic} title="Italic (Ctrl+I)">
+			<button type="button" class="toolbar-button" on:click={toggleItalic} title="Italic (Ctrl+I)">
 				<Italic size={16} />
 			</button>
 
@@ -286,7 +286,7 @@
 
 			<!-- Type Dropdown -->
 			<div class="dropdown-container relative">
-				<button class="toolbar-button" on:click={toggleCodeDropdown} title="Type Options">
+				<button type="button" class="toolbar-button" on:click={toggleCodeDropdown} title="Type Options">
 					<Type size={16} />
 				</button>
 				{#if showCodeDropdown}
@@ -327,7 +327,7 @@
 
 			<!-- Heading Dropdown -->
 			<div class="dropdown-container relative">
-				<button class="toolbar-button" on:click={toggleHeadingDropdown} title="Heading Options">
+				<button type="button" class="toolbar-button" on:click={toggleHeadingDropdown} title="Heading Options">
 					<Heading1 size={16} />
 				</button>
 				{#if showHeadingDropdown}
@@ -370,16 +370,16 @@
 
 			<!-- Block types -->
 
-			<button class="toolbar-button" on:click={makeBulletList} title="Bullet List">
+			<button type="button" class="toolbar-button" on:click={makeBulletList} title="Bullet List">
 				<List size={18} />
 			</button>
-			<button class="toolbar-button" on:click={makeOrderedList} title="Numbered List">
+			<button type="button" class="toolbar-button" on:click={makeOrderedList} title="Numbered List">
 				<ListOrdered size={18} />
 			</button>
-			<button class="toolbar-button" on:click={makeBlockquote} title="Blockquote">
+			<button type="button" class="toolbar-button" on:click={makeBlockquote} title="Blockquote">
 				<Quote size={12} />
 			</button>
-			<button class="toolbar-button" on:click={insertHorizontalRule} title="Horizontal Rule">
+			<button type="button" class="toolbar-button" on:click={insertHorizontalRule} title="Horizontal Rule">
 				<Minus size={16} />
 			</button>
 		</div>
@@ -589,5 +589,12 @@
 
 	.prose-editor :global(.ProseMirror a:hover) {
 		color: #1d4ed8;
+	}
+
+	.prose-editor :global(img) {
+		display: inline !important;
+		vertical-align: middle;
+		height: 1em;
+		width: 1em;
 	}
 </style>

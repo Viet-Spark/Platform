@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
 	import { programLoading, programHandlers, curProgram, programs} from '$lib/stores/programStore';
-    import { userData } from '$lib/stores/userStore';
+    import { userData, userLoading } from '$lib/stores/userStore';
     import { authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
@@ -11,7 +11,7 @@
     let programId = $page.params.id; 
 
     // Redirect if not admin
-    $: if ($authUser && !$userData?.isAdmin) {
+    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
         goto('/');
     }
     
@@ -53,7 +53,7 @@
             <!-- Testimonials Card -->
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <h2 class="mb-4 text-xl font-semibold">Testimonials</h2>
-                    <p class="text-3xl font-bold">{$curProgram.testimonialIds.length}</p>
+                    <p class="text-3xl font-bold">{$curProgram.testimonialIds?.length}</p>
                     <a href="/admin/programs/edit/{programId}/testimonials" class="text-primary mt-4 inline-block hover:underline"
                         >Manage Testimonials →</a
                     >
@@ -62,7 +62,7 @@
             <!-- Workshops Card -->
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <h2 class="mb-4 text-xl font-semibold">Workshops</h2>
-                    <p class="text-3xl font-bold">{$curProgram.workshops.length}</p>
+                    <p class="text-3xl font-bold">{$curProgram.workshopIds?.length}</p>
                     <a href="/admin/programs/edit/{programId}/workshops" class="text-primary mt-4 inline-block hover:underline"
                         >Manage Workshops →</a
                     >

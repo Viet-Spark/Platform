@@ -45,8 +45,27 @@ export function formatDateForDateInput(timestamp) {
 };
 
 export function formatDate(timestamp) {
-    if (!timestamp || !timestamp.seconds) return '';
-    return new Date(timestamp.seconds * 1000).toLocaleDateString();
+    if (!timestamp) return '';
+    
+    let date;
+    if (timestamp.seconds) {
+        // Firestore Timestamp format
+        date = new Date(timestamp.seconds * 1000);
+    } else if (typeof timestamp === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(timestamp)) {
+        // Date string format (YYYY-MM-DD) - add timezone to avoid UTC issues
+        date = new Date(timestamp + 'T00:00:00');
+    } else {
+        // Try to parse as regular date
+        date = new Date(timestamp);
+    }
+    
+    if (isNaN(date.getTime())) return ''; // Invalid date
+    
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 }
 
 export function formatDetailDate(timestamp) {
@@ -76,14 +95,14 @@ export function formatTime(timestamp) {
     if (!timestamp || !timestamp.seconds) return '';
 
     const date = new Date(timestamp.seconds * 1000);
-
+    let timezone = getTimezoneAbbreviation(date); 
     const formatAMPM = date => {
         let hours = date.getHours();
         let minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'PM' : 'AM';
         hours = hours % 12 || 12; // Convert to 12-hour format
         minutes = String(minutes).padStart(2, '0');
-        return `${hours}:${minutes} ${ampm}`;
+        return `${hours}:${minutes} ${ampm} ${timezone}`;
     };
 
     return formatAMPM(date);
