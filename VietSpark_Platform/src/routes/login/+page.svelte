@@ -1,16 +1,21 @@
 <script>
-	import {
-		loginWithEmail,
-		registerWithEmail,
-		authLoading,
-		authError,
-		authUser
-	} from '$lib/stores/authStore';
+	import { loginWithEmail, registerWithEmail, authLoading, authError, authUser } from '$lib/stores/authStore';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { profileData, profileLoading, profileError, updateUserProfile, getUserProfile } from '$lib/stores/profileStore';
+	import { subscribers, subscriberHandlers } from '$lib/stores/subscriberStore';
 
 	let email = '';
 	let password = '';
+	let name = ''; 
+	let title = ''; 
+	let company = ''; 
+	let location = '';
+	let subscriptions = {
+		events: false,
+		newsletters: false,
+		mentorship: false
+	};
 	let isRegistering = false;
 	let errorMessage = '';
 	let formErrors = {
@@ -75,7 +80,22 @@
 
 		try {
 			if (isRegistering) {
-				await registerWithEmail(email, password);
+				const user = await registerWithEmail(email, password);
+				if (user) {
+					try {
+						await getUserProfile(user.uid); 
+						await updateUserProfile(user.uid, {
+							name,
+							title,
+							company,
+							location,
+							subscriptions
+						});
+					} catch (error) {
+						console.error('Error saving profile after registration:', error);
+						errorMessage = error.message || 'Account created but profile could not be saved.';
+					}
+				}
 			} else {
 				await loginWithEmail(email, password);
 			}
@@ -99,16 +119,16 @@
 </svelte:head>
 
 <div class="login-container">
-	<div class="mx-auto max-w-md rounded-lg bg-white p-6 shadow-md">
+	<div class="mx-auto w-xl rounded-lg bg-white p-6 shadow-md">
 		<div class="mb-6 text-center">
 			<img
 				src="/logos/225357894_335085408311214_4818242809207101955_n.png"
 				alt="VietSpark Logo"
 				class="mx-auto mb-4 h-16"
 			/>
-			<h2 class="text-2xl font-bold">
+			<div class="text-2xl font-bold">
 				{isRegistering ? 'Register' : 'Login'}
-			</h2>
+			</div>
 		</div>
 
 		<form on:submit|preventDefault={handleSubmit} class="space-y-4">
@@ -148,6 +168,75 @@
 					</div>
 				{/if}
 			</div>
+
+			{#if isRegistering} 
+				<div>
+					<label for="name" class="mb-1 block font-medium">Display Name</label>
+					<input
+						type="text"
+						id="name"
+						bind:value={name}
+						class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						/>
+				</div>
+				<div>
+					<label for="title" class="mb-1 block font-medium">Job Title</label>
+					<input
+						type="text"
+						id="title"
+						bind:value={title}
+						class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						/>
+				</div>
+				<div>
+					<label for="company" class="mb-1 block font-medium">Company</label>
+					<input
+						type="text"
+						id="company"
+						bind:value={company}
+						class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						/>
+				</div>
+
+				<div>
+					<label for="location" class="mb-1 block font-medium">Location</label>
+					<input
+						type="text"
+						id="location"
+						bind:value={location}
+						class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+						/>
+				</div>
+				<div class="border-t pt-6">
+					<h3 class="mb-4 text-lg font-bold">Email Preferences</h3>
+					<div class="space-y-3">
+						<label class="flex items-center">
+							<input 
+								type="checkbox" 
+								class="text-primary h-5 w-5 rounded" 
+								bind:checked={subscriptions.events} 
+							/>
+							<span class="ml-2 text-gray-700">Event announcements</span>
+						</label>
+						<label class="flex items-center">
+							<input 
+								type="checkbox" 
+								class="text-primary h-5 w-5 rounded" 
+								bind:checked={subscriptions.newsletters} 
+							/>
+							<span class="ml-2 text-gray-700">Newsletter</span>
+						</label>
+						<label class="flex items-center">
+							<input 
+								type="checkbox" 
+								class="text-primary h-5 w-5 rounded" 
+								bind:checked={subscriptions.mentorship} 
+							/>
+							<span class="ml-2 text-gray-700">Mentorship opportunities</span>
+						</label>
+					</div>
+				</div>
+			{/if}
 
 			{#if errorMessage}
 				<div class="text-sm text-red-500">{errorMessage}</div>
