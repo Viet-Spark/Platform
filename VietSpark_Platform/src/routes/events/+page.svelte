@@ -252,6 +252,12 @@
 						Upcoming Workshops
 					</a> -->
 					<a
+						href="/programs"
+						class="btn bg-primary hover:bg-primary-dark text-white"
+					>
+						Learn More About Break Into Tech
+					</a>
+					<a
 						href="/testimonials"
 						class="btn border-primary text-primary border-2 bg-transparent hover:bg-gray-100"
 					>
