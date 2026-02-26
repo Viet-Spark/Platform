@@ -98,7 +98,7 @@
             <p class="text-xl">Loading...</p>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto lg:w-3/4 justify-center">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
