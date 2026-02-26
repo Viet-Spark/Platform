@@ -29,7 +29,7 @@
         filteredUpcomingPrograms = $programs
 		.filter((program) => {
 			const now = new Date();
-			const programDate = new Date(program.startDate);
+			const programDate = new Date(program.applicationDeadline);
 			return programDate >= now;
 		});
 		
@@ -460,7 +460,7 @@
 				<div class="rounded-lg bg-white p-6 shadow-md">
 					<h2 class="mb-6 text-lg font-bold">Mentorship Program</h2>
 					{#if filteredUpcomingPrograms.length > 0}
-						<div class="grid grid-cols-1 gap-6">
+						<div class="grid grid-cols-1 gap-6 p-2">
 							{#each filteredUpcomingPrograms as program}
 								<div class="overflow-hidden rounded-lg bg-white shadow">
 									<img src={program.coverUrl} alt={program.title} class="h-60 w-full object-cover" />
@@ -492,7 +492,13 @@
 													community. Our mentorship program matches mentors with mentees
 													based on career goals and interests.
 												</p>
-												<div class="flex flex-wrap justify-center gap-4">
+												<div class="flex flex-col md:flex-row justify-center gap-4">
+													<button 
+														on:click={() => goto(`/programs/${program.id}`)} 
+														class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
+													>
+															Program Details
+													</button>
 													<button 
 														on:click={() => applyAs('mentee', program.id)} 
 														class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
@@ -529,6 +535,9 @@
 							<p class="mx-auto mb-6 max-w-2xl text-gray-600">
 								There are no upcoming mentorship programs at the moment. Please check back later.
 							</p>
+							<a href="/programs" class="btn bg-primary hover:bg-primary-dark text-white"
+								>Browse Programs</a
+							>
 						</div>
 					{/if}
 				</div>
@@ -569,7 +578,7 @@
 							</div>
 							<h3 class="mb-2 text-xl font-bold">No Applications Yet</h3>
 							<p class="mb-4 text-gray-600">You haven't applied for any programs yet.</p>
-							<button on:click={() => activeTab="Mentorship"} class="btn bg-primary hover:bg-primary-dark text-white">Browse Programs</button>
+							<button on:click={() => activeTab="Mentorship"} class="btn bg-primary hover:bg-primary-dark text-white">Browse Upcoming Programs</button>
 						</div>
 					{/if}
 				</div>
