@@ -53,7 +53,7 @@
             const dataToSubmit = {
                 ...application, 
                 resume: resumeFile, 
-                title: $curProgram.title + role.charAt(0).toUpperCase() + role.slice(1) + ' Application',
+                title: $curProgram.title + ' ' + role.charAt(0).toUpperCase() + role.slice(1) + ' Application',
             }
             // Remove all temporary fields and blob URLs
             delete dataToSubmit.resumeTempFile; 
@@ -65,7 +65,7 @@
             error = e.message || 'Failed to save application';
             console.error('Error saving application:', error);
         } finally {
-            goto(`/admin/programs/edit/${application.programId}`)
+            goto(`/admin/programs/edit/${application.programId}/${role+'s'}`)
         }  
     }
 </script>
@@ -102,7 +102,8 @@
                             error={error}
                             role={application.role}
                             programId={application.programId}
-                            handleCancel={() =>  goto(`/admin/programs/edit/${$curProgram.id}`)} disabled={loading}
+                            handleCancel={() =>  goto(`/admin/programs/edit/${$curProgram.id}/${role+'s'}`)} 
+                            disabled={loading}
                         />
                     </div>
                 </div>

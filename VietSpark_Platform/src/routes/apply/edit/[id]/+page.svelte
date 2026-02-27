@@ -57,7 +57,7 @@
             const dataToSubmit = {
                 ...application, 
                 resume: resumeFile, 
-                title: $curProgram.title + role.charAt(0).toUpperCase() + role.slice(1) + ' Application',
+                title: $curProgram.title + ' ' +  role.charAt(0).toUpperCase() + role.slice(1) + ' Application',
             }
             // Remove all temporary fields and blob URLs
             delete dataToSubmit.resumeTempFile; 
