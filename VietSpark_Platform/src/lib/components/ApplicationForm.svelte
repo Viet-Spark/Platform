@@ -20,6 +20,7 @@
         email: '',
         status: 'Pending',
         links: {},
+        assignedTeam: '',
         // Mentee fields
         interestInSupport: null,
         goals: '',

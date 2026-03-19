@@ -15,6 +15,7 @@
 	import { projectError, projectHandlers } from '$lib/stores/projectStore';
 	import { newsletterError, newsletterHandlers, newsletters, newsletterLoading } from '$lib/stores/newsletterStore';
 	import { workshopHandlers, workshops } from '$lib/stores/workshopStore';
+	import { applications, applicationLoading, applicationHandlers } from '$lib/stores/applicationStore';
 
 	let isDataReady = false;
 
@@ -54,7 +55,8 @@
 			programHandlers.getPrograms(), 
 			testimonialHandlers.getTestimonials(),
 			projectHandlers.getProjects(),
-			workshopHandlers.getWorkshops()
+			workshopHandlers.getWorkshops(), 
+			applicationHandlers.getApplications()
 		]);
 	});
 </script>

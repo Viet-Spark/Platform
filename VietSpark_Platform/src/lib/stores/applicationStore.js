@@ -75,7 +75,9 @@ export const applicationHandlers = {
     updateApplication: async (applicationId, applicationData) => {
         try {
             const applicationRef = doc(db, 'applications', applicationId);
+            const applicationDoc = await getDoc(applicationRef); 
             await updateDoc(applicationRef, {
+                ...applicationDoc.data(),
                 ...applicationData,
                 updatedAt: new Date()
             });
