@@ -1,7 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import MediaUploader from './MediaUploader.svelte';
-    import { usersList, getUsers } from '$lib/stores/userStore';
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { validateFile, validateImageFile, validateVideoFile} from '$lib/utils/validator.js';
@@ -20,7 +19,9 @@
         links: {},
         status: 'Active',
         featured: false,
-        notes: ''
+        notes: '', 
+        removedApplicants: [], 
+        removedManagerApplicant: ''
     };
     export let loading = false;
     export let error = '';
@@ -33,26 +34,25 @@
     let tagInput = '';
     let visibilityOptions = ['Public', 'Internal', 'Hidden'];
     let statusOptions = ['Active', 'Completed', 'Inactive'];
-    let managerApplicants = []; 
-    let memberApplicants = []; 
-    onMount(() => {
-        getUsers();
-    });
-
-    $: if ($usersList) {
-        availableApplicants = availableApplicants.map((u) => {
-            const userData = $usersList.find((user) => user.uid === u.userId); 
-            return {
-                role: u.role, 
-                name: userData.name || '', 
-                uid: userData.uid, 
-                displayName: userData.displayName || '', 
-                email: userData.email
-            }   
-        })
-        managerApplicants = availableApplicants.filter((app) => app.role === 'manager'); 
-        memberApplicants = availableApplicants.filter((app) => app.role !== "manager"); 
-    }
+    $: managerApplicants = availableApplicants.filter(app => app.role === 'manager');
+    $: memberApplicants = availableApplicants.filter(app => app.role !== 'manager');
+    
+    $: availableForSelection = (idx) => {
+        // Merge memberApplicants with already-saved users, deduped by userId
+        const merged = [
+            ...memberApplicants,
+            ...formData.users.filter(
+                (u) => u.userId && !memberApplicants.some((a) => a.userId === u.userId)
+            ),
+            ...formData.removedApplicants.filter(
+                (u) => u.userId && !memberApplicants.some((a) => a.userId === u.userId)
+            )
+        ];
+        // Exclude users already picked in OTHER rows
+        return merged.filter(
+            (app) => !formData.users.some((u, i) => i !== idx && u.userId === app.userId)
+        );
+    };
 
     // Tag management
     function addTag() {
@@ -71,18 +71,62 @@
 
     // User management
     function addUser() {
-        if (!formData.users) {
-            formData.users = []; 
-        }
-        formData.users = [...formData.users, ''];
-    }
-    function removeUser(idx) {
-        formData.users = formData.users.filter((_, i) => i !== idx);
-    }
-    function handleUserChange(idx, userData) {
-        formData.users[idx] = userData; 
+        if (!formData.users) formData.users = [];
+
+        formData.users = [
+            ...formData.users,
+            { userId: '', role: '', applicantId: ''}
+        ];
     }
 
+    function removeUser(idx) {
+        const user = formData.users[idx];
+        if (!formData.removedApplicants) {
+            formData.removedApplicants = [];
+        }
+        // Only track removal if it's an existing saved user (has a userId)
+        if (user.userId) {
+            formData.removedApplicants = [...formData.removedApplicants, user];
+        }
+        formData.users = formData.users.filter((_, i) => i !== idx);
+    }
+
+    function handleUserSelect(e, idx) {
+        const selectedUser = availableForSelection(idx).find((app) => app.userId === e.target.value);
+        if (selectedUser) {
+            formData.users[idx] = {
+                userId: selectedUser.userId,
+                role: selectedUser.role,
+                applicantId: selectedUser.id,
+                name: selectedUser.name || selectedUser.displayName,
+                email: selectedUser.email
+            };
+            formData.users = [...formData.users]; // trigger Svelte reactivity
+        }    
+    }
+
+    function handleManagerSelect(e) {
+        const selectedManager = managerApplicants.find((app) => app.userId === e.target.value);
+        
+        // If there was an existing manager, track them as removed
+        if (formData.manager?.userId && formData.manager.userId !== selectedManager?.userId) {
+            formData.removedManagerApplicant = {...formData.manager};
+            if (!managerApplicants.some((a) => a.userId === formData.manager.userId)) {
+                managerApplicants = [...managerApplicants, formData.manager];
+            }
+        }
+
+        if (selectedManager) {
+            formData.manager = {
+                userId: selectedManager.userId,
+                applicantId: selectedManager.id,
+                email: selectedManager.email,
+                name: selectedManager.name || selectedManager.displayName
+            };
+        } else {
+            formData.manager = null;
+        }
+    }
     // Logo upload
     function handleLogoUpload(event) {
         const { files } = event.detail;
@@ -131,12 +175,20 @@
                     <!-- Manager -->
                     <div>
                         <label for="manager" class="block font-semibold mb-1">Manager (Mentor/Lead)</label>
-                        {#if managerApplicants.length > 0}
-                            <select id="manager" bind:value={formData.manager} class="w-full border rounded px-3 py-2">
+                        {#if managerApplicants.length > 0 || formData.manager?.userId}
+                            <select id="manager" value={formData.manager?.userId} on:change={(e) => handleManagerSelect(e)} class="w-full border rounded px-3 py-2">
                                 <option value="">Select manager</option>
                                 {#each managerApplicants as user}
-                                    <option value={user.uid}>{user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}</option>
+                                    <option value={user.userId}>
+                                        {user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}
+                                    </option>
                                 {/each}
+                                <!-- Show previously saved manager if not already in managerApplicants -->
+                                {#if formData.manager?.userId && !managerApplicants.some((a) => a.userId === formData.manager.userId)}
+                                    <option value={formData.manager.userId}>
+                                        {formData.manager.name} - {formData.manager.email}
+                                    </option>
+                                {/if}
                             </select>
                         {:else}
                             <div>There aren't any approved manager applications yet!</div>
@@ -176,27 +228,31 @@
                     <div class="">
                         <label for="teamMembers" class="block font-semibold mb-1">Team Members</label>
                         <div id="teamMembers" class="space-y-2">
-                            {#if memberApplicants.length > 0}
-                                {#each formData.users as user, idx}
+                            {#if memberApplicants.length > 0 || formData.users.length > 0}
+                                {#each formData.users as user, idx (user.userId || idx)}
                                     <div class="md:flex items-center gap-2">
-                                        <select on:change={(e) => handleUserChange(idx, memberApplicants[e.target.selectedIndex - 1])}
+                                        <select
+                                            value={formData.users[idx].userId}
+                                            on:change={(e) => handleUserSelect(e, idx)}
                                             class="border rounded px-2 py-1 md:flex-2"
                                         >
-                                            <option value="" disabled selected>Select user</option>
-                                            {#each memberApplicants as member}
-                                                <option selected={formData.users[idx]?.uid === member.uid}>
-                                                    {member.name || member.displayName} {(member.name || member.displayName) ? "-" : ""} {member.email} - {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
+                                            <option value="" disabled>Select user</option>
+                                            {#each availableForSelection(idx) as member}
+                                                <option value={member.userId}>
+                                                    {member.name || member.displayName}
+                                                    {(member.name || member.displayName) ? "-" : ""}
+                                                    {member.email} - {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
                                                 </option>
                                             {/each}
-                                        
                                         </select>
                                         <button type="button" class="text-red-500 ml-2" on:click={() => removeUser(idx)}>&times;</button>
                                     </div>
                                 {/each}
+                                <button type="button" class="bg-primary text-white px-3 py-1 rounded" on:click={addUser}>+ Add Member</button>
                             {:else}
                                 <div>There aren't any mentee or mentor applications yet!</div>  
                             {/if}
-                            <button type="button" class="bg-primary text-white px-3 py-1 rounded" on:click={addUser}>+ Add Member</button>
+                            
                         </div>
                     </div>
 

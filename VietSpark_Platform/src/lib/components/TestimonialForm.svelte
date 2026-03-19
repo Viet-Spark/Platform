@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import MediaUploader from '$lib/components/MediaUploader.svelte';
-    import { usersList, getUsers, getUser } from '$lib/stores/userStore';
+    import { usersList, getUsers } from '$lib/stores/userStore';
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { validateFile, validateImageFile, validateVideoFile} from '$lib/utils/validator.js';

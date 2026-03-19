@@ -43,7 +43,7 @@
                 userId: $authUser.uid, 
                 programId: programId, 
                 role: role, 
-                title: $curProgram.title + role.charAt(0).toUpperCase() + role.slice(1) + ' Application',
+                title: $curProgram.title + ' ' + role.charAt(0).toUpperCase() + role.slice(1) + ' Application',
             }
             // Remove all temporary fields and blob URLs
             delete dataToSubmit.resumeTempFile; 
@@ -98,7 +98,7 @@
             <p class="text-xl">Loading...</p>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto lg:w-3/4 justify-center">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}

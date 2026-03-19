@@ -11,35 +11,33 @@
 	import { formatDateFromStr} from '$lib/utils/formatDate'; 
 
 
-	let isDataReady = false;
 	let filterStatus = 'all'; // all, upcoming, past, current
-    let filteredPrograms = writable([]);
+    let filteredPrograms = [];
+	let loading = true; 
 
 	$: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
-		isDataReady = true;
-	}
-
-	$: if (isDataReady && $authUser && !$userData?.isAdmin) {
 		goto('/');
 	}
 
-	$: if ($programs) {
-        filteredPrograms.set($programs
-		.filter((program) => {
-			const now = new Date();
-			const programStartDate = new Date(program.startDate);
-			const programEndDate = new Date(program.endDate);
-			if (filterStatus === 'upcoming') {
-				return programStartDate >= now;
-			} else if (filterStatus === 'past') {
-				return programEndDate < now;
-			} else if (filterStatus === 'current') {
-				return programEndDate > now; 
-			}
-			return true;
-		})
-		.sort((a, b) => new Date(b.startDate) - new Date(a.startDate)));
-    }
+	$: filteredPrograms = $programs.filter((program) => {
+		const now = new Date();
+		const programStartDate = new Date(program.startDate);
+		const programEndDate = new Date(program.endDate);
+		if (filterStatus === 'upcoming') {
+			return programStartDate >= now;
+		} else if (filterStatus === 'past') {
+			return programEndDate < now;
+		} else if (filterStatus === 'current') {
+			return programEndDate > now; 
+		}
+		return true;
+	})
+	.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+
+	onMount(async () => {
+        await programHandlers.getPrograms();
+        loading = false; 
+    })
 
 	async function handleDelete(program) {
 		if (confirm('Are you sure you want to delete this program?')) {
@@ -68,60 +66,63 @@
 </script>
 
 <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-	<div class="mb-6 flex items-center justify-between flex-col md:flex-row gap-2">
-		<h1 class="text-3xl font-bold">Programs</h1>
-		<a
-			href="/admin/programs/new"
-			class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white"
-		>
-			Create New Program
-		</a>
-	</div>
-
-	<div class="mb-6">
-		<div class="flex gap-4">
-			<button
-				class="rounded-md px-4 py-2 {filterStatus === 'all'
-					? 'bg-primary text-white'
-					: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
-				on:click={() => (filterStatus = 'all')}
+	{#if loading}
+        <div class="flex h-screen items-center justify-center">
+            <span>Loading...</span>
+        </div>
+    {:else}
+		<div class="mb-6 flex items-center justify-between flex-col md:flex-row gap-2">
+			<h1 class="text-3xl font-bold">Programs</h1>
+			<a
+				href="/admin/programs/new"
+				class="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white"
 			>
-				All Programs
-			</button>
-			<button
-				class="rounded-md px-4 py-2 {filterStatus === 'upcoming'
-					? 'bg-primary text-white'
-					: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
-				on:click={() => (filterStatus = 'upcoming')}
-			>
-				Upcoming
-			</button>
-			<button
-				class="rounded-md px-4 py-2 {filterStatus === 'current'
-					? 'bg-primary text-white'
-					: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
-				on:click={() => (filterStatus = 'current')}
-			>
-				Current
-			</button>
-			<button
-				class="rounded-md px-4 py-2 {filterStatus === 'past'
-					? 'bg-primary text-white'
-					: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
-				on:click={() => (filterStatus = 'past')}
-			>
-				Past
-			</button>
+				Create New Program
+			</a>
 		</div>
-	</div>
 
-	{#if $programLoading}
-		<div class="py-8 text-center">Loading...</div>
-	{:else if $filteredPrograms.length === 0}
-		<div class="py-8 text-center text-gray-500">No programs found</div>
-	{:else}
+		<div class="mb-6">
+			<div class="flex flex-wrap gap-4 md:flex-row">
+				<button
+					class="rounded-md px-4 py-2 {filterStatus === 'all'
+						? 'bg-primary text-white'
+						: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+					on:click={() => (filterStatus = 'all')}
+				>
+					All Programs
+				</button>
+				<button
+					class="rounded-md px-4 py-2 {filterStatus === 'upcoming'
+						? 'bg-primary text-white'
+						: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+					on:click={() => (filterStatus = 'upcoming')}
+				>
+					Upcoming
+				</button>
+				<button
+					class="rounded-md px-4 py-2 {filterStatus === 'current'
+						? 'bg-primary text-white'
+						: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+					on:click={() => (filterStatus = 'current')}
+				>
+					Current
+				</button>
+				<button
+					class="rounded-md px-4 py-2 {filterStatus === 'past'
+						? 'bg-primary text-white'
+						: 'bg-gray-100 text-gray-700 hover:bg-gray-200'}"
+					on:click={() => (filterStatus = 'past')}
+				>
+					Past
+				</button>
+			</div>
+		</div>
+
+		{#if filteredPrograms.length === 0}
+			<div class="py-8 text-center text-gray-500">No programs found</div>
+		{:else}
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{#each $filteredPrograms as program}
+			{#each filteredPrograms as program}
 				<div class="overflow-hidden rounded-lg bg-white shadow">
 					{#if program.coverUrl}
 						<img src={program.coverUrl} alt={program.title} class="h-48 w-full object-cover" />
@@ -157,5 +158,6 @@
 				</div>
 			{/each}
 		</div>
+		{/if}
 	{/if}
 </div>

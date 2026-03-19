@@ -25,7 +25,7 @@ export const testimonialHandlers = {
                 id: doc.id,
             }));
             testimonials.set(testimonialsList);
-            console.log("Testimonials found in Firestore: ", testimonialsList);
+            // console.log("Testimonials found in Firestore: ", testimonialsList);
             testimonialError.set(null);
         } catch (error) {
             console.error('Error fetching testimonials:', error);
