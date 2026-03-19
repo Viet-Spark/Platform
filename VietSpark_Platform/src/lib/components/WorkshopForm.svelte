@@ -6,6 +6,7 @@
     import { onMount } from 'svelte';
     import { writable } from 'svelte/store';
     import { validateFile, validateImageFile, validateVideoFile} from '$lib/utils/validator.js';
+    import { formatDateForDateTimeInput } from '$lib/utils/formatDate'; 
 
     export let workshop = {
         id: '',
@@ -32,10 +33,30 @@
     const dispatch = createEventDispatcher();
     let formData = { ...workshop };
 
+    let prevWorkshop = workshop;
+
     // Sync formData when workshop prop changes (important when workshops is a writable store)
-    $: if (workshop) {
+    $: if (workshop != prevWorkshop) {
+        prevWorkshop = workshop; 
         formData = { ...workshop };
+        if (formData.startTime) {
+            formData.startTime = formatDateForDateTimeInput(formData.startTime); 
+        }
+        if (formData.endTime) {
+            formData.endTime = formatDateForDateTimeInput(formData.endTime);
+        }
+        if (formData.registrationDeadline) {
+            formData.registrationDeadline = formatDateForDateTimeInput(formData.registrationDeadline);  
+        }
+        
     }
+
+    onMount(() => {
+        // Format dates once on mount for initial data
+        if (formData.startTime) formData.startTime = formatDateForDateTimeInput(formData.startTime);
+        if (formData.endTime) formData.endTime = formatDateForDateTimeInput(formData.endTime);
+        if (formData.registrationDeadline) formData.registrationDeadline = formatDateForDateTimeInput(formData.registrationDeadline);
+    });
 
     // Handle cover image upload
     function handleCoverImageUpload(event) {
@@ -347,7 +368,7 @@
 
                 <!-- Total Duration -->
                 <div class="mt-2 text-sm text-gray-700 font-semibold">
-                    Total Duration: {getWorkshopDuration(workshop)} min
+                    Total Duration: {getWorkshopDuration()} min
                 </div>
                 </div>
                 
