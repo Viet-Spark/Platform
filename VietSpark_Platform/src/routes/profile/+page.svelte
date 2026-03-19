@@ -166,6 +166,19 @@
 			clearTimeout(loadingTimeout);
 		}
 	});
+
+	// async function sendEmail( name, email, templateId) {
+	// 	let status = 'Sending...';
+
+	// 	const res = await fetch('/api/sendEmail', {
+	// 		method: 'POST',
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 		body: JSON.stringify({ to: email, name, templateId, subject:'Welcome!'})
+	// 	});
+	// 	const data = await res.json();
+	// 	status = data.success ? '✅ Email sent!' : `❌ Error: ${data.error}`;
+	// 	console.log(status); 
+	// }
 </script>
 
 <svelte:head>
@@ -308,7 +321,7 @@
 					<div class="lg:col-span-2">
 						<div class="rounded-lg bg-white p-6 shadow-md">
 							<h2 class="mb-3 text-lg font-bold">About Me</h2>
-							<p class="mb-6 text-gray-700">{$profileData.bio || 'No bio information yet.'}</p>
+							<p class="mb-6 text-gray-600">{$profileData.bio || 'No bio information yet.'}</p>
 
 							<h2 class="mb-3 text-lg font-bold">Interests</h2>
 							<div class="mb-6 flex flex-wrap gap-2">
@@ -319,7 +332,7 @@
 										</span>
 									{/each}
 								{:else}
-									<span class="text-sm text-gray-500">No interests added yet.</span>
+									<span class="text-gray-600">No interests added yet.</span>
 								{/if}
 							</div>
 
@@ -578,20 +591,24 @@
 										interests: $profileData.interests, 
 										subscriptions: $profileData.subscriptions
 									});
-									const subscriberData = $subscribers.find((subscriber) => subscriber.email === $profileData.email); 
-									if ($profileData.subscriptions.newsletters) {
-										// If their email is not on the subscribe list yet, then add user to the subscriber list
-										if (!subscriberData) {
-											await subscriberHandlers.addSubscriber($profileData.email);
-										} else if (!subscriberData.active) {
-											await subscriberHandlers.resubscribe(subscriberData.id, subscriberData); 
-										}
-									} else { 
-										// Unsubscribe
-										if (subscriberData) {
-											await subscriberHandlers.unsubscribe(subscriberData.id, subscriberData); 
-										}
-									}
+									// const subscriberData = $subscribers.find((subscriber) => subscriber.email === $profileData.email); 
+									// console.log($subscribers); 
+									// console.log(subscriberData); 
+									// if ($profileData.subscriptions.newsletters) {
+									// 	// If their email is not on the subscribe list yet, then add user to the subscriber list
+									// 	if (!subscriberData) {
+									// 		await subscriberHandlers.addSubscriber($profileData.email);
+									// 		await sendEmail($profileData.name, $profileData.email, '3vz9dle7ej14kj50'); 
+									// 	} else if (!subscriberData.active) {
+									// 		await subscriberHandlers.resubscribe(subscriberData.id, subscriberData); 
+									// 		await sendEmail($profileData.name, $profileData.email, '3vz9dle7ej14kj50'); 
+									// 	}
+									// } else { 
+									// 	// Unsubscribe
+									// 	if (subscriberData) {
+									// 		await subscriberHandlers.unsubscribe(subscriberData.id, subscriberData); 
+									// 	}
+									// }
 								} catch (error) {
 									console.error('Error updating profile:', error);
 								}
@@ -605,6 +622,7 @@
 								id="name"
 								bind:value={$profileData.name}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
+								placeholder="Jane Doe"
 							/>
 						</div>
 
@@ -627,6 +645,7 @@
 								id="title"
 								bind:value={$profileData.title}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
+								placeholder="Software Engineer"
 							/>
 						</div>
 
@@ -637,6 +656,7 @@
 								id="company"
 								bind:value={$profileData.company}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
+								placeholder="Tech Company"
 							/>
 						</div>
 
@@ -647,6 +667,7 @@
 								id="location"
 								bind:value={$profileData.location}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
+								placeholder="San Jose, CA"
 							/>
 						</div>
 
@@ -657,6 +678,7 @@
 								rows="4"
 								bind:value={$profileData.bio}
 								class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
+								placeholder="Tell us a little about yourself…"
 							></textarea>
 						</div>
 

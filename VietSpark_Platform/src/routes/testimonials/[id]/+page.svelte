@@ -90,15 +90,15 @@
 {:else}
 	<section class="bg-primary py-16 text-white">
 		<div class="container mx-auto px-4">
-			<div class="flex flex-col items-center justify-between gap-6 md:flex-row">
-                <div class="flex items-center gap-4">
+			<div class="flex flex-col text-center items-center justify-between gap-6 md:flex-row">
+                <div class="flex flex-6 items-center gap-4">
                     <h1 class="mb-3 text-xl font-bold">
                         {testimonial.highlight || 'Testimonial from the VietSpark community.'}
                     </h1>
                 </div>
 				<a
 					href="/testimonials"
-					class="btn border-2 border-white bg-transparent px-6 py-2 text-sm font-medium text-white hover:bg-white hover:text-primary"
+					class="btn flex-1 border-2 border-white bg-transparent px-6 py-2 text-sm font-medium text-white hover:bg-white hover:text-primary"
 				>
 					Back to Testimonials
 				</a>
@@ -172,9 +172,9 @@
 								class="h-48 w-48 rounded-full object-cover ring-2 ring-gray-100"
 							/>
 						</div>
-						<h2 class="text-3xl font-semibold text-gray-900">
+						<div class="text-xl font-semibold text-gray-900">
 							{testimonial.authorName || 'VietSpark Member'}
-						</h2>
+						</div>
 						{#if testimonial.authorTitle || testimonial.authorOrganization}
 							<p class="mt-1 text-lg text-gray-600">
 								{testimonial.authorTitle}

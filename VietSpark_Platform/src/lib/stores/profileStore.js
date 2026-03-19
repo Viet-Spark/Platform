@@ -9,11 +9,11 @@ import { get } from 'svelte/store';
 export const profileData = writable({
     name: '',
     email: '',
-    title: 'Software Engineer',
-    company: 'Tech Company',
-    location: 'San Francisco, CA',
-    bio: 'Passionate about technology and community building.',
-    interests: ['Web Development', 'AI/ML', 'Community Building'],
+    title: '',
+    company: '',
+    location: '',
+    bio: '',
+    interests: [],
     profileImage: null,
     events: [],
     isAdmin: false, 
@@ -76,11 +76,11 @@ export async function getUserProfile(userId) {
                 name: currentUser ? currentUser.displayName || 'VietSpark Member' : 'VietSpark Member',
                 displayName: currentUser ? currentUser.displayName || 'VietSpark Member' : 'VietSpark Member',
                 email: currentUser ? currentUser.email : '',
-                title: 'Software Engineer',
-                company: 'Tech Company',
-                location: 'San Francisco, CA',
-                bio: 'Passionate about technology and community building.',
-                interests: ['Web Development', 'AI/ML', 'Community Building'],
+                title: '',
+                company: '',
+                location: '',
+                bio: '',
+                interests: [],
                 profileImage: null,
                 events: [],
                 createdAt: new Date().toISOString(), 
@@ -108,7 +108,7 @@ export async function getUserProfile(userId) {
     }
 }
 
-// Update user profile data
+// Update user profile data 
 export async function updateUserProfile(userId, data) {
     profileLoading.set(true);
     profileError.set(null);
