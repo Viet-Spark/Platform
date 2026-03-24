@@ -21,7 +21,7 @@
 	let programTestimonials = writable([]);
 	let programWorkshops = writable([]); 
 
-	$: programId = $page.params.programId;
+	$: programId = $page.params.id;
 
 	$: if (programId && $programs) {
 		program.set($programs.find((p) => p.id === programId));
