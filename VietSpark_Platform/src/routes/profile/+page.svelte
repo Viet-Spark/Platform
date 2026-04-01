@@ -4,7 +4,6 @@
 	import { userData, userLoading, userError, getUserData, updateUserData } from '$lib/stores/userStore';
 	import { profileData, profileLoading, profileError, getUserProfile, uploadProfileImage, updateUserProfile } from '$lib/stores/profileStore';
 	import { goto } from '$app/navigation';
-	import ApplicationForm from '$lib/components/ApplicationForm.svelte';
 	import { programs, programHandlers, programLoading, programError } from '$lib/stores/programStore';
 	import { writable } from 'svelte/store';
 	import { formatDateFromStr } from '$lib/utils/formatDate';
@@ -29,7 +28,7 @@
         filteredUpcomingPrograms = $programs
 		.filter((program) => {
 			const now = new Date();
-			const programDate = new Date(program.applicationDeadline);
+			const programDate = new Date(program.endDate);
 			return programDate >= now;
 		});
 		
@@ -478,12 +477,21 @@
 												<p class="mx-auto mb-6 max-w-2xl text-gray-600">
 													You have successfully applied to join this program!
 												</p>
-												<button 
-													on:click={() => activeTab = 'Applications'} 
-													class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
-												>
-														View Your Application
-												</button>
+												<div class="flex flex-col md:flex-row items-center justify-center gap-5">
+													<button 
+														on:click={() => activeTab = 'Applications'} 
+														class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
+													>
+															View Your Application
+													</button>
+													<button 
+														on:click={() => goto(`/programs/${program.id}/participant`)} 
+														class="btn border-primary text-primary border-2 bg-transparent hover:bg-primary hover:text-white"
+													>
+															View Program Details
+													</button>
+												</div>
+												
 											</div>
 										{:else}
 											<div>
