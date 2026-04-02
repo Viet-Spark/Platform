@@ -95,6 +95,7 @@
                 <div class="space-y-6">
                     <ProjectForm
                         isEditing={false}
+                        isAdmin={true}
                         on:submit={(e) => handleSubmit(e)}
                         loading={loading}
                         error={error}

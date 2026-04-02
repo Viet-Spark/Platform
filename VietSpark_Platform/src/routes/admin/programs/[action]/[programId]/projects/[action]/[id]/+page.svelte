@@ -92,6 +92,7 @@
                         <ProjectForm
                             project={project}
                             isEditing={true}
+                            isAdmin={true}
                             on:submit={(e) => handleSubmit(e)}
                             loading={loading}
                             error={error}
