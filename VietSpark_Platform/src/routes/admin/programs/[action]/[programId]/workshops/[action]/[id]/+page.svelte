@@ -55,11 +55,15 @@
                 const newUrls = await workshopHandlers.uploadWorkshopsImages(workshop.tempFiles, workshopId);
                 workshopImageUrls = [...workshopImageUrls, ...newUrls];
             }
-
-            workshop.startTime = new Date(workshop.startTime); 
-            workshop.endTime = new Date(workshop.endTime); 
-            workshop.registrationDeadline = new Date(workshop.registrationDeadline); 
-
+            if (workshop.startTime) {
+                workshop.startTime = new Date(workshop.startTime); 
+            }
+            if (workshop.endTime) {
+                workshop.endTime = new Date(workshop.endTime); 
+            }
+            if (workshop.registrationDeadline) {
+                workshop.registrationDeadline = new Date(workshop.registrationDeadline); 
+            }
             console.log('Preparing workshop data to submit...');
 
             const dataToSubmit = {
@@ -111,6 +115,7 @@
                         <WorkshopForm
                             workshop={workshop}
                             isEditing={true}
+                            isAdmin={true}
                             on:submit={(e) => handleSubmit(e)}
                             loading={loading}
                             error={error}

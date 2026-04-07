@@ -112,7 +112,7 @@
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Cover Image</th>
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Visibility</th>
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -133,7 +133,11 @@
                                     <div class="text-sm text-gray-900">{formatDetailDate(workshop.startTime)}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">{workshop.location}</div>
+                                    <span class="px-2 inline-flex text-xs font-semibold rounded-full
+                                    {(workshop.visibility === "Public") ? "text-green-500" : (workshop.visibility === "Internal" ? "text-grey-700" : "text-red-500")}"
+                                    >
+                                        {workshop.visibility}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2 justify-center">

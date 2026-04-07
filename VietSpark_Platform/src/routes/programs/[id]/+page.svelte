@@ -32,7 +32,7 @@
 	}
 
 	$: if ($workshops && $program) {
-		let filteredWorkshops = $workshops.filter((w) => $program.workshopIds.includes(w.id)); 
+		let filteredWorkshops = $workshops.filter((w) => $program.workshopIds.includes(w.id) && w.visibility === 'Public'); 
 		// Sort by startTime (most recent first)
 		filteredWorkshops.sort((a, b) => {
 			const getTimestamp = (workshop) => {
