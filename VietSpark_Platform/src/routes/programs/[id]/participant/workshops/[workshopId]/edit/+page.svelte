@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userData, userLoading, getUsers } from '$lib/stores/userStore';
-    import { authUser } from '$lib/stores/authStore';
+    import { getUserData, userData, userLoading } from '$lib/stores/userStore';
+    import { authLoading, authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
     import { teams, teamLoading, teamHandlers} from '$lib/stores/teamStore';
@@ -19,12 +19,44 @@
 
     let workshop = null; 
 
+    async function waitForAuthReady(timeoutMs = 15000) {
+        const start = Date.now();
+        while ($authLoading) {
+            if (Date.now() - start > timeoutMs) return false;
+            await new Promise((r) => setTimeout(r, 50));
+        }
+        return true;
+    }
+
+    async function ensureUserDataLoaded() {
+        const authReady = await waitForAuthReady();
+        if (!authReady) return false;
+        if (!$authUser?.uid) return false;
+        if (!$userData) {
+            await getUserData($authUser.uid);
+        }
+        if ($userData && !$userData.id) {
+            userData.update((cur) => (cur ? { ...cur, id: $authUser.uid } : cur));
+        }
+        return Boolean($userData);
+    }
+
     onMount(async () => {
         try {
             loading = true;
+            const ok = await ensureUserDataLoaded();
+            if (!ok) {
+                // Don't redirect while auth/userData is still loading; only redirect if user is not signed in.
+                if (!$authLoading && !$authUser?.uid) {
+                    goto(`/programs/${programId}`);
+                } else {
+                    error = 'Loading your profile... Please try again in a moment.';
+                }
+                return;
+            }
             await programHandlers.getProgram(programId);
             await applicationHandlers.getApplications();
-            await getUsers(); 
+            
 			// Find this user's application for this program
 			const ids = ($userData?.applicationIds || []).slice();
 			let myApplication = $applications.find((a) => ids.includes(a.id) && a.programId === programId && a.status === 'Approved') || null;
