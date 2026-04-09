@@ -28,7 +28,7 @@
 	}
 
 	$: if ($testimonials && $program) {
-		programTestimonials.set($testimonials.filter((t) => $program.testimonialIds.includes(t.id) && t.moderationStatus === "Approved"));
+		programTestimonials.set($testimonials.filter((t) => $program.testimonialIds.includes(t.id) && t.moderationStatus === "Approved" && t.visibility === 'Public'));
 	}
 
 	$: if ($workshops && $program) {
