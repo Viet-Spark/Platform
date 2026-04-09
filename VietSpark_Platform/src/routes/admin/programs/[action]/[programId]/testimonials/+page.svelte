@@ -103,6 +103,7 @@
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Highlight</th>
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Submitter</th>
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Visibility</th>
                             <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -132,6 +133,13 @@
                                         {(testimonial.moderationStatus === "Approved") ? "text-green-500" : (testimonial.moderationStatus === "Pending" ? "text-grey-700" : "text-red-500")}"
                                     >
                                         {testimonial.moderationStatus}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {(testimonial.visibility === "Public") ? "text-green-500" : (testimonial.visibility === "Internal" ? "text-grey-700" : "text-red-500")}"
+                                    >
+                                        {testimonial.visibility}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
