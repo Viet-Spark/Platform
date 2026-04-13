@@ -28,6 +28,7 @@
     export let isEditing = false;
     export let handleCancel = () => {}; 
     export let availableApplicants = []; 
+    export let isAdmin = false;
 
     const dispatch = createEventDispatcher();
     let formData = { ...team };
@@ -167,33 +168,37 @@
             <form on:submit={handleSubmit} class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Team Name -->
-                    <div>
+                    <div class="grid-cols-1">
                         <label for="name" class="block font-semibold mb-1">Team Name</label>
                         <input type="text" id="name" bind:value={formData.name} required placeholder="Team Name" class="w-full border rounded px-3 py-2" />
                     </div>
 
-                    <!-- Manager -->
-                    <div>
-                        <label for="manager" class="block font-semibold mb-1">Manager (Mentor/Lead)</label>
-                        {#if managerApplicants.length > 0 || formData.manager?.userId}
-                            <select id="manager" value={formData.manager?.userId} on:change={(e) => handleManagerSelect(e)} class="w-full border rounded px-3 py-2">
-                                <option value="">Select manager</option>
-                                {#each managerApplicants as user}
-                                    <option value={user.userId}>
-                                        {user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}
-                                    </option>
-                                {/each}
-                                <!-- Show previously saved manager if not already in managerApplicants -->
-                                {#if formData.manager?.userId && !managerApplicants.some((a) => a.userId === formData.manager.userId)}
-                                    <option value={formData.manager.userId}>
-                                        {formData.manager.name} - {formData.manager.email}
-                                    </option>
-                                {/if}
-                            </select>
-                        {:else}
-                            <div>There aren't any approved manager applications yet!</div>
-                        {/if}
-                    </div>
+                    {#if isAdmin}
+                        <!-- Manager -->
+                        <div>
+                            <label for="manager" class="block font-semibold mb-1">Manager (Mentor/Lead)</label>
+                            {#if managerApplicants.length > 0 || formData.manager?.userId}
+                                <select id="manager" value={formData.manager?.userId} on:change={(e) => handleManagerSelect(e)} class="w-full border rounded px-3 py-2">
+                                    <option value="">Select manager</option>
+                                    {#each managerApplicants as user}
+                                        <option value={user.userId}>
+                                            {user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}
+                                        </option>
+                                    {/each}
+                                    <!-- Show previously saved manager if not already in managerApplicants -->
+                                    {#if formData.manager?.userId && !managerApplicants.some((a) => a.userId === formData.manager.userId)}
+                                        <option value={formData.manager.userId}>
+                                            {formData.manager.name} - {formData.manager.email}
+                                        </option>
+                                    {/if}
+                                </select>
+                            {:else}
+                                <div>There aren't any approved manager applications yet!</div>
+                            {/if}
+                        </div>
+                    {:else}
+                        <div></div>
+                    {/if}
 
                     <!-- Logo Upload -->
                     <div>
@@ -224,37 +229,39 @@
                 </div>
                 
                 <div class="flex flex-col gap-4">
-                    <!-- Users and Roles -->
-                    <div class="">
-                        <label for="teamMembers" class="block font-semibold mb-1">Team Members</label>
-                        <div id="teamMembers" class="space-y-2">
-                            {#if memberApplicants.length > 0 || formData.users.length > 0}
-                                {#each formData.users as user, idx (user.userId || idx)}
-                                    <div class="md:flex items-center gap-2">
-                                        <select
-                                            value={formData.users[idx].userId}
-                                            on:change={(e) => handleUserSelect(e, idx)}
-                                            class="border rounded px-2 py-1 md:flex-2"
-                                        >
-                                            <option value="" disabled>Select user</option>
-                                            {#each availableForSelection(idx) as member}
-                                                <option value={member.userId}>
-                                                    {member.name || member.displayName}
-                                                    {(member.name || member.displayName) ? "-" : ""}
-                                                    {member.email} - {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
-                                                </option>
-                                            {/each}
-                                        </select>
-                                        <button type="button" class="text-red-500 ml-2" on:click={() => removeUser(idx)}>&times;</button>
-                                    </div>
-                                {/each}
-                                <button type="button" class="bg-primary text-white px-3 py-1 rounded" on:click={addUser}>+ Add Member</button>
-                            {:else}
-                                <div>There aren't any mentee or mentor applications yet!</div>  
-                            {/if}
-                            
+                    {#if isAdmin}
+                        <!-- Users and Roles -->
+                        <div class="">
+                            <label for="teamMembers" class="block font-semibold mb-1">Team Members</label>
+                            <div id="teamMembers" class="space-y-2">
+                                {#if memberApplicants.length > 0 || formData.users.length > 0}
+                                    {#each formData.users as user, idx (user.userId || idx)}
+                                        <div class="md:flex items-center gap-2">
+                                            <select
+                                                value={formData.users[idx].userId}
+                                                on:change={(e) => handleUserSelect(e, idx)}
+                                                class="border rounded px-2 py-1 md:flex-2"
+                                            >
+                                                <option value="" disabled>Select user</option>
+                                                {#each availableForSelection(idx) as member}
+                                                    <option value={member.userId}>
+                                                        {member.name || member.displayName}
+                                                        {(member.name || member.displayName) ? "-" : ""}
+                                                        {member.email} - {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
+                                                    </option>
+                                                {/each}
+                                            </select>
+                                            <button type="button" class="text-red-500 ml-2" on:click={() => removeUser(idx)}>&times;</button>
+                                        </div>
+                                    {/each}
+                                    <button type="button" class="bg-primary text-white px-3 py-1 rounded" on:click={addUser}>+ Add Member</button>
+                                {:else}
+                                    <div>There aren't any mentee or mentor applications yet!</div>  
+                                {/if}
+                                
+                            </div>
                         </div>
-                    </div>
+                    {/if}
 
                     <!-- Tags -->
                     <div>
@@ -288,30 +295,31 @@
                         </div>
                     </div>
 
-                    <!-- Visibility, Status, Featured -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label for="visibility" class="block font-semibold mb-1">Visibility</label>
-                            <select id="visibility" bind:value={formData.visibility} required class="w-full border rounded px-3 py-2">
-                            {#each visibilityOptions as v}
-                                <option value={v}>{v}</option>
-                            {/each}
-                            </select>
+                    {#if isAdmin}
+                        <!-- Visibility, Status, Featured -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="visibility" class="block font-semibold mb-1">Visibility</label>
+                                <select id="visibility" bind:value={formData.visibility} required class="w-full border rounded px-3 py-2">
+                                {#each visibilityOptions as v}
+                                    <option value={v}>{v}</option>
+                                {/each}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="status" class="block font-semibold mb-1">Status</label>
+                                <select id="status" bind:value={formData.status} required class="w-full border rounded px-3 py-2">
+                                {#each statusOptions as s}
+                                    <option value={s}>{s}</option>
+                                {/each}
+                                </select>
+                            </div>
+                            <div class="flex items-center mt-6">
+                                <input id="featured" type="checkbox" bind:checked={formData.featured} class="mr-2" />
+                                <label for="featured" class="font-semibold">Featured</label>
+                            </div>
                         </div>
-                        <div>
-                            <label for="status" class="block font-semibold mb-1">Status</label>
-                            <select id="status" bind:value={formData.status} required class="w-full border rounded px-3 py-2">
-                            {#each statusOptions as s}
-                                <option value={s}>{s}</option>
-                            {/each}
-                            </select>
-                        </div>
-                        <div class="flex items-center mt-6">
-                            <input id="featured" type="checkbox" bind:checked={formData.featured} class="mr-2" />
-                            <label for="featured" class="font-semibold">Featured</label>
-                        </div>
-                    </div>
-
+                    {/if}
                     <!-- Notes -->
                     <div>
                         <label for="notes" class="block font-semibold mb-1">Internal Notes</label>

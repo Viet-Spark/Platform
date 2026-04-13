@@ -23,6 +23,7 @@
         imageUrls: [],
         tempFiles: [],
         schedule: [],
+        visibility: 'Internal'
     }
 
     export let loading = false;
@@ -30,10 +31,14 @@
     export let isEditing = false;
     export let handleCancel = () => {}; 
     export let teams = []; 
+    export let isAdmin = false; 
+
     const dispatch = createEventDispatcher();
     let formData = { ...workshop };
 
     let prevWorkshop = workshop;
+
+    let visibilityOptions = ['Internal', 'Hidden', 'Public'];
 
     // Sync formData when workshop prop changes (important when workshops is a writable store)
     $: if (workshop != prevWorkshop) {
@@ -288,89 +293,100 @@
 
                 <!-- Schedule Section -->
                 <div class="mt-6">
-                <h4 class="font-bold mb-2">Schedule</h4>
-                <div class="space-y-2">
-                    <div>
-                        <table class="table-fixed w-full text-sm">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="w-[2%] px-2 py-1">#</th>
-                                    <th class="w-[25%] px-2 py-1">Presenter Name</th>
-                                    <th class="w-[21%] px-2 py-1">Presenter Account</th>
-                                    <th class="w-[10%] px-2 py-1">Time (min)</th>
-                                    <th class="w-[40%] px-2 py-1">Description</th>
-                                    <th class="w-[2%] px-2 py-1"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {#if formData.schedule && formData.schedule.length > 0}
-                                    {#each formData.schedule as entry, schedIdx}
-                                        <tr>
-                                            <td class="w-[2%] px-2 py-1">{schedIdx+1}</td>
-                                            <td class="w-[25%] px-2 py-1">
-                                                <input
-                                                    type="text"
-                                                    class="rounded border-gray-300 w-full"
-                                                    bind:value={entry.presenterName}
-                                                    placeholder="Presenter Name"
-                                                />
-                                            </td>
-                                            <td class="w-[21%] px-2 py-1">
-                                                <select
-                                                    class="rounded border-gray-300 w-full"
-                                                    bind:value={entry.presenterId}
-                                                >
-                                                    <option value="">Select presenter</option>
-                                                    {#if $usersList}
-                                                        {#each $usersList as user}
-                                                            <option value={user.uid}>{user.name || user.displayName || 'Unknown'} ({user.email})</option>
-                                                        {/each}
-                                                    {/if}
-                                                    {#if teams.length > 0}
-                                                        {#each teams as team}
-                                                            <option value={team.id}>{team.name}</option>
-                                                        {/each}
-                                                    {/if}
-                                                </select>
-                                            </td>
-                                            <td class="w-[10%] px-2 py-1">
-                                                <input
-                                                    type="number"
-                                                    class="rounded border-gray-300 w-full"
-                                                    bind:value={entry.time}
-                                                />
-                                            </td>
-                                            <td class="w-[40%] px-2 py-1">
-                                                <input
-                                                    type="text"
-                                                    class="rounded border-gray-300 w-full"
-                                                    bind:value={entry.description}
-                                                    placeholder="Topic Summary"
-                                                />
-                                            </td>
-                                            <td class="w-[2%] px-2 py-1 text-right">
-                                                <button type="button" class="text-red-500 hover:text-red-700" on:click={() => removeScheduleEntry(schedIdx)}>
-                                                    ✕
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    {/each}
-                                {:else}
-                                    <tr><td colspan="4" class="text-gray-500 px-2 py-2">No schedule entries yet.</td></tr>
-                                {/if}
-                            </tbody>
-                        </table>
+                    <h4 class="font-bold mb-2">Schedule</h4>
+                    <div class="space-y-2">
+                        <div>
+                            <table class="table-fixed w-full text-sm">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="w-[2%] px-2 py-1">#</th>
+                                        <th class="w-[25%] px-2 py-1">Presenter Name</th>
+                                        <th class="w-[21%] px-2 py-1">Presenter Account</th>
+                                        <th class="w-[10%] px-2 py-1">Time (min)</th>
+                                        <th class="w-[40%] px-2 py-1">Description</th>
+                                        <th class="w-[2%] px-2 py-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {#if formData.schedule && formData.schedule.length > 0}
+                                        {#each formData.schedule as entry, schedIdx}
+                                            <tr>
+                                                <td class="w-[2%] px-2 py-1">{schedIdx+1}</td>
+                                                <td class="w-[25%] px-2 py-1">
+                                                    <input
+                                                        type="text"
+                                                        class="rounded border-gray-300 w-full"
+                                                        bind:value={entry.presenterName}
+                                                        placeholder="Presenter Name"
+                                                    />
+                                                </td>
+                                                <td class="w-[21%] px-2 py-1">
+                                                    <select
+                                                        class="rounded border-gray-300 w-full"
+                                                        bind:value={entry.presenterId}
+                                                    >
+                                                        <option value="">Select presenter</option>
+                                                        {#if $usersList}
+                                                            {#each $usersList as user}
+                                                                <option value={user.uid}>{user.name || user.displayName || 'Unknown'} ({user.email})</option>
+                                                            {/each}
+                                                        {/if}
+                                                        {#if teams.length > 0}
+                                                            {#each teams as team}
+                                                                <option value={team.id}>{team.name}</option>
+                                                            {/each}
+                                                        {/if}
+                                                    </select>
+                                                </td>
+                                                <td class="w-[10%] px-2 py-1">
+                                                    <input
+                                                        type="number"
+                                                        class="rounded border-gray-300 w-full"
+                                                        bind:value={entry.time}
+                                                    />
+                                                </td>
+                                                <td class="w-[40%] px-2 py-1">
+                                                    <input
+                                                        type="text"
+                                                        class="rounded border-gray-300 w-full"
+                                                        bind:value={entry.description}
+                                                        placeholder="Topic Summary"
+                                                    />
+                                                </td>
+                                                <td class="w-[2%] px-2 py-1 text-right">
+                                                    <button type="button" class="text-red-500 hover:text-red-700" on:click={() => removeScheduleEntry(schedIdx)}>
+                                                        ✕
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        {/each}
+                                    {:else}
+                                        <tr><td colspan="4" class="text-gray-500 px-2 py-2">No schedule entries yet.</td></tr>
+                                    {/if}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="mt-2 bg-primary text-white px-3 py-2 rounded hover:bg-primary-dark" on:click={() => addScheduleEntry()}>
+                            + Add Schedule Item
+                        </button>
                     </div>
-                    <button type="button" class="mt-2 bg-primary text-white px-3 py-2 rounded hover:bg-primary-dark" on:click={() => addScheduleEntry()}>
-                        + Add Schedule Item
-                    </button>
+
+                    <!-- Total Duration -->
+                    <div class="mt-2 text-sm text-gray-700 font-semibold">
+                        Total Duration: {getWorkshopDuration()} min
+                    </div>
                 </div>
 
-                <!-- Total Duration -->
-                <div class="mt-2 text-sm text-gray-700 font-semibold">
-                    Total Duration: {getWorkshopDuration()} min
-                </div>
-                </div>
+                {#if isAdmin}
+                    <div>
+                        <label for="visibility" class="block font-semibold mb-1">Visibility</label>
+                        <select id="visibility" bind:value={formData.visibility} required class="w-full border rounded px-3 py-2">
+                        {#each visibilityOptions as v}
+                            <option value={v}>{v}</option>
+                        {/each}
+                        </select>
+                    </div>
+                {/if}
                 
                 {#if error}
                 <div class="text-red-600">{error}</div>

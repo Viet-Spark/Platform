@@ -1,32 +1,73 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userData, userLoading } from '$lib/stores/userStore';
-    import { authUser } from '$lib/stores/authStore';
+    import { getUserData, userData, userLoading } from '$lib/stores/userStore';
+    import { authLoading, authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
     import { testimonialHandlers, testimonialLoading, testimonials } from '$lib/stores/testimonialStore';
     import TestimonialForm from '$lib/components/TestimonialForm.svelte';
     import { curProgram, programHandlers } from '$lib/stores/programStore';
 
-    // Redirect if not admin
-    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
-        goto('/');
-    }
-
-    let testimonialId = $page.params.id; 
-    let programId = $page.params.programId; 
+    let testimonialId = $page.params.testimonialId; 
+    let programId = $page.params.id; 
 
     let loading = true;
     let error = '';
     let testimonial = null; 
 
+    async function waitForAuthReady(timeoutMs = 15000) {
+        const start = Date.now();
+        while ($authLoading) {
+            if (Date.now() - start > timeoutMs) return false;
+            await new Promise((r) => setTimeout(r, 50));
+        }
+        return true;
+    }
+
+    async function ensureUserDataLoaded() {
+        const authReady = await waitForAuthReady();
+        if (!authReady) return false;
+        if (!$authUser?.uid) return false;
+        if (!$userData) {
+            await getUserData($authUser.uid);
+        }
+        if ($userData && !$userData.id) {
+            userData.update((cur) => (cur ? { ...cur, id: $authUser.uid } : cur));
+        }
+        return Boolean($userData);
+    }
+
     onMount(async () => {
-        loading = true;
+        if (!testimonialId) {
+			error = 'Missing testimonial ID.';
+			loading = false;
+			return;
+		}
         try {
+            loading = true;
+            const ok = await ensureUserDataLoaded();
+            if (!ok) {
+                // Don't redirect while auth/userData is still loading; only redirect if user is not signed in.
+                if (!$authLoading && !$authUser?.uid) {
+                    goto(`/programs/${programId}`);
+                } else {
+                    error = 'Loading your profile... Please try again in a moment.';
+                }
+                return;
+            }
             await programHandlers.getProgram(programId);
             testimonial = await testimonialHandlers.getTestimonial(testimonialId); 
+            if (!testimonial) {
+				error = 'Testimonial not found.';
+				return;
+			}
+            const myId = $userData?.id || $authUser.uid;
+            if (testimonial.submitterId !== myId) {
+                goto(`/programs/${programId}`);
+            }
         } catch (e) {
-            error = 'Failed to load team.';
+            console.error(e);
+            error = 'Failed to load testimonial.';
         } finally {
             loading = false;
         }
@@ -59,7 +100,7 @@
                 authorCoverImage: coverImageUrl,
                 imageUrls: testimonialImageUrls, 
                 videoUrl: testimonialVideoUrl, 
-                submitterId: $userData.id
+                source: 'Form'
             }
             // Remove all temporary fields and blob URLs
             delete dataToSubmit.coverTempFile;
@@ -74,7 +115,7 @@
             error = e.message || 'Failed to save Testimonial';
             console.error('Error saving Testimonial:', error);
         } finally {
-            goto(`/admin/programs/edit/${programId}/testimonials`); 
+            goto(`/programs/${programId}/participant/testimonials/${testimonialId}`); 
             loading = false; 
         }
     }
@@ -86,7 +127,7 @@
             <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto md:my-5">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -105,12 +146,11 @@
                     <div class="space-y-6">
                         <TestimonialForm
                             testimonial={testimonial}
-                            isAdmin={true}
                             isEditing={true}
                             on:submit={(e) => handleSubmit(e)}
                             loading={loading}
                             error={error}
-                            handleCancel={() => goto(`/admin/programs/edit/${programId}/testimonials`)} disabled={loading}
+                            handleCancel={() => goto(`/programs/${programId}/participant`)} disabled={loading}
                         />
                     </div>
                 {:else}

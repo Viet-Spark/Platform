@@ -33,6 +33,7 @@
     export let error = '';
     export let isEditing = false;
     export let handleCancel = () => {}; 
+    export let isAdmin = false; 
 
     const dispatch = createEventDispatcher();
     let formData = { ...testimonial };
@@ -312,34 +313,35 @@
                         {/each}
                     </div>
                 </div>
-
+                {#if isAdmin}
                 <!-- Visibility, Status, Source -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label for="visibility" class="block font-semibold mb-1">Visibility</label>
-                        <select id="visibility" bind:value={formData.visibility} required class="w-full border rounded px-3 py-2">
-                        {#each visibilityOptions as v}
-                            <option value={v}>{v}</option>
-                        {/each}
-                        </select>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="visibility" class="block font-semibold mb-1">Visibility</label>
+                            <select id="visibility" bind:value={formData.visibility} required class="w-full border rounded px-3 py-2">
+                            {#each visibilityOptions as v}
+                                <option value={v}>{v}</option>
+                            {/each}
+                            </select>
+                        </div>
+                        <div>
+                            <label for="status" class="block font-semibold mb-1">Status</label>
+                            <select id="status" bind:value={formData.moderationStatus} required class="w-full border rounded px-3 py-2">
+                            {#each statusOptions as s}
+                                <option value={s}>{s}</option>
+                            {/each}
+                            </select>
+                        </div>
+                        <div>
+                            <label for="source" class="block font-semibold mb-1">Source</label>
+                            <select id="source" bind:value={formData.source} class="w-full border rounded px-3 py-2">
+                            {#each availableSources as s}
+                                <option value={s}>{s}</option>
+                            {/each}
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label for="status" class="block font-semibold mb-1">Status</label>
-                        <select id="status" bind:value={formData.moderationStatus} required class="w-full border rounded px-3 py-2">
-                        {#each statusOptions as s}
-                            <option value={s}>{s}</option>
-                        {/each}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="source" class="block font-semibold mb-1">Source</label>
-                        <select id="source" bind:value={formData.source} class="w-full border rounded px-3 py-2">
-                        {#each availableSources as s}
-                            <option value={s}>{s}</option>
-                        {/each}
-                        </select>
-                    </div>
-                </div>
+                {/if}
 
                 <!-- Notes -->
                 <div>

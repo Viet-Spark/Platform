@@ -28,11 +28,11 @@
 	}
 
 	$: if ($testimonials && $program) {
-		programTestimonials.set($testimonials.filter((t) => $program.testimonialIds.includes(t.id) && t.moderationStatus === "Approved"));
+		programTestimonials.set($testimonials.filter((t) => $program.testimonialIds.includes(t.id) && t.moderationStatus === "Approved" && t.visibility === 'Public'));
 	}
 
 	$: if ($workshops && $program) {
-		let filteredWorkshops = $workshops.filter((w) => $program.workshopIds.includes(w.id)); 
+		let filteredWorkshops = $workshops.filter((w) => $program.workshopIds.includes(w.id) && w.visibility === 'Public'); 
 		// Sort by startTime (most recent first)
 		filteredWorkshops.sort((a, b) => {
 			const getTimestamp = (workshop) => {
@@ -268,7 +268,7 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <button class="btn bg-primary hover:underline hover:bg-primary-dark w-full text-white">
+                                    <button class="btn bg-primary hover:underline hover:bg-primary-dark w-full text-white cursor-pointer">
                                         Apply Now
                                     </button>
                                 </a>
@@ -327,7 +327,7 @@
 							{#if tab.show}
 								<button
 									type="button"
-									class="whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium {activeTab === tab.key
+									class="whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium cursor-pointer {activeTab === tab.key
 										? 'border-primary text-primary'
 										: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}"
 									on:click={() => toggleTab(tab.key)}
@@ -424,7 +424,7 @@
 											<div class="flex flex-row gap-2 mt-auto text-center text-lg">
 												<button
 													type="button"
-													class="flex-1 p-2 border border-primary text-primary hover:bg-primary/5 rounded-lg"
+													class="flex-1 p-2 border border-primary text-primary hover:bg-primary/5 rounded-lg cursor-pointer"
 													on:click={() => goto(`/workshops/${workshop.id}`)}
 												>
 													View details
@@ -435,7 +435,7 @@
 														target="_blank"
 														rel="noopener noreferrer"
 														aria-label={`Register for ${workshop.title}`}
-														class="flex-1 p-2 bg-primary text-white hover:bg-primary-dark rounded-lg"
+														class="flex-1 p-2 bg-primary text-white hover:bg-primary-dark rounded-lg cursor-pointer"
 													>
 													Register
 													</a>
@@ -456,7 +456,7 @@
 						{#each $programImages as url, i (url)}
 							<button
 								type="button"
-								class="focus:outline-none"
+								class="focus:outline-none cursor-pointer"
 								on:click={() => {
 									modalImageUrl = url;
 									showImageModal = true;

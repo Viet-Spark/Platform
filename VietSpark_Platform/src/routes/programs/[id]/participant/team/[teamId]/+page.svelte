@@ -9,18 +9,12 @@
     import { curProgram, programHandlers} from '$lib/stores/programStore';
     import { applications, applicationLoading, applicationHandlers } from '$lib/stores/applicationStore';
 
-    // Redirect if not admin
-    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
-        goto('/');
-    }
-
-    let teamId = $page.params.id; 
-    $: programId = $page.params.programId;
+    let teamId = $page.params.teamId; 
+    $: programId = $page.params.id;
 
     let loading = true;
     let error = '';
     let team = null; 
-    let availableApplicants = []; 
 
     onMount(async () => {
         loading = true;
@@ -28,8 +22,15 @@
             await programHandlers.getProgram(programId);
             // Wait for teams to be fetched fresh
             team = await teamHandlers.getTeam(teamId); 
-            await applicationHandlers.getApplications(); 
-            availableApplicants = $applications.filter((app) => app.programId === programId && app.status === "Approved" && app.assignedTeam == ""); 
+            if (!$userData?.id) {
+                console.log("User not ready");
+                return;
+            }
+
+            let user = team.users.find((u) => u.userId === $userData.id); 
+            if (!user && team?.manager?.userId !== $userData.id) {
+                goto(`/programs/${programId}`);
+            }
         } catch (e) {
             error = 'Failed to load team.';
         } finally {
@@ -49,41 +50,9 @@
             }
             console.log('Preparing team data to submit...');
 
-            // Update assigned team for removed users
-            const removedApplicantIds = [];
-            for (const applicant of team.removedApplicants) {
-                removedApplicantIds.push(applicant.applicantId);
-            }
-            if (team.removedManagerApplicant) {
-                removedApplicantIds.push(team.removedManagerApplicant.applicantId);
-            }
-            for (const applicantId of removedApplicantIds) {
-                await applicationHandlers.updateApplication(applicantId, {
-                    assignedTeam: ""
-                });
-            }
-
-            //Update assigned team for all applicants
-            const applicantsIds = []
-            for (const user of team.users) {
-                applicantsIds.push(user.applicantId);
-            }
-            if (team.manager?.applicantId) {
-                applicantsIds.push(team.manager.applicantId);
-            }
-            
-            for (const applicantId of applicantsIds) {
-                await applicationHandlers.updateApplication(applicantId, {
-                    assignedTeam: teamId
-                });
-            }
-
             const dataToSubmit = {
                 ...team, 
-                logoUrl: teamLogoUrl, 
-                programId: $curProgram.id, 
-                removedApplicants: [], 
-                removedManagerApplicant: ''
+                logoUrl: teamLogoUrl
             }
             // Remove all temporary fields and blob URLs
             delete dataToSubmit.logoFileTemp; 
@@ -96,7 +65,7 @@
             error = e.message || 'Failed to save team';
             console.error('Error saving team:', error);
         } 
-        goto(`/admin/programs/edit/${$curProgram.id}/teams`); 
+        goto(`/programs/${programId}/participant`); 
         loading = false; 
     }
 </script>
@@ -107,7 +76,7 @@
             <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto md:my-5">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -126,13 +95,11 @@
                     <div class="space-y-6">
                         <TeamForm
                             team={team}
-                            isAdmin={true}
-                            availableApplicants={availableApplicants}
                             isEditing={true}
                             on:submit={(e) => handleSubmit(e)}
                             loading={loading}
                             error={error}
-                            handleCancel={() => goto(`/admin/programs/edit/${$curProgram.id}/teams`)} disabled={loading}
+                            handleCancel={() => goto(`/programs/${programId}/participant`)} disabled={loading}
                         />
                     </div>
                 {:else}

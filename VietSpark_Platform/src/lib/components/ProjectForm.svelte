@@ -27,6 +27,7 @@
     export let isEditing = false;
     export let handleCancel = () => {}; 
     export let teams = []; 
+    export let isAdmin = false;
 
     const dispatch = createEventDispatcher();
     let formData = { ...project };
@@ -110,19 +111,21 @@
                         <label for="title" class="block font-semibold mb-1">Project Title</label>
                         <input type="text" id="title" bind:value={formData.title} required placeholder="Project Title" class="w-full border rounded px-3 py-2" />
                     </div>
-
-                    <!-- Team -->
-                    <div>
-                        <label for="teamId" class="block font-semibold mb-1">Team</label>
-                        <select id="teamId" bind:value={formData.teamId} required class="w-full border rounded px-3 py-2">
-                        <option value="">Select team</option>
-                        {#if teams}
-                            {#each teams as team}
-                            <option value={team.id}>{team.name}</option>
-                            {/each}
-                        {/if}
-                        </select>
-                    </div>
+                    
+                    {#if isAdmin}
+                        <!-- Team -->
+                        <div>
+                            <label for="teamId" class="block font-semibold mb-1">Team</label>
+                            <select id="teamId" bind:value={formData.teamId} required class="w-full border rounded px-3 py-2">
+                            <option value="">Select team</option>
+                            {#if teams}
+                                {#each teams as team}
+                                <option value={team.id}>{team.name}</option>
+                                {/each}
+                            {/if}
+                            </select>
+                        </div>
+                    {/if}
 
                     <!-- Start Date -->
                     <div>
@@ -177,27 +180,29 @@
                         <textarea id="description" bind:value={formData.description} rows="8" placeholder="Project Description" required class="w-full border rounded px-3 py-2"></textarea>
                     </div>
 
-                    <!-- Administrators -->
-                    <div>
-                        <label for="administrators" class="block font-semibold mb-1">Administrators</label>
-                        <div id="administrators" class="space-y-2">
-                            {#each formData.administrators as userId, idx}
-                                <div class="flex items-center gap-2">
-                                    <select bind:value={formData.administrators[idx]} on:change={(e) => handleUserChange(idx, e.target.value)} class="border rounded px-2 py-1 flex-2">
-                                    <option value="">Select user</option>
-                                    {#if $usersList}
-                                        {#each $usersList as user}
-                                        <option value={user.uid}>{user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}</option>
-                                        {/each}
-                                    {/if}
-                                    </select>
-                                    
-                                    <button type="button" class="text-red-500 ml-2" on:click={() => removeAdministrators(idx)}>&times;</button>
-                                </div>
-                            {/each}
-                            <button type="button" class="bg-primary text-white px-3 py-1 rounded" on:click={addAdministrators}>+ Add Administrator</button>
+                    {#if isAdmin}
+                        <!-- Administrators -->
+                        <div>
+                            <label for="administrators" class="block font-semibold mb-1">Administrators</label>
+                            <div id="administrators" class="space-y-2">
+                                {#each formData.administrators as userId, idx}
+                                    <div class="flex items-center gap-2">
+                                        <select bind:value={formData.administrators[idx]} on:change={(e) => handleUserChange(idx, e.target.value)} class="border rounded px-2 py-1 flex-2">
+                                        <option value="">Select user</option>
+                                        {#if $usersList}
+                                            {#each $usersList as user}
+                                            <option value={user.uid}>{user.name || user.displayName} {(user.name || user.displayName) ? "-" : ""} {user.email}</option>
+                                            {/each}
+                                        {/if}
+                                        </select>
+                                        
+                                        <button type="button" class="text-red-500 ml-2" on:click={() => removeAdministrators(idx)}>&times;</button>
+                                    </div>
+                                {/each}
+                                <button type="button" class="bg-primary text-white px-3 py-1 rounded" on:click={addAdministrators}>+ Add Administrator</button>
+                            </div>
                         </div>
-                    </div>
+                    {/if}
 
                     <!-- Images -->
                     <div>

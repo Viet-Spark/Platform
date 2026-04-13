@@ -1,41 +1,47 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userData, userLoading } from '$lib/stores/userStore';
+    import { userData, userLoading, getUsers } from '$lib/stores/userStore';
     import { authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
     import { testimonialHandlers, testimonialLoading, testimonials } from '$lib/stores/testimonialStore';
     import TestimonialForm from '$lib/components/TestimonialForm.svelte';
-    import { curProgram, programHandlers } from '$lib/stores/programStore';
-
-    // Redirect if not admin
-    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
-        goto('/');
-    }
-
-    let testimonialId = $page.params.id; 
-    let programId = $page.params.programId; 
+    import { curProgram, programLoading, programHandlers } from '$lib/stores/programStore';
+    import { applications, applicationLoading, applicationHandlers } from '$lib/stores/applicationStore';
 
     let loading = true;
     let error = '';
-    let testimonial = null; 
+    $: programId = $page.params.id;
 
     onMount(async () => {
-        loading = true;
         try {
+            loading = true;
             await programHandlers.getProgram(programId);
-            testimonial = await testimonialHandlers.getTestimonial(testimonialId); 
+            await applicationHandlers.getApplications();
+            await getUsers(); 
+
+            // Find this user's application for this program
+			const ids = ($userData?.applicationIds || []).slice();
+			let myApplication = $applications.find((a) => ids.includes(a.id) && a.programId === programId && a.status === 'Approved') || null;
+
+			if (!myApplication) {
+				goto(`/programs/${programId}`);
+			}
         } catch (e) {
-            error = 'Failed to load team.';
+            error = 'Failed to load testimonial.';
         } finally {
             loading = false;
         }
-    });
+    })
 
     async function handleSubmit(event) {
         loading = true; 
-        testimonial = event.detail; 
+        let testimonial = event.detail; 
+        let testimonialId = ""; 
         try {
+            testimonialId = await testimonialHandlers.createTestimonial({
+                authorName: testimonial.authorName
+            })
             // Upload cover image
             let coverImageUrl = testimonial.authorCoverImage;
 			if (testimonial.coverTempFile) {
@@ -54,12 +60,14 @@
                 testimonialImageUrls = [...testimonialImageUrls, ...newUrls];
             }
             console.log('Preparing testimonial data to submit...');
+            console.log($userData); 
             const dataToSubmit = {
                 ...testimonial, 
                 authorCoverImage: coverImageUrl,
                 imageUrls: testimonialImageUrls, 
                 videoUrl: testimonialVideoUrl, 
-                submitterId: $userData.id
+                submitterId: $userData.id, 
+                source: 'Form'
             }
             // Remove all temporary fields and blob URLs
             delete dataToSubmit.coverTempFile;
@@ -74,9 +82,18 @@
             error = e.message || 'Failed to save Testimonial';
             console.error('Error saving Testimonial:', error);
         } finally {
-            goto(`/admin/programs/edit/${programId}/testimonials`); 
+            let testimonialIds = [...$curProgram.testimonialIds, testimonialId]; 
+            if ($curProgram) {
+                const updatedProgramData = {
+                    ...$curProgram, 
+                    testimonialIds: testimonialIds
+                }
+                await programHandlers.updateProgram($curProgram.id, updatedProgramData); 
+                console.log('Program saved successfully');
+            }
+            goto(`/programs/${programId}/participant/testimonials/${testimonialId}`); 
             loading = false; 
-        }
+        } 
     }
 </script>
 
@@ -86,7 +103,7 @@
             <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto md:my-5">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -100,24 +117,16 @@
                     </div>
                 {/if}
 
-                {#if testimonial}
-                    <!-- Testimonial -->
-                    <div class="space-y-6">
-                        <TestimonialForm
-                            testimonial={testimonial}
-                            isAdmin={true}
-                            isEditing={true}
-                            on:submit={(e) => handleSubmit(e)}
-                            loading={loading}
-                            error={error}
-                            handleCancel={() => goto(`/admin/programs/edit/${programId}/testimonials`)} disabled={loading}
-                        />
-                    </div>
-                {:else}
-                    <div class="flex h-screen items-center justify-center">
-                        <p class="text-xl">Testimonial not found.</p>
-                    </div>
-                {/if}
+                <!-- Testimonial -->
+                <div class="space-y-6">
+                    <TestimonialForm
+                        isEditing={false}
+                        on:submit={(e) => handleSubmit(e)}
+                        loading={loading}
+                        error={error}
+                        handleCancel={() => goto(`/programs/${programId}/participant`)}  disabled={loading}
+                    />
+                </div>
             </div>
         </div>
     {/if}

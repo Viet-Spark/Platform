@@ -1,6 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
-    import { userData, userLoading } from '$lib/stores/userStore';
+    import { userData, userLoading, getUsers} from '$lib/stores/userStore';
     import { authUser } from '$lib/stores/authStore';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
@@ -8,25 +8,34 @@
     import { workshopHandlers, workshopLoading, workshops } from '$lib/stores/workshopStore';
     import WorkshopForm from '$lib/components/WorkshopForm.svelte';
     import { curProgram, programLoading, programHandlers } from '$lib/stores/programStore';
-    
-    // Redirect if not admin
-    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
-        goto('/');
-    }
+    import { applications, applicationLoading, applicationHandlers } from '$lib/stores/applicationStore';
+
     let loading = true;
     let error = '';
     let programTeams = []; 
-    $: programId = $page.params.programId;
+
+    $: programId = $page.params.id;
+    $: workshopId = $page.params.workshopId;
 
     onMount(async () => {
-        loading = true;
         try {
+            loading = true;
             await programHandlers.getProgram(programId);
-            // Wait for teams to be fetched fresh
-            await teamHandlers.getTeams(); 
+            await applicationHandlers.getApplications();
+            await getUsers(); 
+
+            // Find this user's application for this program
+			const ids = ($userData?.applicationIds || []).slice();
+			let myApplication = $applications.find((a) => ids.includes(a.id) && a.programId === programId && a.status === 'Approved') || null;
+
+			if (!myApplication) {
+				goto(`/programs/${programId}`);
+			}
+            await teamHandlers.getTeams();
             programTeams = $teams.filter(team => $curProgram.teamIds.includes(team.id)); 
+
         } catch (e) {
-            error = 'Failed to load team.';
+            error = e?.message || 'Failed to load workshop.';
         } finally {
             loading = false;
         }
@@ -92,7 +101,7 @@
                 await programHandlers.updateProgram($curProgram.id, updatedProgramData); 
                 console.log('Program saved successfully');
             }
-            goto(`/admin/programs/edit/${$curProgram.id}/workshops`); 
+            goto(`/programs/${programId}/participant/workshops/${workshopId}`); 
             loading = false; 
         } 
     }
@@ -104,7 +113,7 @@
             <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto md:my-5">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -122,12 +131,11 @@
                 <div class="space-y-6">
                     <WorkshopForm
                         isEditing={false}
-                        isAdmin={true}
                         on:submit={(e) => handleSubmit(e)}
                         loading={loading}
                         error={error}
                         teams={programTeams}
-                        handleCancel={() => goto(`/admin/programs/edit/${programId}/workshops`)} disabled={loading}
+                        handleCancel={() => goto(`/programs/${programId}/participant/`)} disabled={loading}
                     />
                 </div>
             </div>

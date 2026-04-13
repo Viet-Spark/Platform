@@ -5,6 +5,9 @@
     import DOMPurify from 'dompurify';
     import { workshopHandlers } from '$lib/stores/workshopStore';
     import { formatDate, formatTime, formatDetailDate } from '$lib/utils/formatDate';
+	import { userData, getUsers } from '$lib/stores/userStore';
+    import { curProgram, programHandlers } from '$lib/stores/programStore';
+    import { applications, applicationLoading, applicationHandlers } from '$lib/stores/applicationStore';
 
     let workshop = null;
     let loading = true;
@@ -15,23 +18,37 @@
     let showImageModal = false;
     let modalImageUrl = '';
 
-    $: workshopId = $page.params.id;
+    $: programId = $page.params.id;
+    $: workshopId = $page.params.workshopId;
 
 	onMount(async () => {
-		if (!workshopId) {
-			error = 'Missing workshop ID.';
-			loading = false;
-			return;
-		}
+        
 		try {
 			loading = true;
+            await programHandlers.getProgram(programId);
+            await applicationHandlers.getApplications();
+            await getUsers(); 
+
+			// Find this user's application for this program
+			const ids = ($userData?.applicationIds || []).slice();
+			let myApplication = $applications.find((a) => ids.includes(a.id) && a.programId === programId && a.status === 'Approved') || null;
+
+			if (!myApplication) {
+				goto(`/programs/${programId}`);
+			}
+
+            if (!workshopId) {
+                error = 'Missing workshop ID.';
+                loading = false;
+                return;
+            }
 			const data = await workshopHandlers.getWorkshop(workshopId);
 
-			if (!data || data.visibility !== 'Public') {
+			if (!data) {
 				error = 'Workshop not found.';
 				return;
 			}
-			workshop = data;
+            workshop = data;
 		} catch (e) {
 			console.error('Error loading workshop detail:', e);
 			error = e?.message || 'Failed to load workshop.';
@@ -73,14 +90,14 @@
 		<div class="max-w-xl text-center">
 			<p class="mb-2 text-lg font-semibold text-red-700">Error</p>
 			<p class="text-gray-600">{error}</p>
-			<a href="/workshops" class="text-primary mt-4 inline-block hover:underline">Back to Workshops</a>
+			<a href="/programs/{programId}/participant/" class="text-primary mt-4 inline-block hover:underline">Back to Program</a>
 		</div>
 	</div>
 {:else if !workshop}
 	<div class="flex min-h-screen items-center justify-center">
 		<div class="text-center">
 			<p class="mb-4 text-xl">Workshop not found</p>
-			<a href="/workshops" class="text-primary hover:underline">Back to Workshops</a>
+			<a href="/programs/{programId}/participant/" class="text-primary hover:underline">Back to Program</a>
 		</div>
 	</div>
 {:else}
@@ -107,10 +124,10 @@
                     </div>
                 </div>
                 <a
-                    href="/workshops"
+                    href="/programs/{programId}/participant/"
                     class="btn text-center flex-1 hover:text-primary border-2 border-white bg-transparent hover:bg-white"
                 >
-                    Back to Workshops
+                    Back to Program
                 </a>
             </div>
         </div>

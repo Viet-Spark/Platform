@@ -108,6 +108,7 @@
                 <div class="space-y-6">
                     <TeamForm
                         isEditing={false}
+                        isAdmin={true}
                         availableApplicants={availableApplicants}
                         on:submit={(e) => handleSubmit(e)}
                         loading={loading}

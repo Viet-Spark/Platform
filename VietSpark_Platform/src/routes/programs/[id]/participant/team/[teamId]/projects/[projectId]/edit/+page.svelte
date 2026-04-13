@@ -8,31 +8,42 @@
     import ProjectForm from '$lib/components/ProjectForm.svelte';
     import { teamHandlers, teamLoading, teams } from '$lib/stores/teamStore';
     import { curProgram, programHandlers } from '$lib/stores/programStore';
-    // Redirect if not admin
-    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
-        goto('/');
-    }
+
+    $: programId = $page.params.id;
+    $: projectId = $page.params.projectId; 
+    $: teamId = $page.params.teamId; 
 
     let loading = true;
     let error = '';
-    let programTeams = []; 
-    $: programId = $page.params.programId;
+    let project = null; 
 
     onMount(async () => {
-        await programHandlers.getProgram(programId);
-        await teamHandlers.getTeams(); 
-        programTeams = $teams.filter(team => team.programId === programId);
-        loading = false; 
-    })
+        loading = true;
+        try {
+            await programHandlers.getProgram(programId);
+            // Wait for projects to be fetched fresh
+            project = await projectHandlers.getProject(projectId); 
+            let team = await teamHandlers.getTeam(teamId); 
+            if (!$userData?.id) {
+                console.log("User not ready");
+                return;
+            }
+
+            let user = team.users.find((u) => u.userId === $userData.id); 
+            if (!user && team?.manager?.userId !== $userData.id) {
+                goto(`/programs/${programId}`);
+            }
+        } catch (e) {
+            error = 'Failed to load project.';
+        } finally {
+            loading = false;
+        }
+    });
 
     async function handleSubmit(event) {
         loading = true; 
-        let project = event.detail; 
-        let projectId = ""; 
+        project = event.detail; 
         try {
-            projectId = await projectHandlers.createProject({
-                title: project.title
-            })
             // Upload images
             let projectImagesUrls = project.imageUrls.filter(url => !url.startsWith('data:') && !url.startsWith('blob:')); // Keep existing URLs
             if (project.imageTempFiles?.length > 0) {
@@ -54,20 +65,9 @@
         } catch (e) {
             error = e.message || 'Failed to save project';
             console.error('Error saving project:', error);
-        } finally{
-            let projectIds = [...$curProgram.projectIds, projectId]; 
-            if ($curProgram) {
-                const updatedProgramData = {
-                    ...$curProgram, 
-                    projectIds: projectIds
-                }
-                await programHandlers.updateProgram(programId, updatedProgramData); 
-                console.log('Program saved successfully');
-            }
-            goto(`/admin/programs/edit/${programId}/projects`); 
-            loading = false; 
-        }
-        
+        } 
+        goto(`/programs/${programId}/participant`); 
+        loading = false; 
     }
 </script>
 
@@ -77,7 +77,7 @@
             <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto md:my-5">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -90,19 +90,25 @@
                         </div>
                     </div>
                 {/if}
+                
+                {#if project}
+                    <!-- Project -->
+                    <div class="space-y-6">
+                        <ProjectForm
+                            project={project}
+                            isEditing={true}
+                            on:submit={(e) => handleSubmit(e)}
+                            loading={loading}
+                            error={error}
+                            handleCancel={() =>  goto(`/programs/${programId}/participant`)} disabled={loading}
+                        />
+                    </div>
+                {:else}
+                    <div class="flex h-screen items-center justify-center">
+                        <p class="text-xl">Project not found.</p>
+                    </div>
+                {/if}
 
-                <!-- Project -->
-                <div class="space-y-6">
-                    <ProjectForm
-                        isEditing={false}
-                        isAdmin={true}
-                        on:submit={(e) => handleSubmit(e)}
-                        loading={loading}
-                        error={error}
-                        teams={programTeams}
-                        handleCancel={() =>  goto(`/admin/programs/edit/${programId}/projects`)} disabled={loading}
-                    />
-                </div>
             </div>
         </div>
     {/if}

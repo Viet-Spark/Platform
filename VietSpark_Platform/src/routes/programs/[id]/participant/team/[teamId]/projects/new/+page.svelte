@@ -8,22 +8,33 @@
     import ProjectForm from '$lib/components/ProjectForm.svelte';
     import { teamHandlers, teamLoading, teams } from '$lib/stores/teamStore';
     import { curProgram, programHandlers } from '$lib/stores/programStore';
-    // Redirect if not admin
-    $: if (!$userLoading && $authUser && $userData && !$userData.isAdmin) {
-        goto('/');
-    }
+
+    $: programId = $page.params.id;
+    $: teamId = $page.params.teamId; 
 
     let loading = true;
     let error = '';
-    let programTeams = []; 
-    $: programId = $page.params.programId;
 
     onMount(async () => {
-        await programHandlers.getProgram(programId);
-        await teamHandlers.getTeams(); 
-        programTeams = $teams.filter(team => team.programId === programId);
-        loading = false; 
-    })
+        loading = true;
+        try {
+            await programHandlers.getProgram(programId);
+            let team = await teamHandlers.getTeam(teamId); 
+            if (!$userData?.id) {
+                console.log("User not ready");
+                return;
+            }
+
+            let user = team.users.find((u) => u.userId === $userData.id); 
+            if (!user && team?.manager?.userId !== $userData.id) {
+                goto(`/programs/${programId}`);
+            }
+        } catch (e) {
+            error = 'Failed to load data.';
+        } finally {
+            loading = false;
+        }
+    });
 
     async function handleSubmit(event) {
         loading = true; 
@@ -42,7 +53,8 @@
             console.log('Preparing project data to submit...');
             const dataToSubmit = {
                 ...project, 
-                imageUrls: projectImagesUrls
+                imageUrls: projectImagesUrls, 
+                teamId: teamId
             }
             // Remove all temporary fields and blob URLs
             delete dataToSubmit.imageTempFiles; 
@@ -54,7 +66,7 @@
         } catch (e) {
             error = e.message || 'Failed to save project';
             console.error('Error saving project:', error);
-        } finally{
+        } finally {
             let projectIds = [...$curProgram.projectIds, projectId]; 
             if ($curProgram) {
                 const updatedProgramData = {
@@ -64,7 +76,7 @@
                 await programHandlers.updateProgram(programId, updatedProgramData); 
                 console.log('Program saved successfully');
             }
-            goto(`/admin/programs/edit/${programId}/projects`); 
+            goto(`/programs/${programId}/participant`); 
             loading = false; 
         }
         
@@ -77,7 +89,7 @@
             <span>Loading...</span>
         </div>
     {:else}
-        <div class="container mx-auto">
+        <div class="container mx-auto md:my-5">
             <div class="rounded-lg bg-white p-6 shadow-md">
                 <!-- Error Display -->
                 {#if error}
@@ -90,19 +102,18 @@
                         </div>
                     </div>
                 {/if}
-
+                
                 <!-- Project -->
                 <div class="space-y-6">
                     <ProjectForm
-                        isEditing={false}
-                        isAdmin={true}
+                        isEditing={true}
                         on:submit={(e) => handleSubmit(e)}
                         loading={loading}
                         error={error}
-                        teams={programTeams}
-                        handleCancel={() =>  goto(`/admin/programs/edit/${programId}/projects`)} disabled={loading}
+                        handleCancel={() =>  goto(`/programs/${programId}/participant`)} disabled={loading}
                     />
                 </div>
+
             </div>
         </div>
     {/if}

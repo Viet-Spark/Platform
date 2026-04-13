@@ -107,6 +107,7 @@
                 <div class="space-y-6">
                     <TestimonialForm
                         isEditing={false}
+                        isAdmin={true}
                         on:submit={(e) => handleSubmit(e)}
                         loading={loading}
                         error={error}
