@@ -1,3 +1,5 @@
+<!-- Homepage -->
+
 <script>
 	import Counter from './Counter.svelte';
 	import welcome from '$lib/images/svelte-welcome.webp';
@@ -8,6 +10,8 @@
 
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
 	import TechSummit2025Image from '$lib/images/Events/2025/TechSummit2025Image.jpg';
+	import TechSummit2026Hero from '$lib/images/Events/2026/VS_Homepage_Hero_2025.png';
+	import TS26Logo from '$lib/images/Events/2026/TS26_Logo.png';
 	import VietBayLogo from '$lib/images/Partners/VietBayLogo.jpg';
 	import AIforVietNamFoundationLogo from '$lib/images/Partners/AIforVietNamFoundationLogo.jpg';
 	import VISEMIFoundationLogo from '$lib/images/Partners/VISEMIFoundationLogo.jpg';
@@ -56,20 +60,37 @@
 	</div>
 {:else}
 	<!-- Hero Section -->
-	<section class="bg-primary py-16 text-white">
-		<div class="container mx-auto px-4">
-			<div class="flex flex-col items-center">
-				<h1 class="mb-4 text-4xl font-bold md:text-5xl">
-					Empowering Vietnamese Professionals to Lead in Tech
-				</h1>
-				<p class="mb-8 text-xl">
-					Connect, learn, and grow with a community of like-minded professionals.
+	<section
+		class="hero-section relative overflow-hidden text-white"
+		style="height: 650px; background-image:url({TechSummit2026Hero}); background-size: cover; background-position: center;"
+	>
+		<div class="container mx-auto flex h-full items-center px-4">
+			<div class="max-w-3xl py-20 sm:py-24">
+				<div class="mb-4 flex flex-wrap items-center gap-4">
+					<img src={TS26Logo} alt="Vietnam Tech Summit 2026 logo" class="h-24 w-auto sm:h-28" />
+					<div class="pt-4">
+						<p class="text-sm uppercase tracking-[0.32em] text-white/90">2026 Vietnam</p>
+						<h1 class="uppercase leading-tight text-white font-black" style="font-size: 4.8rem; font-weight: 600; text-align:start ">
+							Tech Summit
+						</h1>
+					</div>
+				</div>
+				<p class="mb-4 text-sm uppercase tracking-[0.24em] text-white/90">
+					Coming August 7 - 8 | Silicon Valley, CA
+				</p>
+				<p class="mb-8 text-l text-white/95">
+					The biggest tech conference for Vietnamese in the U.S., connecting leading professionals and aspiring students all over the country and beyond.
 				</p>
 				<div class="flex flex-wrap gap-4">
-					<a href="/events/tech-summit-2025" class="btn text-primary bg-white hover:bg-gray-100"
-						>Tech Summit 2025</a
+					<a
+						href="https://youtu.be/G5bGnMjbuys?si=MJ2ukyXIQlTE7_Fe"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn bg-white text-primary hover:bg-gray-100"
 					>
-					{#if !$authUser}
+						See Our 2025 Highlights
+					</a>
+					<!-- {#if !$authUser}
 						<a
 							href="/work-with-us"
 							class="btn hover:text-primary border-2 border-white bg-transparent hover:bg-white"
@@ -83,7 +104,7 @@
 						>
 							Work With Us
 						</a>
-					{/if}
+					{/if}  -->
 				</div>
 			</div>
 		</div>
@@ -91,10 +112,13 @@
 	<!-- About Section -->
 	<section id="about" class="bg-white py-16">
 		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Who We Are</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-				<p class="mx-auto max-w-3xl text-lg text-gray-600">
+			<div class="mb-12 text-start">
+				<p class="mx-auto text-lg text-gray-600">
+				Who We Are
+				</p>
+				<h3 class="mb-4 mt-4 text-3xl font-bold">Viet Spark Empowers Vietnamese Professionals to Lead in Tech</h3>
+				<!-- <div class="bg-primary mx-auto mb-6 h-1 w-24"></div> -->
+				<p class="mx-auto text-lg text-gray-600">
 					{$homeStore.whoWeAre}
 				</p>
 			</div>
@@ -138,10 +162,9 @@
 	<!-- What We Do Section -->
 	<section id="what-we-do" class="bg-gray-50 py-16">
 		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">What We Do</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-				<p class="mx-auto max-w-3xl text-lg text-gray-600">
+			<div class="mb-12 text-start">
+				<h3 class="mb-4 text-3xl font-bold">What We Do</h3>
+				<p class="mx-auto text-lg text-gray-600">
 					{$aboutStore.whatWeDo.summary}
 				</p>
 			</div>
@@ -164,63 +187,13 @@
 		</div>
 	</section>
 
-	<!-- Events Highlight Section -->
-	<section id="events-highlight" class="bg-white py-16">
-		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Upcoming Events</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-			</div>
-
-			<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-					{#each $upcomingEvents as event}
-						<div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
-							<div class="flex h-48 items-center justify-center bg-blue-200">
-								<img src={event.coverImage} alt={event.title} class="h-48 w-full object-cover" />
-							</div>
-							<div class="p-6">
-								<div class="text-primary mb-2 text-sm font-semibold">{formatDate(event.eventDate.start)} - {formatDate(event.eventDate.end)}</div>
-								<h3 class="mb-2 text-xl font-bold">{event.title}</h3>
-								<p class="mb-4 text-gray-600">
-									{event.shortDescription}
-								</p>
-								<a href="/events/{event.id}" class="text-primary font-medium hover:underline"
-									>Learn more →</a
-								>
-							</div>
-						</div>
-					{/each}
-				
-
-				<!-- <div class="overflow-hidden rounded-lg bg-gray-50 shadow-md">
-					<div class="flex h-48 items-center justify-center bg-blue-200">
-						<span class="text-primary font-bold">Break Into Tech Image</span>
-					</div>
-					<div class="p-6">
-						<div class="text-primary mb-2 text-sm font-semibold">Nov 5, 2023</div>
-						<h3 class="mb-2 text-xl font-bold">Break Into Tech Workshop</h3>
-						<p class="mb-4 text-gray-600">
-							A workshop designed to help newcomers navigate their way into the tech industry.
-						</p>
-						<a href="/events/break-into-tech" class="text-primary font-medium hover:underline"
-							>Learn more →</a
-						>
-					</div>
-				</div> -->
-			</div>
-
-			<div class="mt-8 text-center">
-				<a href="/events" class="btn bg-primary hover:bg-primary-dark text-white">View All Events</a>
-			</div>
-		</div>
-	</section>
+	
 
 	<!-- Partners Section -->
-	<section id="partners" class="bg-gray-50 py-16">
+	<section id="partners" class="bg-white py-16">
 		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Our Partners</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
+			<div class="mb-12 text-start">
+				<h3 class="mb-4 text-3xl font-bold">Our Partners</h3>
 			</div>
 
 			<div class="grid grid-cols-2 gap-8 md:grid-cols-3">
@@ -229,7 +202,7 @@
 					<a
 						href={partner.website}
 						target="_blank"
-						class="flex h-24 items-center justify-center rounded-lg bg-white p-6 shadow-sm"
+						class="flex h-24 items-center justify-center rounded-lg bg-gray-50 p-6 shadow-sm"
 					>
 						<img
 							src={partner.image}
