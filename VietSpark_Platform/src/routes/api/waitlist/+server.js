@@ -38,7 +38,7 @@ export async function POST({ request }) {
 		const normalizedEmail = normalizeEmail(email);
 		const sheets = getSheetsClient();
 		const spreadsheetId = env.GOOGLE_SHEETS_SPREADSHEET_ID;
-		const sheetName = env.GOOGLE_SHEETS_SHEET_NAME;
+		const sheetName = env.WAITLIST_SHEET_NAME;
 
 		const existingEmailsResponse = await sheets.spreadsheets.values.get({
 			spreadsheetId,
