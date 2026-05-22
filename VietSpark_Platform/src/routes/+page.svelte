@@ -37,6 +37,22 @@
 	let isWaitlistSubmitting = false;
 	let waitlistSuccessMessage = '';
 	let waitlistErrorMessage = '';
+	let isCareerStatusDropdownOpen = false;
+	let isInterestAreaDropdownOpen = false;
+	const careerStatusOptions = [
+		'Student',
+		'New grad',
+		'Early career (0-3 years)',
+		'Manager / Leadership',
+		'Other'
+	];
+	const interestAreaOptions = [
+		'Job & Referral Opportunities',
+		'Networking & Community Building',
+		'Mentorship & Professional Growth',
+		'AI Trends, Innovation & Industry Insights',
+		'Other'
+	];
 	let waitlistFieldErrors = {
 		name: '',
 		email: '',
@@ -47,7 +63,9 @@
 		name: '',
 		email: '',
 		careerStatus: '',
-		interestArea: ''
+		careerStatusOther: '',
+		interestArea: '',
+		interestAreaOther: ''
 	};
 
 	$: if ($eventStore.events) {
@@ -71,10 +89,14 @@
 	function openWaitlistModal() {
 		waitlistSuccessMessage = '';
 		waitlistErrorMessage = '';
+		isCareerStatusDropdownOpen = false;
+		isInterestAreaDropdownOpen = false;
 		isWaitlistModalOpen = true;
 	}
 
 	function closeWaitlistModal() {
+		isCareerStatusDropdownOpen = false;
+		isInterestAreaDropdownOpen = false;
 		isWaitlistModalOpen = false;
 	}
 
@@ -83,7 +105,9 @@
 			name: '',
 			email: '',
 			careerStatus: '',
-			interestArea: ''
+			careerStatusOther: '',
+			interestArea: '',
+			interestAreaOther: ''
 		};
 	}
 
@@ -100,6 +124,24 @@
 		if (event.key === 'Escape' && isWaitlistModalOpen) {
 			closeWaitlistModal();
 		}
+	}
+
+	function selectCareerStatus(option) {
+		waitlistForm.careerStatus = option;
+		if (option !== 'Other') {
+			waitlistForm.careerStatusOther = '';
+		}
+		waitlistFieldErrors.careerStatus = '';
+		isCareerStatusDropdownOpen = false;
+	}
+
+	function selectInterestArea(option) {
+		waitlistForm.interestArea = option;
+		if (option !== 'Other') {
+			waitlistForm.interestAreaOther = '';
+		}
+		waitlistFieldErrors.interestArea = '';
+		isInterestAreaDropdownOpen = false;
 	}
 
 	async function handleWaitlistSubmit() {
@@ -121,10 +163,14 @@
 
 		if (!waitlistForm.careerStatus.trim()) {
 			waitlistFieldErrors.careerStatus = 'Current career status is required.';
+		} else if (waitlistForm.careerStatus === 'Other' && !waitlistForm.careerStatusOther.trim()) {
+			waitlistFieldErrors.careerStatus = 'Please enter your current career status.';
 		}
 
 		if (!waitlistForm.interestArea.trim()) {
 			waitlistFieldErrors.interestArea = 'Interest area is required.';
+		} else if (waitlistForm.interestArea === 'Other' && !waitlistForm.interestAreaOther.trim()) {
+			waitlistFieldErrors.interestArea = 'Please enter your area of interest.';
 		}
 
 		if (Object.values(waitlistFieldErrors).some(Boolean)) {
@@ -139,7 +185,17 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(waitlistForm)
+				body: JSON.stringify({
+					...waitlistForm,
+					careerStatus:
+						waitlistForm.careerStatus === 'Other'
+							? waitlistForm.careerStatusOther.trim()
+							: waitlistForm.careerStatus,
+					interestArea:
+						waitlistForm.interestArea === 'Other'
+							? waitlistForm.interestAreaOther.trim()
+							: waitlistForm.interestArea
+				})
 			});
 
 			const data = await response.json();
@@ -776,13 +832,63 @@
 						<label for="waitlist-career" class="block text-base text-[#1E1E1E]">
 							What best describes your current career status
 						</label>
-						<input
-							id="waitlist-career"
-							type="text"
-							bind:value={waitlistForm.careerStatus}
-							placeholder="Value"
-							class="mt-3 h-[40px] w-full rounded-lg border border-[#0B3A8A] px-6 text-base placeholder:text-[#B3B3B3]"
-						/>
+						<div class="relative mt-3">
+							<button
+								id="waitlist-career"
+								type="button"
+								class="flex h-[40px] w-full items-center justify-between rounded-lg border border-[#0B3A8A] bg-white px-6 text-left text-base text-[#1E1E1E]"
+								aria-haspopup="listbox"
+								aria-expanded={isCareerStatusDropdownOpen}
+								on:click={() => (isCareerStatusDropdownOpen = !isCareerStatusDropdownOpen)}
+							>
+								<span class={waitlistForm.careerStatus ? 'text-[#1E1E1E]' : 'text-[#B3B3B3]'}>
+									{waitlistForm.careerStatus || 'Value'}
+								</span>
+								<svg
+									width="18"
+									height="10"
+									viewBox="0 0 18 10"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+									class={`transition-transform ${isCareerStatusDropdownOpen ? 'rotate-180' : ''}`}
+								>
+									<path
+										d="M2 1.5L9 8.5L16 1.5"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+							</button>
+
+							{#if isCareerStatusDropdownOpen}
+								<div
+									class="absolute z-20 mt-3 w-full overflow-hidden rounded-[20px] border border-[#E4E7EC] bg-white shadow-[0_20px_48px_rgba(16,24,40,0.18)]"
+									role="listbox"
+								>
+									{#each careerStatusOptions as option (option)}
+										<button
+											type="button"
+											class="flex min-h-[60px] w-full items-center px-6 text-left text-[16px] text-[#1E1E1E] transition-colors hover:bg-[#F8FAFC]"
+											on:click={() => selectCareerStatus(option)}
+										>
+											{option}
+										</button>
+									{/each}
+								</div>
+							{/if}
+						</div>
+
+						{#if waitlistForm.careerStatus === 'Other'}
+							<input
+								id="waitlist-career-other"
+								type="text"
+								bind:value={waitlistForm.careerStatusOther}
+								placeholder="Please specify"
+								class="mt-3 h-[40px] w-full rounded-lg border border-[#0B3A8A] px-6 text-base placeholder:text-[#B3B3B3]"
+							/>
+						{/if}
 						{#if waitlistFieldErrors.careerStatus}
 							<div class="mt-2 text-sm text-red-600">{waitlistFieldErrors.careerStatus}</div>
 						{/if}
@@ -792,13 +898,63 @@
 						<label for="waitlist-interest" class="block text-base text-[#1E1E1E]">
 							What area you are most interested in?
 						</label>
-						<input
-							id="waitlist-interest"
-							type="text"
-							bind:value={waitlistForm.interestArea}
-							placeholder="Value"
-							class="mt-3 h-[40px] w-full rounded-lg border border-[#0B3A8A] px-6 text-base placeholder:text-[#B3B3B3]"
-						/>
+						<div class="relative mt-3">
+							<button
+								id="waitlist-interest"
+								type="button"
+								class="flex h-[40px] w-full items-center justify-between rounded-lg border border-[#0B3A8A] bg-white px-6 text-left text-base text-[#1E1E1E]"
+								aria-haspopup="listbox"
+								aria-expanded={isInterestAreaDropdownOpen}
+								on:click={() => (isInterestAreaDropdownOpen = !isInterestAreaDropdownOpen)}
+							>
+								<span class={waitlistForm.interestArea ? 'text-[#1E1E1E]' : 'text-[#B3B3B3]'}>
+									{waitlistForm.interestArea || 'Value'}
+								</span>
+								<svg
+									width="18"
+									height="10"
+									viewBox="0 0 18 10"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+									class={`transition-transform ${isInterestAreaDropdownOpen ? 'rotate-180' : ''}`}
+								>
+									<path
+										d="M2 1.5L9 8.5L16 1.5"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+							</button>
+
+							{#if isInterestAreaDropdownOpen}
+								<div
+									class="absolute z-20 mt-3 w-full overflow-hidden rounded-[20px] border border-[#E4E7EC] bg-white shadow-[0_20px_48px_rgba(16,24,40,0.18)]"
+									role="listbox"
+								>
+									{#each interestAreaOptions as option (option)}
+										<button
+											type="button"
+											class="flex min-h-[60px] w-full items-center px-6 text-left text-[16px] text-[#1E1E1E] transition-colors hover:bg-[#F8FAFC]"
+											on:click={() => selectInterestArea(option)}
+										>
+											{option}
+										</button>
+									{/each}
+								</div>
+							{/if}
+						</div>
+
+						{#if waitlistForm.interestArea === 'Other'}
+							<input
+								id="waitlist-interest-other"
+								type="text"
+								bind:value={waitlistForm.interestAreaOther}
+								placeholder="Please specify"
+								class="mt-3 h-[40px] w-full rounded-lg border border-[#0B3A8A] px-6 text-base placeholder:text-[#B3B3B3]"
+							/>
+						{/if}
 						{#if waitlistFieldErrors.interestArea}
 							<div class="mt-2 text-sm text-red-600">{waitlistFieldErrors.interestArea}</div>
 						{/if}
