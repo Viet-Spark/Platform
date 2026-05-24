@@ -1,6 +1,5 @@
-<!-- Homepage -->
-
 <script>
+	import { onMount } from 'svelte';
 	import Counter from './Counter.svelte';
 	import welcome from '$lib/images/svelte-welcome.webp';
 	import welcomeFallback from '$lib/images/svelte-welcome.png';
@@ -10,7 +9,7 @@
 
 	import TechSummitImage from '$lib/images/Events/TechSummitImage.JPG';
 	import TechSummit2025Image from '$lib/images/Events/2025/TechSummit2025Image.jpg';
-	import AgendaBackground from '$lib/images/Events/2026/Agenda_Background.png';
+	import AgendaBG from '$lib/images/Events/2026/agenda_bg.png';
 	import AgendaDay0Image from '$lib/images/Events/2026/IMG_0064.jpg';
 	import AgendaDay1Image1 from '$lib/images/Events/2026/IMG_4053.jpg';
 	import AgendaDay1Image2 from '$lib/images/Events/2026/DSC05676.jpg';
@@ -355,6 +354,21 @@
 		}
 	];
 
+	const agendaImageSources = summitAgendaDays.flatMap((day) => day.images);
+
+	onMount(() => {
+		const preloadedImages = agendaImageSources.map((src) => {
+			const image = new Image();
+			image.src = src;
+			image.decode?.().catch(() => {});
+			return image;
+		});
+
+		return () => {
+			preloadedImages.length = 0;
+		};
+	});
+
 	$: selectedAgenda =
 		summitAgendaDays.find((item) => item.id === selectedAgendaDay) ?? summitAgendaDays[0];
 </script>
@@ -397,27 +411,34 @@
 					</div>
 				</div>
 				<p class="text-[88px] leading-none font-normal tracking-[-0.27px] text-white">
-					Build Your Edge in the <span class="text-[#9FD2FF]">AI Era</span>
+					Build Your Edge in the
+					<span
+						class="inline-block bg-clip-text text-transparent"
+						style="background-image: linear-gradient(172.27deg, #43F7EB 15.48%, #57D7EB 25.18%, #7B9FEB 44.6%, #9577EB 61.86%, #A55EEB 74.8%, #AB55EC 82.35%);"
+					>
+						AI Era
+					</span>
 				</p>
 				<p class="mt-2 text-base text-white/90">
 					Two days of ideas, strategy, mentorship, and meaningful connections shaping the future of
 					tech careers.
 				</p>
-				<div class="mt-8 flex flex-wrap gap-4">
+				<div class="mt-8 flex flex-wrap gap-4 hover:cursor-pointer">
 					<button
 						type="button"
 						on:click={openWaitlistModal}
 						class="inline-flex items-center rounded-2xl bg-[#0B57BD] px-8 py-4 text-lg font-semibold text-white"
+						style="background: linear-gradient(135.47deg, #4F69F6 0.65%, #7133BD 62.01%, #EA7277 118.82%);"
 					>
 						Join the Waitlist
-						<span class="ml-2">→</span>
+						<span class="ml-2 text-[#90FFF4]">→</span>
 					</button>
 					<div
 						href="/events/tech-summit"
 						class="inline-flex items-center rounded-2xl border border-white/35 bg-black/20 px-6 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-colors hover:bg-black/30"
 					>
 						<i class="far fa-calendar mr-3"></i>
-						Early Tickets · 6/15/2026
+						Early Tickets · 6/06/2026
 					</div>
 					<!-- {#if !$authUser}
 						<a
@@ -441,114 +462,15 @@
 			</div>
 		</div>
 	</section>
-	<section class="bg-white py-24">
-		<div class="container mx-auto px-4">
-			<div class="mx-auto max-w-4xl text-center">
-				<div class="text-base font-bold tracking-[1.92px] text-[#0B57BD] uppercase">Why Attend</div>
-				<div class="my-3 text-[40px] font-extrabold tracking-tight text-[#15213A]">
-					What makes this summit different?
-				</div>
-				<p class="mx-auto max-w-3xl text-xl leading-relaxed text-[#5A6478]">
-					Not just talks. Real access — to people, opportunities, and the rooms where decisions get
-					made.
-				</p>
-			</div>
-
-			<div class="mx-auto mt-16 grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-2">
-				{#each summitHighlights as item (item.id)}
-					<div
-						class="rounded-[28px] border border-[#D7E2F0] bg-white px-10 py-10 shadow-[0_1px_2px_rgba(16,24,40,0.02)]"
-					>
-						<div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-							<div
-								class="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl bg-[#E9EFF8] text-[#1559C2]"
-							>
-								{#if item.icon === 'lightbulb'}
-									<svg
-										width="17"
-										height="24"
-										viewBox="0 0 17 24"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M5.06921 18.4178H11.5692M6.15254 22.7511H10.4859M8.31921 1.08447C6.77296 1.1554 5.28545 1.6978 4.05647 2.63882C2.8275 3.57983 1.91591 4.8744 1.44416 6.34862C0.972405 7.82285 0.96308 9.40614 1.41743 10.8858C1.87179 12.3655 2.76806 13.6707 3.98587 14.6261V17.3345H12.6525V14.6261C13.8703 13.6707 14.7666 12.3655 15.221 10.8858C15.6753 9.40614 15.666 7.82285 15.1943 6.34862C14.7225 4.8744 13.8109 3.57983 12.5819 2.63882C11.353 1.6978 9.86545 1.1554 8.31921 1.08447Z"
-											stroke="#0B57BD"
-											stroke-width="2.16667"
-										/>
-									</svg>
-								{:else if item.icon === 'relationships'}
-									<svg
-										width="19"
-										height="17"
-										viewBox="0 0 19 17"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M5.09945 5.86544L9.43278 1.5321L13.7661 5.86544L18.0994 1.5321M0.766113 10.1988L5.09945 14.5321L9.43278 10.1988L13.7661 14.5321L18.0994 10.1988"
-											stroke="#0B57BD"
-											stroke-width="2.16667"
-										/>
-									</svg>
-								{:else if item.icon === 'trend'}
-									<svg
-										width="21"
-										height="26"
-										viewBox="0 0 21 26"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M11.9166 2.16663L2.16663 15.1666H9.74996L8.66663 23.8333L18.4166 10.8333H10.8333L11.9166 2.16663Z"
-											stroke="#0B57BD"
-											stroke-width="2.16667"
-										/>
-									</svg>
-								{:else if item.icon === 'search'}
-									<svg
-										width="26"
-										height="26"
-										viewBox="0 0 26 26"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M11.9166 19.5C16.1047 19.5 19.4999 16.1049 19.4999 11.9167C19.4999 7.72855 16.1047 4.33337 11.9166 4.33337C7.72843 4.33337 4.33325 7.72855 4.33325 11.9167C4.33325 16.1049 7.72843 19.5 11.9166 19.5Z"
-											stroke="#0B57BD"
-											stroke-width="2.16667"
-										/>
-										<path
-											d="M22.7499 22.75L18.0916 18.0917"
-											stroke="#0B57BD"
-											stroke-width="2.16667"
-										/>
-									</svg>
-								{/if}
-							</div>
-							<div>
-								<h3 class="text-xl font-semibold tracking-tight text-[#15213A]">
-									{item.title}
-								</h3>
-								<p class="mt-2 text-base leading-[1.6] text-[#667085]">
-									{item.description}
-								</p>
-							</div>
-						</div>
-					</div>
-				{/each}
-			</div>
-		</div>
-	</section>
 	<section
-		class="overflow-hidden bg-[#020916] py-24 text-white"
-		style="background-image:url({AgendaBackground}); background-size: cover; background-position: center;"
+		class="overflow-hidden py-24 text-white"
+		style="background-color: #000000; background-image: url({AgendaBG}), radial-gradient(50% 50% at 50% 50%, #50277C 0%, #000000 100%); background-size: contain, cover; background-position: center 82%, center; background-repeat: no-repeat;"
 	>
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-5xl text-center">
 				<div class="text-[14px] font-bold tracking-[1.92px] text-white/90 uppercase">Agenda</div>
 				<div class="mt-6 text-[40px] leading-tight font-extrabold text-white">
-					A multi-day experience built for working professionals
+					A multi-day experience connecting industry leaders &amp; emerging talent
 				</div>
 				<div class="mx-auto mt-5 max-w-3xl text-[18px] leading-[1.55] text-white/80 md:text-[20px]">
 					Designed to inspire, connect, and engage. The full schedule will be available closer to
@@ -565,14 +487,14 @@
 							type="button"
 							class={`flex min-h-[82px] w-[280px] items-center gap-3.5 rounded-2xl border px-4 py-4 text-left hover:cursor-pointer ${
 								selectedAgendaDay === agendaDay.id
-									? 'border-[#0B57BD] bg-[#0B57BD] text-white'
+									? 'border-[#50277C] bg-[#50277C] text-white'
 									: 'border-white/15 bg-white text-black'
 							}`}
 							on:click={() => (selectedAgendaDay = agendaDay.id)}
 						>
 							<div
 								class={`flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl ${
-									selectedAgendaDay === agendaDay.id ? 'bg-white/18' : 'bg-[#E6EBF2]'
+									selectedAgendaDay === agendaDay.id ? 'bg-[#D3BBF7]' : 'bg-[#DFECFF]'
 								}`}
 							>
 								<p
@@ -628,6 +550,8 @@
 							<img
 								src={selectedAgenda.images[0]}
 								alt={selectedAgenda.title}
+								loading="eager"
+								fetchpriority="high"
 								class="h-[260px] w-full object-cover md:h-[360px]"
 							/>
 						</div>
@@ -638,6 +562,8 @@
 									<img
 										src={agendaImage}
 										alt={`${selectedAgenda.title} photo ${imageIndex + 1}`}
+										loading="eager"
+										fetchpriority="high"
 										class="h-[220px] w-full object-cover md:h-[180px]"
 									/>
 								</div>
@@ -664,15 +590,11 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
-	<section class="bg-white py-24">
-		<div class="container mx-auto px-4">
-			<div class="mx-auto max-w-5xl text-center">
-				<div class="text-[14px] font-bold tracking-[1.92px] text-[#0B57BD] uppercase">
+			<div class="mx-auto mt-24 max-w-5xl text-center">
+				<div class="text-[14px] font-bold tracking-[1.92px] text-white/90 uppercase">
 					More Than An Event
 				</div>
-				<div class="mt-3 text-[40px] leading-tight font-extrabold text-[#0E1726]">
+				<div class="mt-3 text-[40px] leading-tight font-extrabold text-white">
 					Connections made to last
 				</div>
 			</div>
@@ -698,7 +620,8 @@
 				</div>
 
 				<div
-					class="rounded-[24px] bg-[linear-gradient(109deg,#020916_10%,#123A74_58%,#2E7BE3_100%)] px-7 py-7 text-white"
+					class="rounded-[24px] px-7 py-7 text-white"
+					style="background: linear-gradient(88.06deg, #191F4D 19.47%, #2B3A84 43.23%, #32399F 61.21%, #50277C 96.72%);"
 				>
 					<div
 						class="inline-flex rounded-full bg-white/14 px-3 py-2 text-[12px] font-bold tracking-[1.4px] text-white/90 uppercase"
@@ -708,19 +631,132 @@
 					<div class="mt-3 text-xl leading-tight font-bold text-white">
 						Networking Hike · Elevated Conversations
 					</div>
-					<div class="ext-[13.5px] my-1.5 leading-[20.25px] font-semibold text-[#B7D4FF]">
+					<div class="my-1.5 text-[13.5px] leading-[20.25px] font-semibold text-[#B7D4FF]">
 						Sunday · August 9, 2026 · Morning
 					</div>
 					<div class="text-[14.5px] leading-[22.48px] text-white/84">
-						Close out the weekend with a refreshing morning hike designed for authentic conversation
-						— the kind you don't get in a conference room.
+						Close out the weekend with a refreshing morning hike designed for authentic
+						conversation — the kind you don't get in a conference room.
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+	<section class="bg-white py-12">
+		<div class="container mx-auto px-4">
+			<div class="mx-auto max-w-4xl text-center">
+				<div class="text-base font-bold tracking-[1.92px] text-[#0B57BD] uppercase">Why Attend</div>
+				<div class="my-3 text-[40px] font-extrabold tracking-tight text-[#15213A]">
+					What makes this summit different?
+				</div>
+				<p class="mx-auto max-w-3xl text-xl leading-relaxed text-[#5A6478]">
+					Not just talks. Real access — to people, opportunities, and the rooms where decisions get
+					made.
+				</p>
+			</div>
+
+			<div class="mx-auto mt-16 grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-2">
+				{#each summitHighlights as item (item.id)}
+					<div
+						class="rounded-[28px] border border-[#D7E2F0] bg-white px-10 py-10 shadow-[0_1px_2px_rgba(16,24,40,0.02)]"
+					>
+						<div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+							<div
+								class="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl bg-[#E9EFF8] text-[#1559C2]"
+							>
+								{#if item.icon === 'lightbulb'}
+									<svg
+										width="17"
+										height="24"
+										viewBox="0 0 17 24"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M5.06921 18.4178H11.5692M6.15254 22.7511H10.4859M8.31921 1.08447C6.77296 1.1554 5.28545 1.6978 4.05647 2.63882C2.8275 3.57983 1.91591 4.8744 1.44416 6.34862C0.972405 7.82285 0.96308 9.40614 1.41743 10.8858C1.87179 12.3655 2.76806 13.6707 3.98587 14.6261V17.3345H12.6525V14.6261C13.8703 13.6707 14.7666 12.3655 15.221 10.8858C15.6753 9.40614 15.666 7.82285 15.1943 6.34862C14.7225 4.8744 13.8109 3.57983 12.5819 2.63882C11.353 1.6978 9.86545 1.1554 8.31921 1.08447Z"
+											stroke="#602E9B"
+											stroke-width="2.16667"
+										/>
+									</svg>
+								{:else if item.icon === 'relationships'}
+									<svg
+										width="19"
+										height="17"
+										viewBox="0 0 19 17"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M18.0994 1.53198L13.7661 5.86532L9.43278 1.53198L5.09945 5.86532L0.766113 1.53198M0.766113 10.1986L5.09945 14.532L9.43278 10.1986L13.7661 14.532L18.0994 10.1986"
+											stroke="#602E9B"
+											stroke-width="2.16667"
+										/>
+									</svg>
+								{:else if item.icon === 'trend'}
+									<svg
+										width="21"
+										height="26"
+										viewBox="0 0 21 26"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M11.9166 2.16675L2.16663 15.1667H9.74996L8.66663 23.8334L18.4166 10.8334H10.8333L11.9166 2.16675Z"
+											stroke="#602E9B"
+											stroke-width="2.16667"
+										/>
+									</svg>
+								{:else if item.icon === 'search'}
+									<svg
+										width="26"
+										height="26"
+										viewBox="0 0 26 26"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M11.9166 19.4999C16.1047 19.4999 19.4999 16.1047 19.4999 11.9166C19.4999 7.72843 16.1047 4.33325 11.9166 4.33325C7.72843 4.33325 4.33325 7.72843 4.33325 11.9166C4.33325 16.1047 7.72843 19.4999 11.9166 19.4999Z"
+											stroke="#602E9B"
+											stroke-width="2.16667"
+										/>
+										<path
+											d="M22.7499 22.7499L18.0916 18.0916"
+											stroke="#602E9B"
+											stroke-width="2.16667"
+										/>
+									</svg>
+								{/if}
+							</div>
+							<div>
+								<h3 class="text-xl font-semibold tracking-tight text-[#15213A]">
+									{item.title}
+								</h3>
+								<p class="mt-2 text-base leading-[1.6] text-[#667085]">
+									{item.description}
+								</p>
+							</div>
+						</div>
+					</div>
+				{/each}
+			</div>
+
+			<div class="mt-10 flex justify-center">
+				<a
+					href="https://youtu.be/G5bGnMjbuys?si=MJ2ukyXIQlTE7_Fe"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-flex items-center justify-center gap-3 rounded-2xl px-[22px] py-[8.5px] text-lg font-semibold text-white"
+					style="background: #33105B; text-decoration: none;"
+				>
+					<span class="text-sm leading-none">▶</span>
+					See our 2025 highlights
+				</a>
+			</div>
+		</div>
+	</section>
 	<section
-		class="bg-[linear-gradient(102deg,#020916_8%,#123A74_58%,#2E7BE3_100%)] py-24 text-white"
+		class="py-24 text-white"
+		style="background: linear-gradient(95.62deg, #000000 5.95%, #2B3A84 66.19%, #50277C 94.04%);"
 	>
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-4xl text-center">
@@ -737,7 +773,7 @@
 					<button
 						type="button"
 						on:click={openWaitlistModal}
-						class="inline-flex items-center justify-center rounded-xl bg-white px-5.5 py-3.5 text-base font-bold text-[#0B57BD]"
+						class="inline-flex items-center justify-center rounded-xl bg-white px-5.5 py-3.5 text-base font-bold text-[#0B57BD]  hover:cursor-pointer"
 					>
 						Join the Waitlist
 					</button>
