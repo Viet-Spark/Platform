@@ -32,10 +32,19 @@
 
 	let upcomingEvents = writable([]);
 	let selectedAgendaDay = 'day0';
+	let activeCta = 'waitlist';
 	let isWaitlistModalOpen = false;
 	let isWaitlistSubmitting = false;
 	let waitlistSuccessMessage = '';
 	let waitlistErrorMessage = '';
+	let isMentorModalOpen = false;
+	let isMentorSubmitting = false;
+	let mentorSuccessMessage = '';
+	let mentorErrorMessage = '';
+	let isVolunteerModalOpen = false;
+	let isVolunteerSubmitting = false;
+	let volunteerSuccessMessage = '';
+	let volunteerErrorMessage = '';
 	let isCareerStatusDropdownOpen = false;
 	let isInterestAreaDropdownOpen = false;
 	const careerStatusOptions = [
@@ -52,11 +61,47 @@
 		'AI Trends, Innovation & Industry Insights',
 		'Other'
 	];
+	const mentorBayAreaOptions = [
+		'Yes — I am currently based in the Bay Area',
+		'Yes — I will be traveling to the Bay Area for the event',
+		'I am interested in participating virtually if opportunities are available'
+	];
+	const mentorContributionOptions = [
+		'Mentorship & Career Guidance',
+		'Speaking Opportunities / Panel Participation',
+		'Informal Networking & Dinner Conversations',
+		'Mock Interviews & Referrals',
+		'Resume Reviews & Professional Development Support'
+	];
+	const volunteerContributionOptions = [
+		'Design & Creative Support',
+		'Marketing & Social Media',
+		'Content Creation',
+		'Community Engagement & Guest Experience',
+		'Photography / Videography',
+		'Event Operations & Logistics'
+	];
 	let waitlistFieldErrors = {
 		name: '',
 		email: '',
 		careerStatus: '',
 		interestArea: ''
+	};
+	let mentorFieldErrors = {
+		name: '',
+		email: '',
+		company: '',
+		titleRole: '',
+		bayAreaStatus: '',
+		contributions: ''
+	};
+	let volunteerFieldErrors = {
+		name: '',
+		email: '',
+		organization: '',
+		careerStatus: '',
+		contributions: '',
+		bayAreaStatus: ''
 	};
 	let waitlistForm = {
 		name: '',
@@ -65,6 +110,22 @@
 		careerStatusOther: '',
 		interestArea: '',
 		interestAreaOther: ''
+	};
+	let mentorForm = {
+		name: '',
+		email: '',
+		company: '',
+		titleRole: '',
+		bayAreaStatus: '',
+		contributions: []
+	};
+	let volunteerForm = {
+		name: '',
+		email: '',
+		organization: '',
+		careerStatus: '',
+		contributions: [],
+		bayAreaStatus: ''
 	};
 
 	$: if ($eventStore.events) {
@@ -86,6 +147,7 @@
 	}
 
 	function openWaitlistModal() {
+		activeCta = 'waitlist';
 		waitlistSuccessMessage = '';
 		waitlistErrorMessage = '';
 		isCareerStatusDropdownOpen = false;
@@ -97,6 +159,36 @@
 		isCareerStatusDropdownOpen = false;
 		isInterestAreaDropdownOpen = false;
 		isWaitlistModalOpen = false;
+	}
+
+	function openMentorModal() {
+		activeCta = 'mentor';
+		mentorSuccessMessage = '';
+		mentorErrorMessage = '';
+		resetMentorForm();
+		resetMentorFieldErrors();
+		isMentorModalOpen = true;
+	}
+
+	function selectVolunteerCta() {
+		activeCta = 'volunteer';
+	}
+
+	function openVolunteerModal() {
+		activeCta = 'volunteer';
+		volunteerSuccessMessage = '';
+		volunteerErrorMessage = '';
+		resetVolunteerForm();
+		resetVolunteerFieldErrors();
+		isVolunteerModalOpen = true;
+	}
+
+	function closeVolunteerModal() {
+		isVolunteerModalOpen = false;
+	}
+
+	function closeMentorModal() {
+		isMentorModalOpen = false;
 	}
 
 	function resetWaitlistForm() {
@@ -119,9 +211,59 @@
 		};
 	}
 
+	function resetMentorForm() {
+		mentorForm = {
+			name: '',
+			email: '',
+			company: '',
+			titleRole: '',
+			bayAreaStatus: '',
+			contributions: []
+		};
+	}
+
+	function resetMentorFieldErrors() {
+		mentorFieldErrors = {
+			name: '',
+			email: '',
+			company: '',
+			titleRole: '',
+			bayAreaStatus: '',
+			contributions: ''
+		};
+	}
+
+	function resetVolunteerForm() {
+		volunteerForm = {
+			name: '',
+			email: '',
+			organization: '',
+			careerStatus: '',
+			contributions: [],
+			bayAreaStatus: ''
+		};
+	}
+
+	function resetVolunteerFieldErrors() {
+		volunteerFieldErrors = {
+			name: '',
+			email: '',
+			organization: '',
+			careerStatus: '',
+			contributions: '',
+			bayAreaStatus: ''
+		};
+	}
+
 	function handleWindowKeydown(event) {
 		if (event.key === 'Escape' && isWaitlistModalOpen) {
 			closeWaitlistModal();
+		}
+		if (event.key === 'Escape' && isMentorModalOpen) {
+			closeMentorModal();
+		}
+		if (event.key === 'Escape' && isVolunteerModalOpen) {
+			closeVolunteerModal();
 		}
 	}
 
@@ -141,6 +283,38 @@
 		}
 		waitlistFieldErrors.interestArea = '';
 		isInterestAreaDropdownOpen = false;
+	}
+
+	function toggleMentorContribution(option) {
+		if (mentorForm.contributions.includes(option)) {
+			mentorForm = {
+				...mentorForm,
+				contributions: mentorForm.contributions.filter((value) => value !== option)
+			};
+		} else {
+			mentorForm = {
+				...mentorForm,
+				contributions: [...mentorForm.contributions, option]
+			};
+		}
+
+		mentorFieldErrors.contributions = '';
+	}
+
+	function toggleVolunteerContribution(option) {
+		if (volunteerForm.contributions.includes(option)) {
+			volunteerForm = {
+				...volunteerForm,
+				contributions: volunteerForm.contributions.filter((value) => value !== option)
+			};
+		} else {
+			volunteerForm = {
+				...volunteerForm,
+				contributions: [...volunteerForm.contributions, option]
+			};
+		}
+
+		volunteerFieldErrors.contributions = '';
 	}
 
 	async function handleWaitlistSubmit() {
@@ -200,7 +374,7 @@
 			const data = await response.json();
 
 			if (!response.ok) {
-				waitlistErrorMessage = data.message || 'Something went wrong while joining the waitlist.';
+				waitlistErrorMessage = data.message || 'Something went wrong while submitting.';
 				return;
 			}
 
@@ -208,9 +382,156 @@
 			resetWaitlistForm();
 		} catch (error) {
 			console.error('Waitlist submit failed:', error);
-			waitlistErrorMessage = 'Something went wrong while joining the waitlist.';
+			waitlistErrorMessage = 'Something went wrong while submitting.';
 		} finally {
 			isWaitlistSubmitting = false;
+		}
+	}
+
+	async function handleMentorSubmit() {
+		mentorSuccessMessage = '';
+		mentorErrorMessage = '';
+		resetMentorFieldErrors();
+
+		const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+		if (!mentorForm.name.trim()) {
+			mentorFieldErrors.name = 'Full name is required.';
+		}
+
+		if (!mentorForm.email.trim()) {
+			mentorFieldErrors.email = 'Email is required.';
+		} else if (!emailPattern.test(mentorForm.email.trim())) {
+			mentorFieldErrors.email = 'Please enter a valid email address.';
+		}
+
+		if (!mentorForm.company.trim()) {
+			mentorFieldErrors.company = 'Company is required.';
+		}
+
+		if (!mentorForm.titleRole.trim()) {
+			mentorFieldErrors.titleRole = 'Title / Role is required.';
+		}
+
+		if (!mentorForm.bayAreaStatus.trim()) {
+			mentorFieldErrors.bayAreaStatus = 'Please select an option.';
+		}
+
+		if (!mentorForm.contributions.length) {
+			mentorFieldErrors.contributions = 'Please select at least one contribution area.';
+		}
+
+		if (Object.values(mentorFieldErrors).some(Boolean)) {
+			return;
+		}
+
+		isMentorSubmitting = true;
+
+		try {
+			const response = await fetch('/api/mentor', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					name: mentorForm.name.trim(),
+					email: mentorForm.email.trim(),
+					company: mentorForm.company.trim(),
+					titleRole: mentorForm.titleRole.trim(),
+					bayAreaStatus: mentorForm.bayAreaStatus,
+					contributions: mentorForm.contributions
+				})
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				mentorErrorMessage = data.message || 'Something went wrong while submitting.';
+				return;
+			}
+
+			mentorSuccessMessage = data.message || "Thanks for your interest. We'll be in touch soon.";
+			resetMentorForm();
+			resetMentorFieldErrors();
+		} catch (error) {
+			console.error('Mentor submit failed:', error);
+			mentorErrorMessage = 'Something went wrong while submitting.';
+		} finally {
+			isMentorSubmitting = false;
+		}
+	}
+
+	async function handleVolunteerSubmit() {
+		volunteerSuccessMessage = '';
+		volunteerErrorMessage = '';
+		resetVolunteerFieldErrors();
+
+		const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+		if (!volunteerForm.name.trim()) {
+			volunteerFieldErrors.name = 'Full name is required.';
+		}
+
+		if (!volunteerForm.email.trim()) {
+			volunteerFieldErrors.email = 'Email is required.';
+		} else if (!emailPattern.test(volunteerForm.email.trim())) {
+			volunteerFieldErrors.email = 'Please enter a valid email address.';
+		}
+
+		if (!volunteerForm.organization.trim()) {
+			volunteerFieldErrors.organization = 'University / Company is required.';
+		}
+
+		if (!volunteerForm.careerStatus.trim()) {
+			volunteerFieldErrors.careerStatus = 'Please select your current career status.';
+		}
+
+		if (!volunteerForm.contributions.length) {
+			volunteerFieldErrors.contributions = 'Please select at least one contribution area.';
+		}
+
+		if (!volunteerForm.bayAreaStatus.trim()) {
+			volunteerFieldErrors.bayAreaStatus = 'Please select an option.';
+		}
+
+		if (Object.values(volunteerFieldErrors).some(Boolean)) {
+			return;
+		}
+
+		isVolunteerSubmitting = true;
+
+		try {
+			const response = await fetch('/api/volunteer', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					name: volunteerForm.name.trim(),
+					email: volunteerForm.email.trim(),
+					organization: volunteerForm.organization.trim(),
+					careerStatus: volunteerForm.careerStatus,
+					contributions: volunteerForm.contributions,
+					bayAreaStatus: volunteerForm.bayAreaStatus
+				})
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				volunteerErrorMessage =
+					data.message || 'Something went wrong while submitting your volunteer form.';
+				return;
+			}
+
+			volunteerSuccessMessage = data.message || "Thanks for your interest. We'll be in touch soon.";
+			resetVolunteerForm();
+			resetVolunteerFieldErrors();
+		} catch (error) {
+			console.error('Volunteer submit failed:', error);
+			volunteerErrorMessage = 'Something went wrong while submitting your volunteer form.';
+		} finally {
+			isVolunteerSubmitting = false;
 		}
 	}
 
@@ -773,20 +1094,36 @@
 					<button
 						type="button"
 						on:click={openWaitlistModal}
-						class="inline-flex items-center justify-center rounded-xl bg-white px-5.5 py-3.5 text-base font-bold text-[#0B57BD]  hover:cursor-pointer"
+						class={`inline-flex cursor-pointer items-center justify-center rounded-xl px-5.5 py-3.5 text-base transition-all duration-200 ${
+							activeCta === 'waitlist'
+								? 'bg-white font-bold text-[#0B57BD] hover:brightness-105'
+								: 'border border-white/28 bg-transparent font-semibold text-white hover:border-white/45 hover:bg-white/10 hover:brightness-110'
+						}`}
 					>
 						Join the Waitlist
 					</button>
-					<div
-						class="inline-flex items-center justify-center rounded-xl border border-white/28 px-5.5 py-3.5 text-base font-semibold text-white"
+					<button
+						type="button"
+						on:click={openMentorModal}
+						class={`inline-flex cursor-pointer items-center justify-center rounded-xl px-5.5 py-3.5 text-base transition-all duration-200 ${
+							activeCta === 'mentor'
+								? 'bg-white font-bold text-[#0B57BD] hover:brightness-105'
+								: 'border border-white/28 bg-transparent font-semibold text-white hover:border-white/45 hover:bg-white/10 hover:brightness-110'
+						}`}
 					>
 						Join as a Mentor
-					</div>
-					<div
-						class="inline-flex items-center justify-center rounded-xl border border-white/28 px-5.5 py-3 text-base font-semibold text-white"
+					</button>
+					<button
+						type="button"
+						on:click={openVolunteerModal}
+						class={`inline-flex cursor-pointer items-center justify-center rounded-xl px-5.5 py-3 text-base transition-all duration-200 ${
+							activeCta === 'volunteer'
+								? 'bg-white font-bold text-[#0B57BD] hover:brightness-105'
+								: 'border border-white/28 bg-transparent font-semibold text-white hover:border-white/45 hover:bg-white/10 hover:brightness-110'
+						}`}
 					>
 						Volunteer with Us
-					</div>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -1010,10 +1347,362 @@
 
 					<button
 						type="submit"
-						class="mt-2 inline-flex h-[40px] w-full items-center justify-center rounded-xl bg-[#0B3A8A] text-base font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+						class="mt-2 inline-flex h-[40px] w-full items-center justify-center rounded-xl text-base font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+						style="background: #50277C;"
 						disabled={isWaitlistSubmitting}
 					>
 						{isWaitlistSubmitting ? 'Submitting...' : 'Submit'}
+					</button>
+				</form>
+			</div>
+		</div>
+	{/if}
+
+	{#if isMentorModalOpen}
+		<div
+			class="fixed inset-0 z-50 flex items-center justify-center bg-[#020916]/55 px-4 py-8 backdrop-blur-[2px]"
+			role="presentation"
+			tabindex="-1"
+			on:click|self={closeMentorModal}
+		>
+			<div
+				id="mentor-modal"
+				class="relative max-h-[90vh] w-full max-w-[820px] overflow-y-auto rounded-[18px] border border-[#D7E2F0] bg-white p-6 shadow-[0_24px_80px_rgba(2,9,22,0.35)]"
+				role="dialog"
+				tabindex="-1"
+				aria-modal="true"
+				aria-labelledby="mentor-modal-title"
+			>
+				<button
+					type="button"
+					class="absolute top-5 right-5 inline-flex h-10 w-10 items-center justify-center rounded-full text-[#667085] transition-colors hover:bg-[#F2F4F7] hover:text-[#15213A]"
+					aria-label="Close mentor popup"
+					on:click={closeMentorModal}
+				>
+					<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+						/>
+					</svg>
+				</button>
+
+				<div id="mentor-modal-title" class="text-2xl font-semibold text-[#202124]">
+					Become a Mentor
+				</div>
+
+				<form class="mt-6 space-y-6" novalidate on:submit|preventDefault={handleMentorSubmit}>
+					<div>
+						<label for="mentor-name" class="block text-base text-[#202124]">
+							Full name <span class="text-red-500">*</span>
+						</label>
+						<input
+							id="mentor-name"
+							type="text"
+							bind:value={mentorForm.name}
+							placeholder="e.g. Trang Nguyen"
+							class="mt-3 h-[40px] w-full rounded-lg border border-[#D7DCE4] px-6 text-base text-[#202124] placeholder:text-[#B3B3B3]"
+						/>
+						{#if mentorFieldErrors.name}
+							<div class="mt-2 text-sm text-red-600">{mentorFieldErrors.name}</div>
+						{/if}
+					</div>
+
+					<div>
+						<label for="mentor-email" class="block text-base text-[#202124]">
+							Email <span class="text-red-500">*</span>
+						</label>
+						<input
+							id="mentor-email"
+							type="text"
+							inputmode="email"
+							bind:value={mentorForm.email}
+							placeholder="Value"
+							class="mt-3 h-[40px] w-full rounded-lg border border-[#D7DCE4] px-6 text-base text-[#202124] placeholder:text-[#B3B3B3]"
+						/>
+						{#if mentorFieldErrors.email}
+							<div class="mt-2 text-sm text-red-600">{mentorFieldErrors.email}</div>
+						{/if}
+					</div>
+
+					<div>
+						<label for="mentor-company" class="block text-base text-[#202124]">
+							Company <span class="text-red-500">*</span>
+						</label>
+						<input
+							id="mentor-company"
+							type="text"
+							bind:value={mentorForm.company}
+							placeholder="Value"
+							class="mt-3 h-[40px] w-full rounded-lg border border-[#D7DCE4] px-6 text-base text-[#202124] placeholder:text-[#B3B3B3]"
+						/>
+						{#if mentorFieldErrors.company}
+							<div class="mt-2 text-sm text-red-600">{mentorFieldErrors.company}</div>
+						{/if}
+					</div>
+
+					<div>
+						<label for="mentor-title" class="block text-base text-[#202124]">
+							Title / Role <span class="text-red-500">*</span>
+						</label>
+						<input
+							id="mentor-title"
+							type="text"
+							bind:value={mentorForm.titleRole}
+							placeholder="Value"
+							class="mt-3 h-[40px] w-full rounded-lg border border-[#D7DCE4] px-6 text-base text-[#202124] placeholder:text-[#B3B3B3]"
+						/>
+						{#if mentorFieldErrors.titleRole}
+							<div class="mt-2 text-sm text-red-600">{mentorFieldErrors.titleRole}</div>
+						{/if}
+					</div>
+
+					<div>
+						<div class="block text-base text-[#202124]">
+							Will you be in the Bay Area during the event? <span class="text-red-500">*</span>
+						</div>
+						<div class="mt-3 space-y-3">
+							{#each mentorBayAreaOptions as option (option)}
+								<label class="flex items-start gap-3 text-base text-[#202124]">
+									<input
+										type="radio"
+										name="mentor-bay-area"
+										value={option}
+										bind:group={mentorForm.bayAreaStatus}
+										class="mentor-radio mt-1"
+									/>
+									<span>{option}</span>
+								</label>
+							{/each}
+						</div>
+						{#if mentorFieldErrors.bayAreaStatus}
+							<div class="mt-2 text-sm text-red-600">{mentorFieldErrors.bayAreaStatus}</div>
+						{/if}
+					</div>
+
+					<div>
+						<div class="block text-base text-[#202124]">
+							How would you like to contribute? <span class="italic">(Select all that apply.)</span>
+							<span class="text-red-500">*</span>
+						</div>
+						<div class="mt-3 space-y-3">
+							{#each mentorContributionOptions as option (option)}
+								<label class="flex items-start gap-3 text-base text-[#202124]">
+									<input
+										type="checkbox"
+										checked={mentorForm.contributions.includes(option)}
+										on:change={() => toggleMentorContribution(option)}
+										class="mentor-checkbox mt-1"
+									/>
+									<span>{option}</span>
+								</label>
+							{/each}
+						</div>
+						{#if mentorFieldErrors.contributions}
+							<div class="mt-2 text-sm text-red-600">{mentorFieldErrors.contributions}</div>
+						{/if}
+					</div>
+
+					{#if mentorSuccessMessage}
+						<div class="rounded-xl bg-[#ECFDF3] px-4 py-3 text-sm text-[#027A48]">
+							{mentorSuccessMessage}
+						</div>
+					{/if}
+
+					{#if mentorErrorMessage}
+						<div class="rounded-xl bg-[#FEF3F2] px-4 py-3 text-sm text-[#B42318]">
+							{mentorErrorMessage}
+						</div>
+					{/if}
+
+					<button
+						type="submit"
+						class="mt-2 inline-flex h-[40px] w-full items-center justify-center rounded-xl px-6 text-base font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+						style="background: #50277C;"
+						disabled={isMentorSubmitting}
+					>
+						{isMentorSubmitting ? 'Submitting...' : 'Submit'}
+					</button>
+				</form>
+			</div>
+		</div>
+	{/if}
+
+	{#if isVolunteerModalOpen}
+		<div
+			class="fixed inset-0 z-50 flex items-center justify-center bg-[#020916]/55 px-4 py-8 backdrop-blur-[2px]"
+			role="presentation"
+			tabindex="-1"
+			on:click|self={closeVolunteerModal}
+		>
+			<div
+				id="volunteer-modal"
+				class="relative max-h-[90vh] w-full max-w-[820px] overflow-y-auto rounded-[18px] border border-[#D7E2F0] bg-white p-6 shadow-[0_24px_80px_rgba(2,9,22,0.35)]"
+				role="dialog"
+				tabindex="-1"
+				aria-modal="true"
+				aria-labelledby="volunteer-modal-title"
+			>
+				<button
+					type="button"
+					class="absolute top-5 right-5 inline-flex h-10 w-10 items-center justify-center rounded-full text-[#667085] transition-colors hover:bg-[#F2F4F7] hover:text-[#15213A]"
+					aria-label="Close volunteer popup"
+					on:click={closeVolunteerModal}
+				>
+					<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M13.5 4.5L4.5 13.5M4.5 4.5L13.5 13.5"
+							stroke="currentColor"
+							stroke-width="1.8"
+							stroke-linecap="round"
+						/>
+					</svg>
+				</button>
+
+				<div id="volunteer-modal-title" class="text-2xl font-semibold text-[#202124]">
+					Volunteer with us
+				</div>
+
+				<form class="mt-6 space-y-6" novalidate on:submit|preventDefault={handleVolunteerSubmit}>
+					<div>
+						<label for="volunteer-name" class="block text-base text-[#202124]">
+							Full name <span class="text-red-500">*</span>
+						</label>
+						<input
+							id="volunteer-name"
+							type="text"
+							bind:value={volunteerForm.name}
+							placeholder="e.g. Trang Nguyen"
+							class="mt-3 h-[40px] w-full rounded-lg border border-[#D7DCE4] px-6 text-base text-[#202124] placeholder:text-[#B3B3B3]"
+						/>
+						{#if volunteerFieldErrors.name}
+							<div class="mt-2 text-sm text-red-600">{volunteerFieldErrors.name}</div>
+						{/if}
+					</div>
+
+					<div>
+						<label for="volunteer-email" class="block text-base text-[#202124]">
+							Email <span class="text-red-500">*</span>
+						</label>
+						<input
+							id="volunteer-email"
+							type="text"
+							inputmode="email"
+							bind:value={volunteerForm.email}
+							placeholder="Value"
+							class="mt-3 h-[40px] w-full rounded-lg border border-[#D7DCE4] px-6 text-base text-[#202124] placeholder:text-[#B3B3B3]"
+						/>
+						{#if volunteerFieldErrors.email}
+							<div class="mt-2 text-sm text-red-600">{volunteerFieldErrors.email}</div>
+						{/if}
+					</div>
+
+					<div>
+						<label for="volunteer-organization" class="block text-base text-[#202124]">
+							University/ Company <span class="text-red-500">*</span>
+						</label>
+						<input
+							id="volunteer-organization"
+							type="text"
+							bind:value={volunteerForm.organization}
+							placeholder="Value"
+							class="mt-3 h-[40px] w-full rounded-lg border border-[#D7DCE4] px-6 text-base text-[#202124] placeholder:text-[#B3B3B3]"
+						/>
+						{#if volunteerFieldErrors.organization}
+							<div class="mt-2 text-sm text-red-600">{volunteerFieldErrors.organization}</div>
+						{/if}
+					</div>
+
+					<div>
+						<div class="block text-base text-[#202124]">
+							What best describes your current career status: <span class="text-red-500">*</span>
+						</div>
+						<div class="mt-3 space-y-3">
+							{#each careerStatusOptions.slice(0, 4) as option (option)}
+								<label class="flex items-start gap-3 text-base text-[#202124]">
+									<input
+										type="radio"
+										name="volunteer-career-status"
+										value={option}
+										bind:group={volunteerForm.careerStatus}
+										class="mentor-radio mt-1"
+									/>
+									<span>{option}</span>
+								</label>
+							{/each}
+						</div>
+						{#if volunteerFieldErrors.careerStatus}
+							<div class="mt-2 text-sm text-red-600">{volunteerFieldErrors.careerStatus}</div>
+						{/if}
+					</div>
+
+					<div>
+						<div class="block text-base text-[#202124]">
+							How would you like to contribute? <span class="italic">(Select all that apply.)</span>
+							<span class="text-red-500">*</span>
+						</div>
+						<div class="mt-3 space-y-3">
+							{#each volunteerContributionOptions as option (option)}
+								<label class="flex items-start gap-3 text-base text-[#202124]">
+									<input
+										type="checkbox"
+										checked={volunteerForm.contributions.includes(option)}
+										on:change={() => toggleVolunteerContribution(option)}
+										class="mentor-checkbox mt-1"
+									/>
+									<span>{option}</span>
+								</label>
+							{/each}
+						</div>
+						{#if volunteerFieldErrors.contributions}
+							<div class="mt-2 text-sm text-red-600">{volunteerFieldErrors.contributions}</div>
+						{/if}
+					</div>
+
+					<div>
+						<div class="block text-base text-[#202124]">
+							Will you be in the Bay Area during the event? <span class="text-red-500">*</span>
+						</div>
+						<div class="mt-3 space-y-3">
+							{#each mentorBayAreaOptions as option (option)}
+								<label class="flex items-start gap-3 text-base text-[#202124]">
+									<input
+										type="radio"
+										name="volunteer-bay-area"
+										value={option}
+										bind:group={volunteerForm.bayAreaStatus}
+										class="mentor-radio mt-1"
+									/>
+									<span>{option}</span>
+								</label>
+							{/each}
+						</div>
+						{#if volunteerFieldErrors.bayAreaStatus}
+							<div class="mt-2 text-sm text-red-600">{volunteerFieldErrors.bayAreaStatus}</div>
+						{/if}
+					</div>
+
+					{#if volunteerSuccessMessage}
+						<div class="rounded-xl bg-[#ECFDF3] px-4 py-3 text-sm text-[#027A48]">
+							{volunteerSuccessMessage}
+						</div>
+					{/if}
+
+					{#if volunteerErrorMessage}
+						<div class="rounded-xl bg-[#FEF3F2] px-4 py-3 text-sm text-[#B42318]">
+							{volunteerErrorMessage}
+						</div>
+					{/if}
+
+					<button
+						type="submit"
+						class="mt-2 inline-flex h-[40px] w-full items-center justify-center rounded-xl px-6 text-base font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70"
+						style="background: #50277C;"
+						disabled={isVolunteerSubmitting}
+					>
+						{isVolunteerSubmitting ? 'Submitting...' : 'Submit'}
 					</button>
 				</form>
 			</div>
@@ -1038,5 +1727,54 @@
 	:global(a.btn:hover) {
 		text-decoration: none !important;
 		color: #0a57a0 !important; /* This is primary from your config */
+	}
+
+	.mentor-radio,
+	.mentor-checkbox {
+		appearance: none;
+		-webkit-appearance: none;
+		flex-shrink: 0;
+		width: 1.25rem;
+		height: 1.25rem;
+		cursor: pointer;
+		border: 1.5px solid #98a2b3;
+		background-color: #ffffff;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.mentor-radio {
+		border-radius: 9999px;
+	}
+
+	.mentor-radio:checked {
+		border-color: #894bd9;
+		background-color: #894bd9;
+		box-shadow: inset 0 0 0 5px #894bd9;
+		background-image: radial-gradient(circle, #ffffff 0 28%, transparent 32%);
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+	}
+
+	.mentor-checkbox {
+		border-radius: 0.25rem;
+	}
+
+	.mentor-checkbox:checked {
+		border-color: #894bd9;
+		background-color: #894bd9;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M3.5 8.5 6.5 11.5 12.5 4.5'/%3E%3C/svg%3E");
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: 0.95rem 0.95rem;
+	}
+
+	.mentor-radio:focus-visible,
+	.mentor-checkbox:focus-visible {
+		outline: 2px solid rgba(137, 75, 217, 0.28);
+		outline-offset: 2px;
 	}
 </style>
