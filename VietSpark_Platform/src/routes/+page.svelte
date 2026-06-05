@@ -759,7 +759,7 @@
 						class="inline-flex items-center rounded-2xl border border-white/35 bg-black/20 px-6 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-colors hover:bg-black/30"
 					>
 						<i class="far fa-calendar mr-3"></i>
-						Early Tickets · 6/06/2026
+						Early Tickets · 06/15/2026
 					</div>
 					<!-- {#if !$authUser}
 						<a
