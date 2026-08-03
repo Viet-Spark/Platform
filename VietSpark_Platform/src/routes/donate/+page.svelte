@@ -1,420 +1,132 @@
 <script>
-	import { faqs, faqsLoading } from '$lib/stores/faqStore';
-	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
-	import { faqCategories } from '$lib/stores/faqCategoryStore';
+	import zelleQrCode from '$lib/images/Donate/vietspark-zelle-img.jpeg';
 
-	// Donation amount options
-	const donationOptions = [25, 50, 100, 250, 500];
-	let selectedAmount = 50;
-	let customAmount = '';
-	let isCustomAmount = false;
-	let donorName = '';
-	let donorEmail = '';
-	let isAnonymous = false;
-	let showCompanyField = false;
-	let companyName = '';
-	let donationMessage = '';
-	let donationFaqs = writable([]);
+	const zelleEmail = 'finance@vietspark.org';
 
-	$: if ($faqs.length > 0 && $faqCategories.length > 0) {
-		const donationFaqCategoryId = $faqCategories.find(category => category.name === 'Donation').id;
-		donationFaqs.set($faqs.filter(faq => faq.categoryId === donationFaqCategoryId));
-		console.log("Donation FAQs: ", $donationFaqs);
-	}
-
-	function setAmount(amount) {
-		selectedAmount = amount;
-		isCustomAmount = false;
-	}
-
-	function setCustomAmount() {
-		isCustomAmount = true;
-	}
-
-	function handleSubmit() {
-		// Here you would typically handle the payment processing
-		// This is just a placeholder for demonstration
-		const donationAmount = isCustomAmount ? parseFloat(customAmount) : selectedAmount;
-
-		console.log('Processing donation:', {
-			amount: donationAmount,
-			name: isAnonymous ? 'Anonymous' : donorName,
-			email: donorEmail,
-			company: companyName,
-			message: donationMessage,
-			isAnonymous
-		});
-
-		// Redirect to a payment processor would happen here
-		alert('This would redirect to a payment processor in a real implementation.');
-	}
+	const qrSteps = [
+		"Log in to your bank's mobile app.",
+		'Go to the Zelle section.',
+		'Select Send Money or tap the plus (+) sign to add a new recipient.',
+		'Choose the option to scan or upload a QR code.',
+		"Upload the Zelle QR code image below from your phone's photo library.",
+		'Confirm that the VietSpark Zelle account information appears automatically.',
+		'Enter your donation amount, review the information, and submit.'
+	];
 </script>
 
 <svelte:head>
 	<title>Donate - VietSpark</title>
 	<meta
 		name="description"
-		content="Support VietSpark's mission to empower Vietnamese professionals in the tech industry through your generous donation."
+		content="Donate to VietSpark via Zelle using finance@vietspark.org or the VietSpark Zelle QR code."
 	/>
 </svelte:head>
 
-{#if $faqsLoading}
-	<div class="flex h-screen items-center justify-center">
-		<p class="text-xl">Loading...</p>
-	</div>
-{:else}
-	<!-- Hero Section -->
-	<section class="bg-primary py-16 text-white">
-		<div class="container mx-auto px-4 text-center">
-			<h1 class="mb-4 text-4xl font-bold">Support Our Mission</h1>
-			<p class="mx-auto max-w-3xl text-xl">
-				Your donation helps us empower Vietnamese professionals in the tech industry through
-				education, mentorship, and community building.
+<main class="min-h-screen bg-gray-50 text-gray-900">
+	<section class="bg-primary text-white">
+		<div class="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:px-8">
+			<p class="text-primary-100 mb-3 text-sm font-semibold tracking-wide uppercase">
+				VietSpark Donation
+			</p>
+			<h1 class="mx-auto max-w-3xl text-4xl leading-tight font-bold sm:text-5xl">
+				Donate to VietSpark via Zelle
+			</h1>
+			<p class="text-primary-50 mx-auto mt-5 max-w-3xl text-lg leading-8">
+				Thank you for supporting VietSpark and our mission as a nonprofit organization. You can send
+				your donation directly to our NGO account through Zelle using either method below.
 			</p>
 		</div>
 	</section>
 
-	<!-- Impact Section -->
-	<section class="bg-white py-16">
-		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Your Donation Makes a Difference</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-				<p class="mx-auto max-w-3xl text-lg text-gray-600">
-					Every contribution helps us expand our programs and reach more professionals in the
-					community. Please email contact@vietspark.org for direct donation.
+	<section class="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+		<div class="space-y-8">
+			<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+				<div class="mb-5 flex items-center gap-3">
+					<div
+						class="bg-primary flex h-10 w-10 items-center justify-center rounded-full text-white"
+					>
+						<i class="fas fa-envelope" aria-hidden="true"></i>
+					</div>
+					<div>
+						<p class="text-primary text-sm font-semibold uppercase">Option 1</p>
+						<h2 class="text-2xl font-bold">Send by Email</h2>
+					</div>
+				</div>
+
+				<p class="text-gray-700">
+					Open Zelle through your bank's mobile app or online banking account and enter the
+					following email address:
+				</p>
+
+				<div class="border-primary-100 bg-primary-25 mt-5 rounded-md border p-4">
+					<p class="text-sm font-semibold text-gray-600">Zelle Email</p>
+					<a href={`mailto:${zelleEmail}`} class="text-primary mt-1 block text-xl font-bold">
+						{zelleEmail}
+					</a>
+				</div>
+
+				<p class="mt-5 text-gray-700">
+					Please verify that the recipient information matches VietSpark before completing your
+					donation.
 				</p>
 			</div>
 
-			<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-				<div class="rounded-lg bg-gray-50 p-6 text-center">
+			<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+				<div class="mb-5 flex items-center gap-3">
 					<div
-						class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
+						class="bg-secondary flex h-10 w-10 items-center justify-center rounded-full text-white"
 					>
-						<i class="fas fa-graduation-cap text-2xl"></i>
+						<i class="fas fa-qrcode" aria-hidden="true"></i>
 					</div>
-					<h3 class="mb-3 text-xl font-bold">Educational Programs</h3>
-					<p class="text-gray-600">
-						Fund workshops, seminars, and educational resources to help Vietnamese professionals
-						develop the skills needed to excel in tech.
-					</p>
-				</div>
-
-				<div class="rounded-lg bg-gray-50 p-6 text-center">
-					<div
-						class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-					>
-						<i class="fas fa-users text-2xl"></i>
-					</div>
-					<h3 class="mb-3 text-xl font-bold">Mentorship Initiatives</h3>
-					<p class="text-gray-600">
-						Support our mentorship program connecting experienced professionals with those starting
-						their career or transitioning into tech.
-					</p>
-				</div>
-
-				<div class="rounded-lg bg-gray-50 p-6 text-center">
-					<div
-						class="text-primary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
-					>
-						<i class="fas fa-handshake text-2xl"></i>
-					</div>
-					<h3 class="mb-3 text-xl font-bold">Community Events</h3>
-					<p class="text-gray-600">
-						Help us organize networking events, tech summits, and social gatherings that foster
-						connections within our community.
-					</p>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Donation Form Section -->
-	<!-- <section class="bg-gray-50 py-16">
-		<div class="container mx-auto px-4">
-			<div class="mx-auto max-w-3xl overflow-hidden rounded-lg bg-white shadow-md">
-				<div class="bg-primary p-6 text-white">
-					<h2 class="text-2xl font-bold">Make a Donation</h2>
-					<p>Your support helps us create opportunities for Vietnamese professionals in tech.</p>
-				</div>
-
-				<form on:submit|preventDefault={handleSubmit} class="space-y-6 p-6">
-					Donation Amount
 					<div>
-						<fieldset>
-							<legend class="mb-4 block font-medium text-gray-700">Select Donation Amount</legend>
-							<div class="grid grid-cols-3 gap-2 md:grid-cols-5">
-								{#each donationOptions as amount}
-									<button
-										type="button"
-										class="rounded-md border px-4 py-2 {selectedAmount === amount && !isCustomAmount
-											? 'bg-primary border-primary text-white'
-											: 'hover:border-primary border-gray-300 text-gray-700'}"
-										on:click={() => setAmount(amount)}
-									>
-										${amount}
-									</button>
-								{/each}
-								<button
-									type="button"
-									class="rounded-md border px-4 py-2 {isCustomAmount
-										? 'bg-primary border-primary text-white'
-										: 'hover:border-primary border-gray-300 text-gray-700'}"
-									on:click={setCustomAmount}
-								>
-									Custom
-								</button>
-							</div>
-
-							{#if isCustomAmount}
-								<div class="mt-3">
-									<label for="custom-amount" class="sr-only">Custom amount</label>
-									<div class="relative">
-										<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<span class="text-gray-500">$</span>
-										</div>
-										<input
-											type="number"
-											id="custom-amount"
-											bind:value={customAmount}
-											placeholder="Enter amount"
-											min="1"
-											step="1"
-											class="focus:ring-primary w-full rounded-md border px-4 py-2 pl-8 focus:outline-none focus:ring-2"
-										/>
-									</div>
-								</div>
-							{/if}
-						</fieldset>
+						<p class="text-secondary text-sm font-semibold uppercase">Option 2</p>
+						<h2 class="text-2xl font-bold">Scan the Zelle QR Code</h2>
 					</div>
-
-					Donor Information
-					<div>
-						<h3 class="mb-4 text-lg font-bold">Donor Information</h3>
-
-						<div class="space-y-4">
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="anonymous"
-									bind:checked={isAnonymous}
-									class="text-primary h-5 w-5 rounded"
-								/>
-								<label for="anonymous" class="ml-2 text-gray-700">
-									Make this donation anonymous
-								</label>
-							</div>
-
-							{#if !isAnonymous}
-								<div>
-									<label for="donor-name" class="mb-2 block font-medium text-gray-700">Name *</label>
-									<input
-										type="text"
-										id="donor-name"
-										bind:value={donorName}
-										required
-										class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
-									/>
-								</div>
-							{/if}
-
-							<div>
-								<label for="donor-email" class="mb-2 block font-medium text-gray-700">Email *</label>
-								<input
-									type="email"
-									id="donor-email"
-									bind:value={donorEmail}
-									required
-									class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
-								/>
-								<p class="mt-1 text-sm text-gray-600">Receipt will be sent to this email</p>
-							</div>
-
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="company-donation"
-									bind:checked={showCompanyField}
-									class="text-primary h-5 w-5 rounded"
-								/>
-								<label for="company-donation" class="ml-2 text-gray-700">
-									This is a donation from a company
-								</label>
-							</div>
-
-							{#if showCompanyField}
-								<div>
-									<label for="company-name" class="mb-2 block font-medium text-gray-700"
-										>Company Name *</label
-									>
-									<input
-										type="text"
-										id="company-name"
-										bind:value={companyName}
-										required={showCompanyField}
-										class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
-									/>
-								</div>
-							{/if}
-
-							<div>
-								<label for="donation-message" class="mb-2 block font-medium text-gray-700"
-									>Message (Optional)</label
-								>
-								<textarea
-									id="donation-message"
-									bind:value={donationMessage}
-									rows="3"
-									class="focus:ring-primary w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2"
-									placeholder="Share why you're supporting VietSpark..."
-								></textarea>
-							</div>
-						</div>
-					</div>
-
-					Submit Button
-					<div class="pt-4">
-						<button
-							type="submit"
-							class="bg-primary hover:bg-primary-dark focus:ring-primary w-full rounded-md py-3 font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
-						>
-							Donate ${isCustomAmount ? customAmount || '0' : selectedAmount}
-						</button>
-						<p class="mt-3 text-center text-sm text-gray-600">
-							Your donation is tax-deductible to the extent allowed by law.
-						</p>
-					</div>
-				</form>
-			</div>
-		</div>
-	</section> -->
-
-	<!-- Other Ways to Support -->
-	<section class="bg-white py-16">
-		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Other Ways to Support</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-			</div>
-
-			<div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-				<div class="rounded-lg bg-gray-50 p-6">
-					<div
-						class="text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100"
-					>
-						<i class="fas fa-hand-holding-usd text-xl"></i>
-					</div>
-					<h3 class="mb-3 text-xl font-bold">Corporate Matching</h3>
-					<p class="mb-4 text-gray-600">
-						Many companies match employee donations. Check if your employer has a matching gift
-						program to double your impact.
-					</p>
-					<a href="/contact" class="text-primary hover:underline">Learn More →</a>
 				</div>
 
-				<div class="rounded-lg bg-gray-50 p-6">
-					<div
-						class="text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100"
-					>
-						<i class="fas fa-gift text-xl"></i>
-					</div>
-					<h3 class="mb-3 text-xl font-bold">In-Kind Donations</h3>
-					<p class="mb-4 text-gray-600">
-						Support our work through donations of services, products, or resources that help us
-						fulfill our mission.
-					</p>
-					<a href="/contact" class="text-primary hover:underline">Contact Us →</a>
-				</div>
-
-				<div class="rounded-lg bg-gray-50 p-6">
-					<div
-						class="text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100"
-					>
-						<i class="fas fa-briefcase text-xl"></i>
-					</div>
-					<h3 class="mb-3 text-xl font-bold">Corporate Sponsorship</h3>
-					<p class="mb-4 text-gray-600">
-						Partner with us through sponsorships of our events, programs, or initiatives with various
-						recognition benefits.
-					</p>
-					<a href="/contact?subject=Corporate Sponsorship" class="text-primary hover:underline"
-						>Become a Sponsor →</a
-					>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- Donor Recognition -->
-	<!-- <section class="bg-gray-50 py-16">
-		<div class="container mx-auto px-4 text-center">
-			<h2 class="mb-4 text-3xl font-bold">Our Supporters</h2>
-			<p class="mx-auto mb-8 max-w-2xl text-xl text-gray-600">
-				We are grateful to the individuals and organizations whose generous support makes our work
-				possible.
-			</p> -->
-
-			<!-- Placeholder for donor recognition wall -->
-			<!-- <div class="mx-auto grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-				{#each Array(6) as _, i}
-					<div class="flex h-24 items-center justify-center rounded-lg bg-white p-4 shadow-sm">
-						<span class="text-gray-400">Supporter {i + 1}</span>
-					</div>
-				{/each}
-			</div>
-
-			<p class="mt-8 text-gray-600">
-				Want to see your name or company here? <a
-					href="#donation-form"
-					class="text-primary hover:underline">Make a donation today</a
-				>.
-			</p>
-		</div>
-	</section> -->
-
-	<!-- FAQ Section -->
-	<section class="bg-white py-16">
-		<div class="container mx-auto px-4">
-			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Frequently Asked Questions</h2>
-				<div class="bg-primary mx-auto mb-6 h-1 w-24"></div>
-			</div>
-
-			<div class="mx-auto max-w-3xl">
-				<div class="space-y-6">
-					{#each $donationFaqs as faq}
-						<div class="rounded-lg bg-gray-50 p-6">
-							<h3 class="mb-2 text-xl font-bold">{faq.question}</h3>
-							<p class="text-gray-600">
-								{faq.answer}
-							</p>
-						</div>
+				<ol class="space-y-3">
+					{#each qrSteps as step, index}
+						<li class="flex gap-3 text-gray-700">
+							<span
+								class="text-primary mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-100 text-sm font-bold"
+							>
+								{index + 1}
+							</span>
+							<span>{step}</span>
+						</li>
 					{/each}
+				</ol>
+			</div>
+
+			<div class="rounded-lg border border-gray-200 bg-white p-5 text-center shadow-sm">
+				<h2 class="mb-4 text-xl font-bold">VietSpark Zelle QR Code</h2>
+				<img
+					src={zelleQrCode}
+					alt="VietSpark Zelle QR code for donations"
+					class="mx-auto w-full max-w-xs rounded-md border border-gray-200"
+				/>
+				<p class="mt-4 text-sm text-gray-600">
+					Save this image to your phone, then upload or scan it from your bank's Zelle flow.
+				</p>
+			</div>
+
+			<div class="border-tertiary-300 bg-tertiary-50 rounded-lg border p-6">
+				<div class="flex gap-3">
+					<div
+						class="bg-tertiary flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white"
+					>
+						<i class="fas fa-circle-info" aria-hidden="true"></i>
+					</div>
+					<div>
+						<h2 class="text-xl font-bold text-gray-900">Important</h2>
+						<p class="mt-2 text-gray-800">
+							In the memo or message section, please include your full name so our team can properly
+							record and acknowledge your donation.
+						</p>
+						<p class="mt-4 font-semibold text-gray-900">Thank you for your generous support!</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
-	<!-- CTA Section -->
-	<section class="bg-primary py-16 text-white">
-		<div class="container mx-auto px-4 text-center">
-			<h2 class="mb-4 text-3xl font-bold">Ready to Make a Difference?</h2>
-			<p class="mx-auto mb-8 max-w-2xl text-xl">
-				Your support helps us create opportunities and build a stronger community for Vietnamese
-				professionals in tech.
-			</p>
-			<a href="#donation-form" class="btn text-primary bg-white hover:bg-gray-100"> Donate Now </a>
-		</div>
-	</section>
-{/if}
-
-<style>
-	.btn {
-		display: inline-block;
-		padding: 0.75rem 1.5rem;
-		font-weight: 500;
-		border-radius: 0.375rem;
-		transition: all 0.2s;
-	}
-</style>
+</main>
