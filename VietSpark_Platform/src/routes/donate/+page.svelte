@@ -4,21 +4,21 @@
 	const zelleEmail = 'finance@vietspark.org';
 
 	const qrSteps = [
-		"Log in to your bank's mobile app.",
+		'Log in to your bank mobile app.',
 		'Go to the Zelle section.',
 		'Select Send Money or tap the plus (+) sign to add a new recipient.',
 		'Choose the option to scan or upload a QR code.',
 		"Upload the Zelle QR code image below from your phone's photo library.",
-		'Confirm that the VietSpark Zelle account information appears automatically.',
+		'Confirm that the Viet Spark Zelle account information appears automatically.',
 		'Enter your donation amount, review the information, and submit.'
 	];
 </script>
 
 <svelte:head>
-	<title>Donate - VietSpark</title>
+	<title>Donate - Viet Spark</title>
 	<meta
 		name="description"
-		content="Donate to VietSpark via Zelle using finance@vietspark.org or the VietSpark Zelle QR code."
+		content="Donate to Viet Spark via Zelle using finance@vietspark.org or the Viet Spark Zelle QR code."
 	/>
 </svelte:head>
 
@@ -26,14 +26,14 @@
 	<section class="bg-primary text-white">
 		<div class="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:px-8">
 			<p class="text-primary-100 mb-3 text-sm font-semibold tracking-wide uppercase">
-				VietSpark Donation
+				Viet Spark Donation
 			</p>
 			<h1 class="mx-auto max-w-3xl text-4xl leading-tight font-bold sm:text-5xl">
-				Donate to VietSpark via Zelle
+				Donate to Viet Spark via Zelle
 			</h1>
 			<p class="text-primary-50 mx-auto mt-5 max-w-3xl text-lg leading-8">
-				Thank you for supporting VietSpark and our mission as a nonprofit organization. You can send
-				your donation directly to our NGO account through Zelle using either method below.
+				Thank you for supporting Viet Spark and our mission as a nonprofit organization. You can
+				send your donation directly to our NGO account through Zelle using either method below.
 			</p>
 		</div>
 	</section>
@@ -54,8 +54,8 @@
 				</div>
 
 				<p class="text-gray-700">
-					Open Zelle through your bank's mobile app or online banking account and enter the
-					following email address:
+					Open Zelle through <strong>YOUR BANK&rsquo;S MOBILE APP</strong> or online banking account
+					and enter the following email address:
 				</p>
 
 				<div class="border-primary-100 bg-primary-25 mt-5 rounded-md border p-4">
@@ -66,7 +66,7 @@
 				</div>
 
 				<p class="mt-5 text-gray-700">
-					Please verify that the recipient information matches VietSpark before completing your
+					Please verify that the recipient information matches Viet Spark before completing your
 					donation.
 				</p>
 			</div>
@@ -85,24 +85,28 @@
 				</div>
 
 				<ol class="space-y-3">
-					{#each qrSteps as step, index}
+					{#each qrSteps as step, index (step)}
 						<li class="flex gap-3 text-gray-700">
 							<span
 								class="text-primary mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-100 text-sm font-bold"
 							>
 								{index + 1}
 							</span>
-							<span>{step}</span>
+							{#if index === 0}
+								<span>Log in to <strong>YOUR BANK&rsquo;S MOBILE APP</strong>.</span>
+							{:else}
+								<span>{step}</span>
+							{/if}
 						</li>
 					{/each}
 				</ol>
 			</div>
 
 			<div class="rounded-lg border border-gray-200 bg-white p-5 text-center shadow-sm">
-				<h2 class="mb-4 text-xl font-bold">VietSpark Zelle QR Code</h2>
+				<h2 class="mb-4 text-xl font-bold">Viet Spark Zelle QR Code</h2>
 				<img
 					src={zelleQrCode}
-					alt="VietSpark Zelle QR code for donations"
+					alt="Viet Spark Zelle QR code for donations"
 					class="mx-auto w-full max-w-xs rounded-md border border-gray-200"
 				/>
 				<p class="mt-4 text-sm text-gray-600">
